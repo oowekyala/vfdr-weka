@@ -5,16 +5,17 @@ import weka.core.Instance;
 import weka.core.Instances;
 
 /**
+ * Antd for numerical attributes.
  * 
  * @author cl-fo
- *
+ * 
  */
-public class NumericLiteral extends Literal {
+public class NumericAntd extends Antd {
 
 	/** The split point for this numeric antecedent */
 	private double splitPoint;
 
-	public NumericLiteral(Attribute a) {
+	public NumericAntd(Attribute a) {
 		super(a);
 		splitPoint = Double.NaN;
 	}
@@ -35,7 +36,7 @@ public class NumericLiteral extends Literal {
 	 */
 	@Override
 	public Object copy() {
-		NumericLiteral na = new NumericLiteral(getAttr());
+		NumericAntd na = new NumericAntd(getAttr());
 		na.value = this.value;
 		na.splitPoint = this.splitPoint;
 		return na;

@@ -1,30 +1,38 @@
 package vfdr;
 
+import weka.core.Attribute;
 import weka.core.Instance;
 
 public class NominalAntd extends Antd {
 
-	public NominalAntd(String a) {
-		super(a);
-		// TODO Auto-generated constructor stub
+	/**
+	 * Index of the value of the attribute that is tested
+	 */
+	private int m_targetAttributeValue = -1;
+	
+	
+	public NominalAntd(Attribute attributeName) {
+		m_attribute = attributeName;
+		m_isNominal = true;
 	}
+	
 
 	@Override
 	public boolean covers(Instance inst) {
-		// TODO Auto-generated method stub
-		return false;
+		return (inst.value(m_attribute) == m_targetAttributeValue);
 	}
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
+		return m_attribute.name() + " = " + m_attribute.value(m_targetAttributeValue);
 	}
 
-	@Override
-	public Object copy() {
-		// TODO Auto-generated method stub
-		return null;
+	public int getTargetValue() {
+		return m_targetAttributeValue;
+	}
+
+	public void setTargetValue(int m_attributeValue) {
+		this.m_targetAttributeValue = m_attributeValue;
 	}
 
 }

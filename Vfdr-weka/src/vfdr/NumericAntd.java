@@ -1,5 +1,6 @@
 package vfdr;
 
+import weka.core.Attribute;
 import weka.core.Instance;
 
 /**
@@ -11,43 +12,28 @@ import weka.core.Instance;
 public class NumericAntd extends Antd {
 
 	/** The split point for this numeric antecedent */
-	private double splitPoint;
-	
+	private double m_splitPoint;
+
+	/**
+	 * Is 0 if the condition is <=, 1 otherwise
+	 */
+	private boolean m_condition;
+
 	/**
 	 * Builds a numeric antecedent from the attname
+	 * 
 	 * @param a
 	 */
-	public NumericAntd(String a) {
-		super(a);
-		splitPoint = Double.NaN;
-		isNominal = false;
+	public NumericAntd(Attribute attribute) {
+		m_attribute = attribute;
+		m_splitPoint = Double.NaN;
+		m_isNominal = false;
 	}
 
-	/**
-	 * Get split point of this numeric antecedent
-	 * 
-	 * @return the split point of this numeric antecedent
-	 */
-	public double getSplitPoint() {
-		return splitPoint;
-	}
-
-	/**
-	 * Implements Copyable
-	 * 
-	 * @return a copy of this object
-	 */
-	@Override
-	public Object copy() {
-		NumericAntd na = new NumericAntd(getAttr());
-		na.m_value = this.m_value;
-		na.splitPoint = this.splitPoint;
-		return na;
-	}
 
 	@Override
 	public boolean covers(Instance inst) {
-		
+
 		return false;
 	}
 
@@ -56,11 +42,26 @@ public class NumericAntd extends Antd {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	
-	
-	
-	
-	
+
+	/**
+	 * Get split point of this numeric antecedent
+	 * 
+	 * @return the split point of this numeric antecedent
+	 */
+	public double getSplitPoint() {
+		return m_splitPoint;
+	}
+
+	public void setSplitPoint(double m_splitPoint) {
+		this.m_splitPoint = m_splitPoint;
+	}
+
+	public boolean isHigherCondition() {
+		return m_condition;
+	}
+
+	public void setCondition(boolean m_condition) {
+		this.m_condition = m_condition;
+	}
 
 }

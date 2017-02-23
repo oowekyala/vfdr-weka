@@ -1,62 +1,43 @@
 package vfdr;
 
-import weka.core.Copyable;
+import weka.core.Attribute;
 import weka.core.Instance;
 
 /**
- *  Simple literal class used to create a rule.
+ * Simple literal class used to create a rule.
+ * 
  * @author cl-fo
  *
  */
-public abstract class Antd implements Copyable {
+public abstract class Antd {
 
 	/** The attribute of the antecedent */
-	protected String m_attName;
+	protected Attribute m_attribute;
+
+	protected boolean m_isNominal;
 
 	/**
-	 * The attribute value of the antecedent. For numeric attributes, the value is
-	 * either 0 (1st bag) or 1 (2nd bag).
+	 * Reference to the enclosing rule
 	 */
-	protected double m_value;
-	
-	protected boolean isNominal;
-	
-
-	/**
-	 * Constructor
-	 */
-	public Antd(String a) {
-		m_attName = a;
-		m_value = Double.NaN;
-	}
+	protected VfdrRule m_thisRule;
 
 	public abstract boolean covers(Instance inst);
 
-	@Override
 	public abstract String toString();
 
 	/**
-	 * Implements Copyable
-	 * 
-	 * @return a copy of this object
+	 * Get the attribute of this antecedent
 	 */
-	@Override
-	public abstract Object copy();
-
-	/* Get functions of this antecedent */
-	public String getAttr() {
-		return m_attName;
+	public Attribute getAttr() {
+		return m_attribute;
 	}
 
-	public double getAttrValue() {
-		return m_value;
+	public boolean isNominal() {
+		return m_isNominal;
 	}
-	
-	public boolean isNominal(){
-		return isNominal;
+
+	public boolean isNumeric() {
+		return !m_isNominal;
 	}
-	public  boolean isNumeric(){
-		return !isNominal;
-	}
-	
+
 }

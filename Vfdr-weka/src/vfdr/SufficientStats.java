@@ -3,6 +3,7 @@ package vfdr;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import weka.core.Attribute;
 import weka.core.Instance;
 
 /**
@@ -57,8 +58,11 @@ public class SufficientStats {
 
 		// update stats for each attribute
 		for (int i = 0; i < inst.numAttributes(); i++) {
-			m_attributeLookup.get(inst.attribute(i).name()).update(inst);
+			Attribute a = inst.attribute(i);
+			m_attributeLookup.get(a.name()).update(inst.value(a), classVal);
 		}
+		m_totalWeight++;
+
 	}
 
 	/**

@@ -1,8 +1,12 @@
 package vfdr;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import weka.core.Utils;
 import weka.estimators.UnivariateNormalEstimator;
@@ -19,14 +23,18 @@ public class GaussianAttributeStats extends AttributeStats {
 	protected Map<String, Double> m_minValObservedPerClass = new HashMap<String, Double>();
 	protected Map<String, Double> m_maxValObservedPerClass = new HashMap<String, Double>();
 
-	protected int numBins = 10;
+	protected int m_numBins = 10;
+
+	public GaussianAttributeStats(String attName) {
+		m_attributeName = attName;
+	}
 
 	/**
 	 * Gets the number of bins performed when testing for good split points in
 	 * the interval covered by the distribution
 	 */
 	public int getNumBins() {
-		return numBins;
+		return m_numBins;
 	}
 
 	/**
@@ -37,7 +45,7 @@ public class GaussianAttributeStats extends AttributeStats {
 	 * @see #getNumBins()
 	 */
 	public void setNumBins(int numBins) {
-		this.numBins = numBins;
+		this.m_numBins = numBins;
 	}
 
 	/**
@@ -65,15 +73,144 @@ public class GaussianAttributeStats extends AttributeStats {
 					m_maxValObservedPerClass.put(classVal, attVal);
 			}
 			// That's in weka.estimators.UnivariateNormalEstimator
-			norm.addValue(attVal, 1); 
-										 
+			norm.addValue(attVal, 1);
+
 		}
 	}
 
+	/**
+	 * Returns the best antecedent that could be found for this attribute, as a
+	 * {@link CandidateAntd} object (holds the antecedent and the score
+	 * calculated by the metric)
+	 * 
+	 * @param splitMetric
+	 *            The metric with which to estimate the value of an antecedent
+	 * @param preSplitDist
+	 *            The class distribution of the rule before expansion
+	 * @return The best antecedent, as a antecedent candidate for rule expansion
+	 */
 	@Override
-	public CandidateAntd bestCandidate(SplitMetric splitMetric, Map<String, Integer> preSplitDist) {
-		// TODO Auto-generated method stub
-		return null;
+	public CandidateAntd bestCandidate(ExpansionMetric expMetric, Map<String, Integer> preSplitDist) {
+
+		Set<Double> splitPoints = getSplitPointCandidates();
+
+		double bestScoreYet = Double.NEGATIVE_INFINITY;
+		Double bestSplitPoint = null;
+		boolean isConditionHigher = false;
+
+		for (Double s : splitPoints) {
+			List<Map<String, Integer>> postSplitDists = postExpansionDistributions(s);
+			double[] expMerits = expMetric.evaluateSplit(preSplitDist, postSplitDists);
+
+			for (int i = 0; i < 2; i++) {
+				if (expMerits[i] > bestScoreYet) {
+					bestScoreYet = expMerits[i];
+					bestSplitPoint = s;
+					isConditionHigher = i == 1;
+				}
+			}
+		}
+
+		NumericAntd bestAntd = Antd.buildNumericAntd(m_attributeName);
+		bestAntd.setConditionHigher(isConditionHigher);
+		bestAntd.setSplitPoint(bestSplitPoint);
+
+		return new CandidateAntd(bestAntd, bestScoreYet);
+	}
+
+	/**
+	 * Returns a list with the class distribution for lower or equal
+	 * 
+	 * @param selectedSplit
+	 * @return
+	 */
+	private List<Map<String, Integer>> postExpansionDistributions(double selectedSplit) {
+
+		Map<String, Integer> leftDist = new HashMap<>();
+		Map<String, Integer> rightDist = new HashMap<>();
+
+		// Iterate over classes
+		for (Map.Entry<String, Object> e : m_classLookup.entrySet()) {
+			String classVal = e.getKey();
+			GaussianEstimator norm = (GaussianEstimator) e.getValue();
+
+			if (norm != null) {
+				if (selectedSplit < m_minValObservedPerClass.get(classVal)) {
+					Integer mass = rightDist.get(classVal);
+					if (mass == null) {
+						mass = new Integer(0);
+						rightDist.put(classVal, mass);
+					}
+					mass = new Integer(mass.intValue() + (int) norm.getSumOfWeights());
+				} else if (selectedSplit > m_maxValObservedPerClass.get(classVal)) {
+					Integer mass = leftDist.get(classVal);
+					if (mass == null) {
+						mass = new Integer(0);
+						leftDist.put(classVal, mass);
+					}
+					mass = new Integer(mass.intValue() + (int) norm.getSumOfWeights());
+				} else {
+					double[] weights = norm.weightLessThanEqualAndGreaterThan(selectedSplit);
+					Integer lmass = leftDist.get(classVal);
+					if (lmass == null) {
+						lmass = new Integer(0);
+						leftDist.put(classVal, lmass);
+					}
+					lmass = new Integer((int) (lmass.intValue() + weights[0] + weights[1]));
+
+					Integer rmass = rightDist.get(classVal);
+					if (rmass == null) {
+						rmass = new Integer(0);
+						rightDist.put(classVal, rmass);
+					}
+					rmass = new Integer(rmass.intValue() + (int) weights[2]);
+				}
+			}
+		}
+
+		List<Map<String, Integer>> list = new ArrayList<>();
+
+		list.add(leftDist);
+		list.add(rightDist);
+
+		return list;
+	}
+
+	/**
+	 * Returns the set of all breakpoints between bins, which serve as candidate
+	 * splitpoints for the antecedent being worked out. The interval binned is
+	 * selected so that all values observed for now could fit in.
+	 * 
+	 * @return The set of all breakpoints between bins
+	 */
+	private Set<Double> getSplitPointCandidates() {
+		Set<Double> splitPoints = new TreeSet<Double>();
+		double min = Double.POSITIVE_INFINITY;
+		double max = Double.NEGATIVE_INFINITY;
+
+		for (String classVal : m_classLookup.keySet()) {
+
+			if (m_maxValObservedPerClass.containsKey(classVal)) {
+				if (m_maxValObservedPerClass.get(classVal) > max)
+					max = m_maxValObservedPerClass.get(classVal);
+			}
+
+			if (m_minValObservedPerClass.containsKey(classVal)) {
+				if (m_minValObservedPerClass.get(classVal) < min)
+					min = m_minValObservedPerClass.get(classVal);
+			}
+
+		}
+
+		double binWidth = (max - min) / (m_numBins + 1);
+		for (int i = 1; i <= m_numBins; i++) {
+			double split = min + i * binWidth;
+
+			if (split < max && split > min)
+				splitPoints.add(split);
+		}
+
+		return splitPoints;
 	}
 
 	/**

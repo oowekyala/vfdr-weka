@@ -1,5 +1,7 @@
 package vfdr;
 
+import java.util.Map;
+
 import weka.core.Attribute;
 import weka.core.Instance;
 
@@ -15,11 +17,6 @@ public abstract class Antd {
 	protected Attribute m_attribute;
 
 	protected boolean m_isNominal;
-
-	/**
-	 * Reference to the enclosing rule
-	 */
-	protected VfdrRule m_thisRule;
 
 	public abstract boolean covers(Instance inst);
 
@@ -38,6 +35,42 @@ public abstract class Antd {
 
 	public boolean isNumeric() {
 		return !m_isNominal;
+	}
+
+	private static Map<String, Attribute> lookupTable;
+
+	/**
+	 * Initialises the lookup table that allows us to build an antecedent
+	 * without its attribute (only its name).
+	 * 
+	 * @param template
+	 */
+	public static void init(Instance template) {
+		for (int i = 0; i < template.numAttributes(); i++) {
+			Attribute a = template.attribute(i);
+			lookupTable.put(a.name(), a);
+		}
+	}
+
+	/**
+	 * Builds a new numeric antecedent from the name of its attribute
+	 * 
+	 * @param attName
+	 * @return A new numeric antecedent
+	 */
+	public static NumericAntd buildNumericAntd(String attName) {
+		return new NumericAntd(lookupTable.get(attName));
+	}
+
+	/**
+	 * Builds a new nominal antecedent from the name of its attribute
+	 * 
+	 * @param attName
+	 *            The name of the attribute
+	 * @return A new nominal antecedent
+	 */
+	public static NominalAntd buildNominalAntd(String attName) {
+		return new NominalAntd(lookupTable.get(attName));
 	}
 
 }

@@ -1,19 +1,36 @@
 package vfdr;
 
-import java.util.List;
-import java.util.Map;
+public class CandidateAntd implements Comparable<CandidateAntd> {
 
-import weka.classifiers.trees.ht.WeightMass;
-
-public class CandidateAntd {
-
-	/**
-	 * list of class distributions resulting from a split - 2 entries in the
-	 * outer list for numeric splits and n for nominal splits
-	 */
-	public List<Map<String, WeightMass>> m_postSplitClassDistributions;
+	private Antd m_antd;
 
 	/** The merit of the split (metric-dependent) */
-	public double m_splitMerit;
+	private double m_splitMerit;
+
+	public CandidateAntd(Antd antd, double splitMerit) {
+		m_antd = antd;
+		m_splitMerit = splitMerit;
+	}
+
+	/**
+	 * Returns the split merit of this candidate
+	 * 
+	 * @return the split merit of this candidate
+	 */
+	public double splitMerit() {
+		return m_splitMerit;
+	}
+
+	/**
+	 * Implements comparable
+	 * 
+	 * @param ca
+	 *            The candidate to compare to
+	 * @return comparison
+	 */
+	@Override
+	public int compareTo(CandidateAntd ca) {
+		return Double.compare(m_splitMerit, ca.m_splitMerit);
+	}
 
 }

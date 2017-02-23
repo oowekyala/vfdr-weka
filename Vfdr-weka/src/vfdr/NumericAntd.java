@@ -56,11 +56,11 @@ public class NumericAntd extends Antd {
 		this.m_splitPoint = m_splitPoint;
 	}
 
-	public boolean isHigherCondition() {
+	public boolean isConditionHigher() {
 		return m_condition;
 	}
 
-	public void setCondition(boolean m_condition) {
+	public void setConditionHigher(boolean m_condition) {
 		this.m_condition = m_condition;
 	}
 

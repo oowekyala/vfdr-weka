@@ -1,6 +1,8 @@
 package vfdr;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import weka.core.Attribute;
@@ -51,9 +53,9 @@ public class SufficientStats {
 			AttributeStats stats = m_attributeLookup.get(a.name());
 			if (stats == null) {
 				if (a.isNumeric()) {
-					stats = new GaussianAttributeStats();
+					stats = new GaussianAttributeStats(a.name());
 				} else {
-					stats = new NominalAttributeStats();
+					stats = new NominalAttributeStats(a.name());
 				}
 				m_attributeLookup.put(a.name(), stats);
 			}
@@ -65,12 +67,53 @@ public class SufficientStats {
 	}
 
 	/**
+	 * Gets the best antecedents that have been worked out for each attribute
+	 * 
+	 * @return
+	 */
+	public List<CandidateAntd> getExpansionCandidates(ExpansionMetric expMetric) {
+
+		List<CandidateAntd> candids = new ArrayList<>();
+		
+		for (Map.Entry<String, AttributeStats> en : m_attributeLookup.entrySet()) {
+			AttributeStats astat = en.getValue();
+			
+			// best candidate for this attribute
+			CandidateAntd acand = astat.bestCandidate(expMetric, m_classDistribution);
+		}
+
+		
+		return candids;
+	}
+
+	/**
 	 * Returns the weight of examples covered by the rule.
 	 * 
 	 * @return The weight of examples covered by the rule.
 	 */
 	public int totalWeight() {
 		return m_totalWeight;
+	}
+
+	/**
+	 * Gets the class distribution for this rule
+	 * 
+	 * @return the class distribution
+	 */
+	public Map<String, Integer> classDistribution() {
+		return m_classDistribution;
+	}
+
+	public void classDistribution(Map<String, Integer> m_classDistribution) {
+		this.m_classDistribution = m_classDistribution;
+	}
+
+	public Map<String, AttributeStats> attributeLookup() {
+		return m_attributeLookup;
+	}
+
+	public void attributeLookup(Map<String, AttributeStats> m_attributeLookup) {
+		this.m_attributeLookup = m_attributeLookup;
 	}
 
 }

@@ -15,29 +15,38 @@ import weka.core.Utils;
  */
 public class NominalAttributeStats extends AttributeStats {
 
-	
 	/**
 	 * Cumulated weight of all distributions (that is, for all classes)
 	 */
 	protected int m_totalWeight = 0;
-	
+
+	/**
+	 * 
+	 * @param attName
+	 */
+	public NominalAttributeStats(String attName) {
+		m_attributeName = attName;
+	}
+
+	/**
+	 * 
+	 */
 	@Override
 	public void update(double attVal, String classVal) {
 		if (!Utils.isMissingValue(attVal)) {
 			DiscreteDistribution dist = (DiscreteDistribution) m_classLookup.get(classVal);
-			if(dist == null){
+			if (dist == null) {
 				dist = new DiscreteDistribution();
-				dist.add((int) attVal); 
+				dist.add((int) attVal);
 				m_classLookup.put(classVal, dist);
 			}
 			m_totalWeight++;
 		}
-		
-		
+
 	}
 
 	@Override
-	public CandidateAntd bestCandidate(SplitMetric splitMetric, Map<String, Integer> preSplitDist) {
+	public CandidateAntd bestCandidate(ExpansionMetric splitMetric, Map<String, Integer> preSplitDist) {
 		// TODO Auto-generated method stub
 		return null;
 	}

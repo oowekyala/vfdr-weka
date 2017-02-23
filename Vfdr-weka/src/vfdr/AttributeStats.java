@@ -45,6 +45,9 @@ public abstract class AttributeStats {
 	 *            The class distribution of the rule before expansion
 	 * @return The best antecedent, as a antecedent candidate for rule expansion
 	 */
-	public abstract CandidateAntd bestCandidate(SplitMetric splitMetric, Map<String, Integer> preSplitDist);
+	public abstract CandidateAntd bestCandidate(ExpansionMetric splitMetric, Map<String, Integer> preSplitDist);
 
+	
+	
+	
 }

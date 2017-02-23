@@ -10,7 +10,8 @@ import weka.core.Instances;
 import weka.core.WeightedInstancesHandler;
 
 /**
- * Implements the algorithm proper. Only works for binary, unweighted classification
+ * Implements the algorithm proper. Only works for binary, unweighted
+ * classification
  * 
  * @author cl-fo
  * 
@@ -30,15 +31,17 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 	/**
 	 * Whether the set of rules is ordered or not
 	 */
-	private boolean ordered_set;
+	private boolean m_orderedSet;
 
 	/**
 	 * Minimal number of uncovered examples needed to expand a rule.
 	 */
-	private int NMIN = 40;
+	private int m_gracePeriod = 40;
 
+	/**
+	 * Set of rules built
+	 */
 	private List<VfdrRule> m_ruleSet;
-
 	private VfdrRule m_defaultRule;
 
 	/**
@@ -49,7 +52,7 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 		// can classifier handle the data?
 		// getCapabilities().testWithFail(instances); // TODO
 
-		// remove instances with missing class
+		
 		instances = new Instances(instances);
 		instances.deleteWithMissingClass();
 
@@ -58,6 +61,9 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 
 		m_ruleSet = new ArrayList<>();
 		m_defaultRule = new VfdrRule(instances.get(0));
+		
+		Antd.init(instances.get(0));
+		
 
 		// TODO make subsets
 		for (Instance x : instances) {
@@ -77,18 +83,18 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 	@Override
 	public void updateClassifier(Instance x) throws Exception {
 		int trigerred = 0;
-		
+
 		for (VfdrRule r : m_ruleSet) {
 			if (r.covers(x)) {
 				trigerred++;
 				SufficientStats lr = r.getStats();
 				lr.update(x);
-		
-				if (lr.totalWeight() > NMIN) {
+
+				if (lr.totalWeight() > m_gracePeriod) {
 					r = r.expand(x);
 				}
-				
-				if (ordered_set) {
+
+				if (m_orderedSet) {
 					break;
 				}
 			}
@@ -96,7 +102,7 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 
 		if (trigerred == 0) {
 			m_defaultRule.getStats().update(x);
-			if (m_defaultRule.getStats().totalWeight() > NMIN) {
+			if (m_defaultRule.getStats().totalWeight() > m_gracePeriod) {
 				m_ruleSet.add(m_defaultRule.expand(x));
 			}
 

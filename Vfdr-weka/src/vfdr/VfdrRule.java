@@ -2,6 +2,7 @@ package vfdr;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import weka.core.Instance;
 
@@ -14,7 +15,7 @@ import weka.core.Instance;
  */
 public class VfdrRule {
 	/**
-	 * After each expansion, the attribute specialized is removed
+	 * After each expansion, the attribute used in the new antecedent is removed
 	 */
 	private List<String> m_attributesLeft;
 
@@ -46,8 +47,13 @@ public class VfdrRule {
 	 * FIXME TODO
 	 */
 	public VfdrRule expand(Instance x) {
-		double hoeffding = computeHoeffding(1, m_confidence, m_lr.totalWeight());
 
+		// i.e. distribution is impure
+		if (m_lr.classDistribution().size() > 1) {
+
+			double hoeffding = computeHoeffding(1, m_confidence, m_lr.totalWeight());
+
+		}
 		return this;
 
 	}

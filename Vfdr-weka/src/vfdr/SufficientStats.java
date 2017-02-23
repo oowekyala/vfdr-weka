@@ -1,9 +1,9 @@
 package vfdr;
 
-import java.util.TreeSet;
-import java.util.Vector;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-import weka.core.matrix.Matrix;
+import weka.core.Instance;
 
 /**
  * Sufficient statistics used to grow rules.
@@ -13,19 +13,61 @@ import weka.core.matrix.Matrix;
  */
 public class SufficientStats {
 
-	private int coveredExamples = 0;
+	private int m_totalWeight = 0;
 
 	/**
-	 * Stores the probability of observing examples of each class
+	 * Stores the class distribution for the examples covered by this rule.
 	 */
-	private Vector<Double> proba_vector;
+	private Map<String, Integer> m_classDistribution = new LinkedHashMap<>();
 
 	/**
-	 * Used to compute the probability {@code p(at_i = v_j | c_i)} of observing value {@code v_j} of a *nominal*
-	 * attribute {@code at_i}. There's one matrix per class.
+	 * Map indexed on attributes, storing stats for individual attributes
 	 */
-	private Matrix[] proba_matrix;
-	
-	private TreeSet[] proba_btree;
+	private Map<String, AttributeStats> m_attributeLookup = new LinkedHashMap<>();
+
+	/**
+	 * Creates sufficient statistics using an example as a template for
+	 * attributes
+	 * 
+	 * @param template
+	 *            Template instance
+	 */
+	public SufficientStats(Instance template) {
+
+	}
+
+	/**
+	 * Updates the sufficient statistics to take one more example in account.
+	 * 
+	 * @param inst
+	 *            The example with which to update.
+	 */
+	public void update(Instance inst) {
+
+		// update the class distribution for the rule
+		if (inst.classIsMissing()) {
+			return;
+		}
+		String classVal = inst.stringValue(inst.classAttribute());
+		Integer m = m_classDistribution.get(classVal);
+		if (m == null)
+			m_classDistribution.put(classVal, 1);
+		else
+			m++;
+
+		// update stats for each attribute
+		for (int i = 0; i < inst.numAttributes(); i++) {
+			m_attributeLookup.get(inst.attribute(i).name()).update(inst);
+		}
+	}
+
+	/**
+	 * Returns the weight of examples covered by the rule.
+	 * 
+	 * @return The weight of examples covered by the rule.
+	 */
+	public int totalWeight() {
+		return m_totalWeight;
+	}
 
 }

@@ -1,8 +1,6 @@
 package vfdr;
 
-import weka.core.Attribute;
 import weka.core.Instance;
-import weka.core.Instances;
 
 /**
  * Antd for numerical attributes.
@@ -14,10 +12,15 @@ public class NumericAntd extends Antd {
 
 	/** The split point for this numeric antecedent */
 	private double splitPoint;
-
-	public NumericAntd(Attribute a) {
+	
+	/**
+	 * Builds a numeric antecedent from the attname
+	 * @param a
+	 */
+	public NumericAntd(String a) {
 		super(a);
 		splitPoint = Double.NaN;
+		isNominal = false;
 	}
 
 	/**
@@ -37,20 +40,14 @@ public class NumericAntd extends Antd {
 	@Override
 	public Object copy() {
 		NumericAntd na = new NumericAntd(getAttr());
-		na.value = this.value;
+		na.m_value = this.m_value;
 		na.splitPoint = this.splitPoint;
 		return na;
 	}
 
 	@Override
-	public Instances[] splitData(Instances data, double defAcRt, double cla) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public boolean covers(Instance inst) {
-		// TODO Auto-generated method stub
+		
 		return false;
 	}
 
@@ -59,5 +56,11 @@ public class NumericAntd extends Antd {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	
+	
+	
+	
+	
 
 }

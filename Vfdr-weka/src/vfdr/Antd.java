@@ -1,9 +1,7 @@
 package vfdr;
 
-import weka.core.Attribute;
 import weka.core.Copyable;
 import weka.core.Instance;
-import weka.core.Instances;
 
 /**
  *  Simple literal class used to create a rule.
@@ -13,24 +11,24 @@ import weka.core.Instances;
 public abstract class Antd implements Copyable {
 
 	/** The attribute of the antecedent */
-	protected Attribute att;
+	protected String m_attName;
 
 	/**
 	 * The attribute value of the antecedent. For numeric attributes, the value is
 	 * either 0 (1st bag) or 1 (2nd bag).
 	 */
-	protected double value;
+	protected double m_value;
+	
+	protected boolean isNominal;
+	
 
 	/**
 	 * Constructor
 	 */
-	public Antd(Attribute a) {
-		att = a;
-		value = Double.NaN;
+	public Antd(String a) {
+		m_attName = a;
+		m_value = Double.NaN;
 	}
-
-	/* The abstract members for inheritance */
-	public abstract Instances[] splitData(Instances data, double defAcRt, double cla);
 
 	public abstract boolean covers(Instance inst);
 
@@ -46,11 +44,19 @@ public abstract class Antd implements Copyable {
 	public abstract Object copy();
 
 	/* Get functions of this antecedent */
-	public Attribute getAttr() {
-		return att;
+	public String getAttr() {
+		return m_attName;
 	}
 
 	public double getAttrValue() {
-		return value;
+		return m_value;
 	}
+	
+	public boolean isNominal(){
+		return isNominal;
+	}
+	public  boolean isNumeric(){
+		return !isNominal;
+	}
+	
 }

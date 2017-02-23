@@ -1,0 +1,550 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.14" icons="true" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
+  realizations="true" associations="true" dependencies="true" nesting-relationships="true" router="FAN">  
+  <class id="1" language="java" name="weka.classifiers.trees.ht.GiniSplitMetric" project="Vfdr-weka" 
+    file="C:/Program Files/Weka-3-8/weka.jar" binary="true" corner="BOTTOM_RIGHT">    
+    <position height="178" width="494" x="65" y="2838"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="weka.classifiers.trees.ht.UnivariateNominalMultiwaySplit" project="Vfdr-weka" 
+    file="C:/Program Files/Weka-3-8/weka.jar" binary="true" corner="BOTTOM_RIGHT">    
+    <position height="142" width="248" x="1370" y="3056"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="weka.classifiers.trees.ht.LeafNode" project="Vfdr-weka" 
+    file="C:/Program Files/Weka-3-8/weka.jar" binary="true" corner="BOTTOM_RIGHT">    
+    <position height="160" width="225" x="2079" y="1335"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="weka.classifiers.trees.ht.NBNodeAdaptive" project="Vfdr-weka" 
+    file="C:/Program Files/Weka-3-8/weka.jar" binary="true" corner="BOTTOM_RIGHT">    
+    <position height="232" width="269" x="1747" y="2294"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="weka.classifiers.trees.ht.GaussianConditionalSufficientStats" project="Vfdr-weka" 
+    file="C:/Program Files/Weka-3-8/weka.jar" binary="true" corner="BOTTOM_RIGHT">    
+    <position height="286" width="429" x="1215" y="2294"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="weka.classifiers.trees.ht.HNode" project="Vfdr-weka" 
+    file="C:/Program Files/Weka-3-8/weka.jar" binary="true" corner="BOTTOM_RIGHT">    
+    <position height="393" width="327" x="2079" y="1535"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="weka.classifiers.trees.ht.SplitMetric" project="Vfdr-weka" 
+    file="C:/Program Files/Weka-3-8/weka.jar" binary="true" corner="BOTTOM_RIGHT">    
+    <position height="159" width="492" x="622" y="2620"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="weka.classifiers.trees.ht.NominalConditionalSufficientStats" project="Vfdr-weka" 
+    file="C:/Program Files/Weka-3-8/weka.jar" binary="true" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="867" y="2349"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="weka.classifiers.trees.ht.Split" project="Vfdr-weka" 
+    file="C:/Program Files/Weka-3-8/weka.jar" binary="true" corner="BOTTOM_RIGHT">    
+    <position height="177" width="231" x="2140" y="2838"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" name="weka.classifiers.trees.ht.NBNode" project="Vfdr-weka" 
+    file="C:/Program Files/Weka-3-8/weka.jar" binary="true" corner="BOTTOM_RIGHT">    
+    <position height="232" width="269" x="1747" y="1968"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="11" language="java" name="weka.classifiers.trees.ht.InfoGainSplitMetric" project="Vfdr-weka" 
+    file="C:/Program Files/Weka-3-8/weka.jar" binary="true" corner="BOTTOM_RIGHT">    
+    <position height="160" width="494" x="620" y="2838"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="12" language="java" name="weka.classifiers.trees.ht.SplitNode" project="Vfdr-weka" 
+    file="C:/Program Files/Weka-3-8/weka.jar" binary="true" corner="BOTTOM_RIGHT">    
+    <position height="286" width="327" x="2121" y="1968"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="13" language="java" name="weka.classifiers.trees.ht.WeightMass" project="Vfdr-weka" 
+    file="C:/Program Files/Weka-3-8/weka.jar" binary="true" corner="BOTTOM_RIGHT">    
+    <position height="124" width="153" x="1177" y="3056"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="14" language="java" name="weka.classifiers.trees.ht.ConditionalSufficientStats" project="Vfdr-weka" 
+    file="C:/Program Files/Weka-3-8/weka.jar" binary="true" corner="BOTTOM_RIGHT">    
+    <position height="177" width="427" x="1175" y="1968"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="15" language="java" name="weka.classifiers.trees.ht.LearningNode" project="Vfdr-weka" 
+    file="C:/Program Files/Weka-3-8/weka.jar" binary="true" corner="BOTTOM_RIGHT">    
+    <position height="70" width="143" x="1787" y="2620"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="16" language="java" name="weka.classifiers.trees.ht.UnivariateNumericBinarySplit" project="Vfdr-weka" 
+    file="C:/Program Files/Weka-3-8/weka.jar" binary="true" corner="BOTTOM_RIGHT">    
+    <position height="160" width="277" x="1789" y="3056"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="17" language="java" name="weka.classifiers.trees.ht.SplitCandidate" project="Vfdr-weka" 
+    file="C:/Program Files/Weka-3-8/weka.jar" binary="true" corner="BOTTOM_RIGHT">    
+    <position height="178" width="397" x="1255" y="2620"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="18" language="java" name="weka.classifiers.trees.ht.ActiveHNode" project="Vfdr-weka" 
+    file="C:/Program Files/Weka-3-8/weka.jar" binary="true" corner="BOTTOM_RIGHT">    
+    <position height="160" width="322" x="1644" y="1535"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="19" language="java" name="weka.classifiers.trees.ht.InactiveHNode" project="Vfdr-weka" 
+    file="C:/Program Files/Weka-3-8/weka.jar" binary="true" corner="BOTTOM_RIGHT">    
+    <position height="124" width="268" x="1336" y="1535"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="20" language="java" name="weka.classifiers.trees.HoeffdingTree" project="Vfdr-weka" 
+    file="C:/Program Files/Weka-3-8/weka.jar" binary="true" corner="BOTTOM_RIGHT">    
+    <position height="1258" width="338" x="1987" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <dependency id="21">    
+    <bendpoint x="589" y="1968"/>    
+    <bendpoint x="589" y="2294"/>    
+    <bendpoint x="589" y="2620"/>    
+    <bendpoint x="589" y="2838"/>    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <dependency id="22">    
+    <bendpoint x="1134" y="2451"/>    
+    <bendpoint x="1144" y="2620"/>    
+    <bendpoint x="1165" y="2838"/>    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <dependency id="23">    
+    <bendpoint x="631" y="1968"/>    
+    <bendpoint x="631" y="2294"/>    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <association id="24">    
+    <bendpoint x="2436" y="1535"/>    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="25" name="m_parentNode"/>      
+      <multiplicity id="26" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="27">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <generalization id="28">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="10"/>  
+  </generalization>  
+  <dependency id="29">    
+    <bendpoint x="1254" y="2838"/>    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <dependency id="30">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="17"/>  
+  </dependency>  
+  <association id="31">    
+    <bendpoint x="2334" y="1335"/>    
+    <end type="SOURCE" refId="20" navigable="false">      
+      <attribute id="32" name="m_root"/>      
+      <multiplicity id="33" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="34">    
+    <bendpoint x="1184" y="2294"/>    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="17"/>  
+  </dependency>  
+  <dependency id="35">    
+    <bendpoint x="2457" y="1335"/>    
+    <bendpoint x="2457" y="1535"/>    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="12"/>  
+  </dependency>  
+  <realization id="36">    
+    <bendpoint x="1716" y="1968"/>    
+    <bendpoint x="1716" y="2294"/>    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="15"/>  
+  </realization>  
+  <association id="37">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="38" name="m_theNode"/>      
+      <multiplicity id="39" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="40">    
+    <bendpoint x="1090" y="2372"/>    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="41">    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <dependency id="42">    
+    <bendpoint x="1144" y="1335"/>    
+    <bendpoint x="1144" y="1535"/>    
+    <bendpoint x="1144" y="1968"/>    
+    <bendpoint x="1163" y="2294"/>    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="17"/>  
+  </dependency>  
+  <dependency id="43">    
+    <bendpoint x="1824" y="1335"/>    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <dependency id="44">    
+    <bendpoint x="431" y="1335"/>    
+    <bendpoint x="431" y="1535"/>    
+    <bendpoint x="431" y="1968"/>    
+    <bendpoint x="431" y="2294"/>    
+    <bendpoint x="431" y="2620"/>    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <generalization id="45">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <dependency id="46">    
+    <bendpoint x="1756" y="2620"/>    
+    <bendpoint x="1756" y="2838"/>    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <dependency id="47">    
+    <bendpoint x="1203" y="2620"/>    
+    <bendpoint x="1233" y="2838"/>    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="2"/>  
+  </dependency>  
+  <generalization id="48">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <generalization id="49">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <association id="50">    
+    <bendpoint x="2140" y="2294"/>    
+    <bendpoint x="2140" y="2620"/>    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="51" name="m_split"/>      
+      <multiplicity id="52" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="53">    
+    <bendpoint x="610" y="1968"/>    
+    <bendpoint x="568" y="2294"/>    
+    <bendpoint x="452" y="2620"/>    
+    <bendpoint x="34" y="2838"/>    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <realization id="54">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="15"/>  
+  </realization>  
+  <generalization id="55">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="14"/>  
+  </generalization>  
+  <dependency id="56">    
+    <bendpoint x="1224" y="2620"/>    
+    <bendpoint x="1212" y="2838"/>    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <dependency id="57">    
+    <bendpoint x="1653" y="1968"/>    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <generalization id="58">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="6"/>  
+  </generalization>  
+  <dependency id="59">    
+    <bendpoint x="547" y="1335"/>    
+    <bendpoint x="547" y="1535"/>    
+    <bendpoint x="547" y="1968"/>    
+    <bendpoint x="547" y="2294"/>    
+    <bendpoint x="547" y="2620"/>    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="11"/>  
+  </dependency>  
+  <dependency id="60">    
+    <bendpoint x="2109" y="2294"/>    
+    <bendpoint x="2109" y="2620"/>    
+    <bendpoint x="2109" y="2838"/>    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <generalization id="61">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="14"/>  
+  </generalization>  
+  <association id="62">    
+    <end type="SOURCE" refId="17" navigable="false">      
+      <attribute id="63" name="m_splitTest"/>      
+      <multiplicity id="64" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="65">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="18"/>  
+  </generalization>  
+  <dependency id="66">    
+    <bendpoint x="1144" y="2838"/>    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <generalization id="67">    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <association id="68">    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="69" name="m_children"/>      
+      <multiplicity id="70" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="71">    
+    <bendpoint x="568" y="1335"/>    
+    <bendpoint x="568" y="1535"/>    
+    <bendpoint x="568" y="1968"/>    
+    <bendpoint x="610" y="2294"/>    
+    <end type="SOURCE" refId="20" navigable="false">      
+      <attribute id="72" name="m_splitMetric"/>      
+      <multiplicity id="73" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="74">    
+    <bendpoint x="2048" y="1335"/>    
+    <bendpoint x="2048" y="1535"/>    
+    <bendpoint x="2067" y="1968"/>    
+    <bendpoint x="2067" y="2294"/>    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="15"/>  
+  </dependency>  
+  <generalization id="75">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="6"/>  
+  </generalization>  
+  <dependency id="76">    
+    <bendpoint x="1714" y="2620"/>    
+    <bendpoint x="1798" y="2838"/>    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="16"/>  
+  </dependency>  
+  <dependency id="77">    
+    <bendpoint x="1632" y="1968"/>    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="8"/>  
+  </dependency>  
+  <realization id="78">    
+    <bendpoint x="2046" y="2294"/>    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="15"/>  
+  </realization>  
+  <association id="79">    
+    <bendpoint x="2088" y="1968"/>    
+    <bendpoint x="2088" y="2294"/>    
+    <bendpoint x="1960" y="2620"/>    
+    <bendpoint x="1777" y="2838"/>    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="80" name="m_classDistribution"/>      
+      <multiplicity id="81" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="13" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="82">    
+    <end type="SOURCE" refId="18" navigable="false">      
+      <attribute id="83" name="m_nodeStats"/>      
+      <multiplicity id="84" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="85">    
+    <bendpoint x="1695" y="1968"/>    
+    <bendpoint x="1674" y="2294"/>    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="17"/>  
+  </dependency>  
+  <dependency id="86">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <dependency id="87">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="88">    
+    <bendpoint x="1735" y="2620"/>    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="9"/>  
+  </dependency>  
+  <generalization id="89">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="9"/>  
+  </generalization>  
+  <dependency id="90">    
+    <bendpoint x="2478" y="1335"/>    
+    <bendpoint x="2478" y="1535"/>    
+    <bendpoint x="2478" y="1968"/>    
+    <bendpoint x="2478" y="2294"/>    
+    <bendpoint x="2478" y="2620"/>    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="9"/>  
+  </dependency>  
+  <realization id="91">    
+    <bendpoint x="1674" y="1968"/>    
+    <bendpoint x="1695" y="2294"/>    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="15"/>  
+  </realization>  
+  <dependency id="92">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="17"/>  
+  </dependency>  
+  <generalization id="93">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="9"/>  
+  </generalization>  
+  <dependency id="94">    
+    <bendpoint x="1182" y="2620"/>    
+    <bendpoint x="1186" y="2838"/>    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <dependency id="95">    
+    <bendpoint x="1670" y="1335"/>    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="19"/>  
+  </dependency>  
+  <dependency id="96">    
+    <bendpoint x="2027" y="1335"/>    
+    <bendpoint x="2027" y="1535"/>    
+    <bendpoint x="2046" y="1968"/>    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <dependency id="97">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <dependency id="98">    
+    <bendpoint x="1996" y="1335"/>    
+    <bendpoint x="1996" y="1535"/>    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="10"/>  
+  </dependency>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

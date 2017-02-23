@@ -6,8 +6,8 @@ import java.util.List;
 import weka.core.Instance;
 
 /**
- * Represents a rule for the Vfdr algorithm. Rules are comprised of a
- * conjunction of antecedents, and a set of sufficient statistics.
+ * Represents a rule for the Vfdr algorithm. Rules are made of a conjunction of
+ * antecedents, and a set of sufficient statistics.
  * 
  * @author cl-fo
  *
@@ -33,7 +33,7 @@ public class VfdrRule {
 	 */
 	public VfdrRule(Instance template) {
 		m_literals = new ArrayList<>();
-		m_lr = new SufficientStats(template);
+		m_lr = new SufficientStats();
 		m_attributesLeft = new ArrayList<>();
 		for (int i = 0; i < template.numAttributes(); i++) {
 			m_attributesLeft.add(template.attribute(i).name());

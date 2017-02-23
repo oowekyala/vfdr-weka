@@ -27,17 +27,6 @@ public class SufficientStats {
 	private Map<String, AttributeStats> m_attributeLookup = new LinkedHashMap<>();
 
 	/**
-	 * Creates sufficient statistics using an example as a template for
-	 * attributes
-	 * 
-	 * @param template
-	 *            Template instance
-	 */
-	public SufficientStats(Instance template) {
-
-	}
-
-	/**
 	 * Updates the sufficient statistics to take one more example in account.
 	 * 
 	 * @param inst
@@ -59,6 +48,16 @@ public class SufficientStats {
 		// update stats for each attribute
 		for (int i = 0; i < inst.numAttributes(); i++) {
 			Attribute a = inst.attribute(i);
+			AttributeStats stats = m_attributeLookup.get(a.name());
+			if (stats == null) {
+				if (a.isNumeric()) {
+					stats = new GaussianAttributeStats();
+				} else {
+					stats = new NominalAttributeStats();
+				}
+				m_attributeLookup.put(a.name(), stats);
+			}
+
 			m_attributeLookup.get(a.name()).update(inst.value(a), classVal);
 		}
 		m_totalWeight++;

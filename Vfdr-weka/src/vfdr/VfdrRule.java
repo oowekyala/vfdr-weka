@@ -3,9 +3,7 @@ package vfdr;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
-import weka.core.Copyable;
 import weka.core.Instance;
 
 /**
@@ -87,10 +85,12 @@ public class VfdrRule {
 					VfdrRule newRule = new VfdrRule();
 					newRule.m_literals.add(best.antd());
 					newRule.m_attributesLeft.remove(best.antd().getAttr().name());
+					this.m_lr = new SufficientStats();
 					return newRule;
 
 				} else {
 					m_literals.add(best.antd());
+					this.m_lr = new SufficientStats();
 					return this;
 				}
 

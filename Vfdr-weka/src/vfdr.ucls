@@ -21,7 +21,7 @@
   </class>  
   <class id="3" language="java" name="vfdr.GaussianAttributeStats" project="Vfdr-weka" 
     file="/Vfdr-weka/src/vfdr/GaussianAttributeStats.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="698" y="1271"/>    
+    <position height="-1" width="-1" x="1372" y="1218"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -30,7 +30,7 @@
   </class>  
   <class id="4" language="java" name="vfdr.NumericAntd" project="Vfdr-weka" file="/Vfdr-weka/src/vfdr/NumericAntd.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="-192" y="799"/>    
+    <position height="-1" width="-1" x="-287" y="843"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -39,7 +39,7 @@
   </class>  
   <class id="5" language="java" name="vfdr.SufficientStats" project="Vfdr-weka" 
     file="/Vfdr-weka/src/vfdr/SufficientStats.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="988" y="597"/>    
+    <position height="-1" width="-1" x="1246" y="469"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -48,7 +48,7 @@
   </class>  
   <class id="6" language="java" name="vfdr.NominalAttributeStats" project="Vfdr-weka" 
     file="/Vfdr-weka/src/vfdr/NominalAttributeStats.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1751" y="899"/>    
+    <position height="-1" width="-1" x="1966" y="1099"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -57,7 +57,7 @@
   </class>  
   <class id="7" language="java" name="vfdr.ExpansionMetric" project="Vfdr-weka" 
     file="/Vfdr-weka/src/vfdr/ExpansionMetric.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1255" y="1092"/>    
+    <position height="-1" width="-1" x="908" y="852"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -66,7 +66,7 @@
   </class>  
   <class id="8" language="java" name="vfdr.AttributeStats" project="Vfdr-weka" 
     file="/Vfdr-weka/src/vfdr/AttributeStats.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1089" y="880"/>    
+    <position height="-1" width="-1" x="1491" y="828"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -102,7 +102,7 @@
   </class>  
   <class id="12" language="java" name="vfdr.EntropyMetric" project="Vfdr-weka" 
     file="/Vfdr-weka/src/vfdr/EntropyMetric.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="106" width="434" x="1231" y="1239"/>    
+    <position height="-1" width="-1" x="814" y="1120"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -111,7 +111,7 @@
   </class>  
   <class id="13" language="java" name="vfdr.CandidateAntd" project="Vfdr-weka" 
     file="/Vfdr-weka/src/vfdr/CandidateAntd.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="205" y="872"/>    
+    <position height="-1" width="-1" x="120" y="1016"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -121,10 +121,10 @@
   <association id="14">    
     <end type="SOURCE" refId="5" navigable="false">      
       <attribute id="15" name="m_attributeLookup">        
-        <position height="0" width="0" x="0" y="0"/>      
+        <position height="0" width="0" x="402" y="-52"/>      
       </attribute>      
       <multiplicity id="16" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
+        <position height="0" width="0" x="402" y="-52"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="8" navigable="true"/>    
@@ -175,10 +175,10 @@
   <association id="27">    
     <end type="SOURCE" refId="1" navigable="false">      
       <attribute id="28" name="m_lr">        
-        <position height="0" width="0" x="0" y="0"/>      
+        <position height="0" width="0" x="258" y="-128"/>      
       </attribute>      
       <multiplicity id="29" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
+        <position height="0" width="0" x="258" y="-128"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="5" navigable="true"/>    

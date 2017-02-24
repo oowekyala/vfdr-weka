@@ -9,7 +9,7 @@ import java.util.Map;
  * the values of its attribute for each class. In effect, it stores an
  * estimation of P(attr = value | class).
  * 
- * @author Clément Fournier
+* @author Clément Fournier (clement.fournier@insa-rennes.fr)
  */
 public abstract class AttributeStats {
 

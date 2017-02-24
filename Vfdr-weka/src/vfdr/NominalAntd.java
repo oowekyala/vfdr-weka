@@ -3,19 +3,24 @@ package vfdr;
 import weka.core.Attribute;
 import weka.core.Instance;
 
+/**
+ * Nominal antecedent, of the form {NominalAttribute = value}. The value is
+ * represented by its index.
+ * 
+ * @author Clément Fournier (clement.fournier@insa-rennes.fr)
+ *
+ */
 public class NominalAntd extends Antd {
 
 	/**
 	 * Index of the value of the attribute that is tested
 	 */
 	private int m_targetAttributeValue = -1;
-	
-	
+
 	public NominalAntd(Attribute attributeName) {
 		m_attribute = attributeName;
 		m_isNominal = true;
 	}
-	
 
 	@Override
 	public boolean covers(Instance inst) {

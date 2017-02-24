@@ -15,7 +15,7 @@ import weka.estimators.UnivariateNormalEstimator;
  * Attribute stats for numeric attributes. It fits a Gaussian distribution to
  * the observed distribution of values.
  * 
- * @author Clément Fournier
+ * @author Clément Fournier (clement.fournier@insa-rennes.fr)
  *
  */
 public class GaussianAttributeStats extends AttributeStats {
@@ -25,6 +25,12 @@ public class GaussianAttributeStats extends AttributeStats {
 
 	protected int m_numBins = 10;
 
+	/**
+	 * Builds a GaussianAttributeStats given the attribute's name
+	 * 
+	 * @param attName
+	 *            The attribute's name
+	 */
 	public GaussianAttributeStats(String attName) {
 		m_attributeName = attName;
 	}
@@ -32,6 +38,8 @@ public class GaussianAttributeStats extends AttributeStats {
 	/**
 	 * Gets the number of bins performed when testing for good split points in
 	 * the interval covered by the distribution
+	 * 
+	 * @return The number of bins performed
 	 */
 	public int getNumBins() {
 		return m_numBins;
@@ -83,7 +91,7 @@ public class GaussianAttributeStats extends AttributeStats {
 	 * {@link CandidateAntd} object (holds the antecedent and the score
 	 * calculated by the metric)
 	 * 
-	 * @param splitMetric
+	 * @param expMetric
 	 *            The metric with which to estimate the value of an antecedent
 	 * @param preSplitDist
 	 *            The class distribution of the rule before expansion
@@ -100,7 +108,7 @@ public class GaussianAttributeStats extends AttributeStats {
 
 		for (Double s : splitPoints) {
 			List<Map<String, Integer>> postSplitDists = postExpansionDistributions(s);
-			double[] expMerits = expMetric.evaluateSplit(preSplitDist, postSplitDists);
+			double[] expMerits = expMetric.evaluateExpansions(preSplitDist, postSplitDists);
 
 			for (int i = 0; i < 2; i++) {
 				if (expMerits[i] > bestScoreYet) {
@@ -122,7 +130,8 @@ public class GaussianAttributeStats extends AttributeStats {
 	 * Returns a list with the class distribution for lower or equal
 	 * 
 	 * @param selectedSplit
-	 * @return
+	 *            The split point
+	 * @return A list with the class distribution for lower or equal
 	 */
 	private List<Map<String, Integer>> postExpansionDistributions(double selectedSplit) {
 

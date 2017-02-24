@@ -8,10 +8,11 @@ import weka.core.Instance;
 
 /**
  * Represents a rule for the Vfdr algorithm. Rules are made of a conjunction of
- * antecedents, and a set of sufficient statistics.
+ * antecedents, and a set of sufficient statistics. Sufficient statistics
+ * determine the strategy used to classify instances.
  * 
- * @author cl-fo
- *
+ * @author Clément Fournier (clement.fournier@insa-rennes.fr)
+ * @see SufficientStats
  */
 public class VfdrRule {
 

@@ -4,9 +4,11 @@ import weka.core.Attribute;
 import weka.core.Instance;
 
 /**
- * Antd for numerical attributes.
+ * Antecedent for numerical attributes, of the form {NumericAttribute &lt;=
+ * number} or {NumericAttribute &gt; number}. The condition type (&lt;= or &gt;)
+ * is stored as a boolean, and the split point as a double.
  * 
- * @author cl-fo
+ * @author Clément Fournier (clement.fournier@insa-rennes.fr)
  * 
  */
 public class NumericAntd extends Antd {
@@ -22,14 +24,14 @@ public class NumericAntd extends Antd {
 	/**
 	 * Builds a numeric antecedent from the attname
 	 * 
-	 * @param a
+	 * @param attribute
+	 *            The attribute's name
 	 */
 	public NumericAntd(Attribute attribute) {
 		m_attribute = attribute;
 		m_splitPoint = Double.NaN;
 		m_isNominal = false;
 	}
-
 
 	@Override
 	public boolean covers(Instance inst) {

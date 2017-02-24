@@ -4,7 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Frames objects able to evaluate the merit of an expansion to chose the best.
+ * Metrics evaluate the merit of an expansion (given the pre and post expansion
+ * class distribution) to chose the best.
  * 
  * @author Clément Fournier (clement.fournier@insa-rennes.fr)
  *
@@ -18,7 +19,7 @@ public abstract class ExpansionMetric {
 	 * returned.
 	 * 
 	 * When evaluating an expansion on a numeric attribute, once the splitpoint
-	 * is chosen, the antecedent could take either a <= or > condition. Both
+	 * is chosen, the antecedent could take either a &lt;= or &gt; condition. Both
 	 * distributions are evaluated so as to chose the best condition
 	 * 
 	 * @param preDist
@@ -27,7 +28,7 @@ public abstract class ExpansionMetric {
 	 *            Post-expansion distributions
 	 * @return An array of one score for each post-expansion distribution
 	 */
-	public abstract double[] evaluateSplit(Map<String, Integer> preDist, List<Map<String, Integer>> postDists);
+	public abstract double[] evaluateExpansions(Map<String, Integer> preDist, List<Map<String, Integer>> postDists);
 
 	/**
 	 * Gets the range of the metric. Used to compute Hoeffding's bound

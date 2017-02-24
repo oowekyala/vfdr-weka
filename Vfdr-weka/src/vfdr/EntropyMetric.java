@@ -20,7 +20,7 @@ public class EntropyMetric extends ExpansionMetric {
 	 * returned.
 	 * 
 	 * When evaluating an expansion on a numeric attribute, once the splitpoint
-	 * is chosen, the antecedent could take either a <= or > condition. Both
+	 * is chosen, the antecedent could take either a &lt;= or &gt; condition. Both
 	 * distributions are evaluated so as to chose the best condition
 	 * 
 	 * @param preDist
@@ -30,7 +30,7 @@ public class EntropyMetric extends ExpansionMetric {
 	 * @return An array of one score for each post-expansion distribution
 	 */
 	@Override
-	public double[] evaluateSplit(Map<String, Integer> preDist, List<Map<String, Integer>> postDists) {
+	public double[] evaluateExpansions(Map<String, Integer> preDist, List<Map<String, Integer>> postDists) {
 
 		double[] pre = new double[preDist.size()];
 		int count = 0;
@@ -56,7 +56,15 @@ public class EntropyMetric extends ExpansionMetric {
 		return scores;
 	}
 
-	
+	/**
+	 * Gets the range of the metric. Used to compute Hoeffding's bound.
+	 * 
+	 * The range of this metric is log2(n), where n is the number of classes.
+	 * For this version of the algorithm, which performs binary classification,
+	 * the range is 1.
+	 * 
+	 * @return The range of the metric
+	 */
 	@Override
 	public double getMetricRange() {
 		return 1;

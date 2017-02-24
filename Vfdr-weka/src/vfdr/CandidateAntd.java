@@ -1,5 +1,12 @@
 package vfdr;
 
+/**
+ * Class holding a antecedent that is candidate for rule expansion. Stores the
+ * antecedent and the score calculated by an {@link ExpansionMetric}.
+ * 
+ * @author Clément Fournier (clement.fournier@insa-rennes.fr)
+ *
+ */
 public class CandidateAntd implements Comparable<CandidateAntd> {
 
 	private Antd m_antd;
@@ -7,6 +14,15 @@ public class CandidateAntd implements Comparable<CandidateAntd> {
 	/** The merit of the expansion (metric-dependent) */
 	private double m_expMerit;
 
+	/**
+	 * Builds a CandidateAntd given an antecedent and the merit of this
+	 * antecedent previously calculated by an expansion metric.
+	 * 
+	 * @param antd
+	 *            The antecedent
+	 * @param expMerit
+	 *            The merit of this antecedent
+	 */
 	public CandidateAntd(Antd antd, double expMerit) {
 		m_antd = antd;
 		m_expMerit = expMerit;

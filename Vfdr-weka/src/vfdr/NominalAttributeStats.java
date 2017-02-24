@@ -25,6 +25,7 @@ public class NominalAttributeStats extends AttributeStats {
 	/**
 	 * 
 	 * @param attName
+	 *            The name of the attribute
 	 */
 	public NominalAttributeStats(String attName) {
 		m_attributeName = attName;
@@ -51,7 +52,7 @@ public class NominalAttributeStats extends AttributeStats {
 	public CandidateAntd bestCandidate(ExpansionMetric expMetric, Map<String, Integer> preSplitDist) {
 
 		List<Map<String, Integer>> postExpansionDists = postExpansionDistributions();
-		double[] expMerits = expMetric.evaluateSplit(preSplitDist, postExpansionDists);
+		double[] expMerits = expMetric.evaluateExpansions(preSplitDist, postExpansionDists);
 
 		double bestMerit = Double.NEGATIVE_INFINITY;
 		double bestValueIndex = -1;

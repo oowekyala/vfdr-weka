@@ -11,15 +11,10 @@ import weka.core.Instances;
 import weka.core.WeightedInstancesHandler;
 
 /**
- * Implements the algorithm proper. Only works for binary, unweighted
- * classification
+ * Implements the algorithm proper. This version only performs binary,
+ * unweighted classification.
  * 
- * @author cl-fo
- * 
- *         TODO implement weka interfaces : WeightedInstancesHandler,
- *         OptionHandler, RevisionHandler, TechnicalInformationHandler
- * 
- *         TODO implement options and capabilities
+ * @author Clément Fournier (clement.fournier@insa-rennes.fr)
  *
  */
 public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
@@ -50,21 +45,14 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 	private List<VfdrRule> m_ruleSet;
 	private VfdrRule m_defaultRule;
 
-	
 	public double[] distributionForInstance(Instance inst) throws Exception {
-		
+
 		Attribute classAtt = inst.classAttribute();
 		double[] prediction = new double[classAtt.numValues()];
-		
-		
-		
-		
+
 		return prediction;
 	}
-	
-	
-	
-	
+
 	/**
 	 * Builds the classifier with the given training set. It can be updated
 	 * later.
@@ -95,7 +83,7 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 	/**
 	 * Updates the classifier with the given instance.
 	 * 
-	 * @param instance
+	 * @param x
 	 *            the new training instance to include in the model
 	 * @throws Exception
 	 *             if the instance could not be incorporated in the model.

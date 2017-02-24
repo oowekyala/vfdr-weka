@@ -10,9 +10,12 @@ import weka.core.Instance;
 
 /**
  * Sufficient statistics used to grow rules and make predictions on unlabeled
- * instances.
+ * instances. They can be of two types depending on the classification strategy
+ * used : naive bayes or majority class.
  * 
- * @author cl-fo
+ * @author Clément Fournier (clement.fournier@insa-rennes.fr)
+ * @see NBStrategyStats
+ * @see MCStrategyStats
  *
  */
 public abstract class SufficientStats {
@@ -29,6 +32,18 @@ public abstract class SufficientStats {
 	 */
 	protected Map<String, AttributeStats> m_attributeLookup = new LinkedHashMap<>();
 
+	/**
+	 * Returns the probabilities for each class for a given instance.
+	 * 
+	 * @param inst
+	 *            The instance to classify
+	 * @param classAtt
+	 *            The target attribute
+	 * @return An array containing the probability of the example being in each
+	 *         class
+	 * @throws Exception
+	 *             Case things turn wrong
+	 */
 	public abstract double[] makePrediction(Instance inst, Attribute classAtt) throws Exception;
 
 	/**
@@ -71,6 +86,9 @@ public abstract class SufficientStats {
 
 	/**
 	 * Gets the best antecedents that have been worked out for each attribute
+	 * 
+	 * @param expMetric
+	 *            The expansion metric used to evaluate antecedents
 	 * 
 	 * @return a list of best antecedents for every attribute
 	 */

@@ -50,7 +50,6 @@ public class VfdrRule {
 
 		// i.e. distribution is impure
 		if (m_lr.classDistribution().size() > 1) {
-
 			double hoeffding = computeHoeffding(1, m_confidence, m_lr.totalWeight());
 
 		}

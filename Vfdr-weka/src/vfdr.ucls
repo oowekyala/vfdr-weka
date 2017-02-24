@@ -30,7 +30,7 @@
   </class>  
   <class id="4" language="java" name="vfdr.NumericAntd" project="Vfdr-weka" file="/Vfdr-weka/src/vfdr/NumericAntd.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="8" y="812"/>    
+    <position height="-1" width="-1" x="-192" y="799"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -48,7 +48,7 @@
   </class>  
   <class id="6" language="java" name="vfdr.NominalAttributeStats" project="Vfdr-weka" 
     file="/Vfdr-weka/src/vfdr/NominalAttributeStats.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1660" y="900"/>    
+    <position height="-1" width="-1" x="1751" y="899"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -84,7 +84,7 @@
   </class>  
   <class id="10" language="java" name="vfdr.NominalAntd" project="Vfdr-weka" file="/Vfdr-weka/src/vfdr/NominalAntd.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="-276" y="891"/>    
+    <position height="-1" width="-1" x="-494" y="513"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -100,53 +100,64 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <dependency id="12">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="9"/>  
-  </dependency>  
-  <association id="13">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="14" name="m_literals">        
-        <position height="0" width="0" x="-166" y="-107"/>      
+  <class id="12" language="java" name="vfdr.EntropyMetric" project="Vfdr-weka" 
+    file="/Vfdr-weka/src/vfdr/EntropyMetric.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="106" width="434" x="1231" y="1239"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="13" language="java" name="vfdr.CandidateAntd" project="Vfdr-weka" 
+    file="/Vfdr-weka/src/vfdr/CandidateAntd.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="205" y="872"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <association id="14">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="15" name="m_attributeLookup">        
+        <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="15" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="-166" y="-107"/>      
+      <multiplicity id="16" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="9" navigable="true"/>    
+    <end type="TARGET" refId="8" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="16">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="9"/>  
-  </generalization>  
   <dependency id="17">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="7"/>  
-  </dependency>  
-  <dependency id="18">    
     <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="7"/>  
+    <end type="TARGET" refId="13"/>  
   </dependency>  
-  <dependency id="19">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="10"/>  
-  </dependency>  
-  <dependency id="20">    
+  <association id="18">    
+    <bendpoint x="594" y="322"/>    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="19" name="m_ruleSet">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="20" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="21">    
     <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="3"/>  
   </dependency>  
-  <generalization id="21">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="8"/>  
-  </generalization>  
   <association id="22">    
-    <bendpoint x="594" y="322"/>    
+    <bendpoint x="382" y="321"/>    
     <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="23" name="m_ruleSet">        
+      <attribute id="23" name="m_defaultRule">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="24" minimum="0" maximum="2147483647">        
+      <multiplicity id="24" minimum="0" maximum="1">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
@@ -154,87 +165,130 @@
     <display labels="true" multiplicity="true"/>  
   </association>  
   <dependency id="25">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="7"/>  
-  </dependency>  
-  <dependency id="26">    
-    <end type="SOURCE" refId="9"/>    
-    <end type="TARGET" refId="10"/>  
-  </dependency>  
-  <association id="27">    
-    <bendpoint x="382" y="321"/>    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="28" name="m_defaultRule">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="29" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="1" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <dependency id="30">    
-    <end type="SOURCE" refId="9"/>    
-    <end type="TARGET" refId="4"/>  
-  </dependency>  
-  <dependency id="31">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="6"/>  
-  </dependency>  
-  <association id="32">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="33" name="m_attributeLookup">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="34" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="8" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <dependency id="35">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="5"/>  
-  </dependency>  
-  <generalization id="36">    
     <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="8"/>  
-  </generalization>  
-  <association id="37">    
+    <end type="TARGET" refId="9"/>  
+  </dependency>  
+  <association id="26">    
     <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="38" name="m_lr">        
+      <attribute id="27" name="m_lr">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="39" minimum="0" maximum="1">        
+      <multiplicity id="28" minimum="0" maximum="1">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="5" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="40">    
+  <dependency id="29">    
     <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="4"/>  
   </dependency>  
-  <generalization id="41">    
-    <end type="SOURCE" refId="11"/>    
-    <end type="TARGET" refId="1"/>  
-  </generalization>  
-  <dependency id="42">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="9"/>  
-  </dependency>  
-  <dependency id="43">    
-    <end type="SOURCE" refId="3"/>    
+  <dependency id="30">    
+    <end type="SOURCE" refId="8"/>    
     <end type="TARGET" refId="7"/>  
   </dependency>  
-  <generalization id="44">    
-    <bendpoint x="-96" y="620"/>    
+  <dependency id="31">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <dependency id="32">    
+    <bendpoint x="-264" y="379"/>    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="10"/>  
+  </dependency>  
+  <dependency id="33">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <dependency id="34">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <generalization id="35">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="8"/>  
+  </generalization>  
+  <dependency id="36">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <generalization id="37">    
     <end type="SOURCE" refId="10"/>    
     <end type="TARGET" refId="9"/>  
   </generalization>  
+  <generalization id="38">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="1"/>  
+  </generalization>  
+  <dependency id="39">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <dependency id="40">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="41">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="42">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="9"/>  
+  </dependency>  
+  <dependency id="43">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="10"/>  
+  </dependency>  
+  <association id="44">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="45" name="m_antd">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="46" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="47">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="48" name="m_literals">        
+        <position height="0" width="0" x="-166" y="-107"/>      
+      </attribute>      
+      <multiplicity id="49" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="-166" y="-107"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="50">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="9"/>  
+  </generalization>  
+  <generalization id="51">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="8"/>  
+  </generalization>  
+  <generalization id="52">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <dependency id="53">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="54">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="9"/>  
+  </dependency>  
+  <dependency id="55">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    

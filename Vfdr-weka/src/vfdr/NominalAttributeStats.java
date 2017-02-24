@@ -1,7 +1,9 @@
 package vfdr;
 
-import java.io.Serializable;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import weka.core.Utils;
@@ -46,9 +48,63 @@ public class NominalAttributeStats extends AttributeStats {
 	}
 
 	@Override
-	public CandidateAntd bestCandidate(ExpansionMetric splitMetric, Map<String, Integer> preSplitDist) {
-		// TODO Auto-generated method stub
-		return null;
+	public CandidateAntd bestCandidate(ExpansionMetric expMetric, Map<String, Integer> preSplitDist) {
+
+		List<Map<String, Integer>> postExpansionDists = postExpansionDistributions();
+		double[] expMerits = expMetric.evaluateSplit(preSplitDist, postExpansionDists);
+
+		double bestMerit = Double.NEGATIVE_INFINITY;
+		double bestValueIndex = -1;
+		for (int i = 0; i < expMerits.length; i++) {
+			if (expMerits[i] > bestMerit) {
+				bestMerit = expMerits[i];
+				bestValueIndex = i;
+			}
+		}
+
+		NominalAntd bestAntd = Antd.buildNominalAntd(m_attributeName);
+		bestAntd.setTargetValue((int) bestValueIndex);
+
+		return new CandidateAntd(bestAntd, bestMerit);
+	}
+
+	private List<Map<String, Integer>> postExpansionDistributions() {
+
+		// att index keys to class distribution
+		Map<Integer, Map<String, Integer>> splitDists = new HashMap<Integer, Map<String, Integer>>();
+
+		for (Map.Entry<String, Object> classEntry : m_classLookup.entrySet()) {
+			String classVal = classEntry.getKey();
+			DiscreteDistribution attDist = (DiscreteDistribution) classEntry.getValue();
+
+			for (Map.Entry<Integer, Integer> valueEntry : attDist.m_dist.entrySet()) {
+				Integer attVal = valueEntry.getKey();
+				Integer attCount = valueEntry.getValue();
+
+				Map<String, Integer> clsDist = splitDists.get(attVal);
+				if (clsDist == null) {
+					clsDist = new HashMap<String, Integer>();
+					splitDists.put(attVal, clsDist);
+				}
+
+				Integer clsCount = clsDist.get(classVal);
+
+				if (clsCount == null) {
+					clsCount = new Integer(0);
+					clsDist.put(classVal, clsCount);
+				}
+
+				clsCount = new Integer(clsCount.intValue() + attCount.intValue());
+			}
+
+		}
+
+		List<Map<String, Integer>> result = new LinkedList<Map<String, Integer>>();
+		for (Map.Entry<Integer, Map<String, Integer>> v : splitDists.entrySet()) {
+			result.add(v.getValue());
+		}
+
+		return result;
 	}
 
 	/**
@@ -61,8 +117,8 @@ public class NominalAttributeStats extends AttributeStats {
 	protected class DiscreteDistribution {
 
 		/**
-		 * Maps the values of the attributes to the number of occurences
-		 * observed
+		 * Maps the values of the attributes (as their indices) to the number of
+		 * occurences observed
 		 */
 		protected final Map<Integer, Integer> m_dist = new LinkedHashMap<Integer, Integer>();
 

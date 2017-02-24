@@ -30,6 +30,8 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 	 */
 	private boolean m_orderedSet = false;
 
+	private boolean m_initialised = false;
+
 	/**
 	 * Minimal number of covered examples needed to consider expanding a rule.
 	 */
@@ -41,17 +43,26 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 	private ExpansionMetric m_expMetric = new EntropyMetric();
 
 	/**
-	 * Set of rules built
+	 * Set of rules
 	 */
 	private List<VfdrRule> m_ruleSet;
 	private VfdrRule m_defaultRule;
+	private ClassificationStrategy m_classificationStrategy;
 
+	/**
+	 * Returns class probabilities for an instance.
+	 * 
+	 * @param instance
+	 *            the instance to compute the distribution for
+	 * @return the class probabilities
+	 * @throws Exception
+	 *             if distribution can't be computed successfully
+	 */
 	public double[] distributionForInstance(Instance inst) throws Exception {
-
-		Attribute classAtt = inst.classAttribute();
-		double[] prediction = new double[classAtt.numValues()];
-
-		return prediction;
+		if (m_initialised)
+			return m_classificationStrategy.distributionForInstance(m_ruleSet, m_defaultRule, inst);
+		else
+			throw new Exception("You must build this classifier before trying to classify an instance");
 	}
 
 	/**
@@ -74,6 +85,9 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 
 		m_ruleSet = new ArrayList<>();
 		m_defaultRule = new VfdrRule();
+		m_classificationStrategy = m_orderedSet ? new WeightedMaxStrategy() : new FirstHitStrategy();
+
+		m_initialised = true;
 
 		// TODO make subsets
 		for (Instance x : instances) {

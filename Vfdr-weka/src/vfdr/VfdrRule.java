@@ -14,6 +14,9 @@ import weka.core.Instance;
  *
  */
 public class VfdrRule {
+
+	private static boolean m_useNaiveBayes = true;
+
 	/**
 	 * After each expansion, the attribute used in the new antecedent is removed
 	 */
@@ -36,15 +39,35 @@ public class VfdrRule {
 	 */
 	public VfdrRule() {
 		m_literals = new ArrayList<>();
-		m_lr = new SufficientStats();
+		m_lr = m_useNaiveBayes ? new NBStrategyStats() : new MCStrategyStats();
 		m_attributesLeft = new ArrayList<>(m_fullAttributes);
 	}
 
+	/**
+	 * Initialises static members, must be used before any instantiation of this
+	 * class !
+	 * 
+	 * @param template
+	 *            A template for the instances subsequently created rules can
+	 *            handle
+	 */
 	public static void init(Instance template) {
 		m_fullAttributes = new ArrayList<>();
 		for (int i = 0; i < template.numAttributes(); i++) {
-			m_fullAttributes.add(template.attribute(i).name());
+			if (i != template.classIndex())
+				m_fullAttributes.add(template.attribute(i).name());
 		}
+	}
+
+	/**
+	 * Sets whether subsequently created instances will use naive bayes or not
+	 * to make predictions.
+	 * 
+	 * @param nb
+	 *            a boolean value
+	 */
+	public static void useNaiveBayes(boolean nb) {
+		m_useNaiveBayes = nb;
 	}
 
 	/**
@@ -52,7 +75,7 @@ public class VfdrRule {
 	 * 
 	 * @param expMetric
 	 *            The metric used to get the best expansion possible
-	 * @return a new VfdrRule if the default rule was expanded, or {@code this}
+	 * @return A new VfdrRule if the default rule was expanded, or {@code this}
 	 *         otherwise
 	 * 
 	 */
@@ -85,15 +108,14 @@ public class VfdrRule {
 					VfdrRule newRule = new VfdrRule();
 					newRule.m_literals.add(best.antd());
 					newRule.m_attributesLeft.remove(best.antd().getAttr().name());
-					this.m_lr = new SufficientStats();
+					m_lr = m_useNaiveBayes ? new NBStrategyStats() : new MCStrategyStats();
 					return newRule;
 
 				} else {
 					m_literals.add(best.antd());
-					this.m_lr = new SufficientStats();
+					m_lr = m_useNaiveBayes ? new NBStrategyStats() : new MCStrategyStats();
 					return this;
 				}
-
 			}
 		}
 		return this;
@@ -101,6 +123,8 @@ public class VfdrRule {
 
 	/**
 	 * Gets the sufficient statistics of the rule
+	 * 
+	 * @return the sufficient statistics
 	 */
 	public SufficientStats getStats() {
 		return m_lr;
@@ -108,6 +132,11 @@ public class VfdrRule {
 
 	/**
 	 * Whether the rule covers the example or not.
+	 * 
+	 * @param datum
+	 *            The instance to test
+	 * 
+	 * @return Whether the rule covers the example or not.
 	 */
 	public boolean covers(Instance datum) {
 		for (Antd x : m_literals) {
@@ -119,6 +148,8 @@ public class VfdrRule {
 
 	/**
 	 * Whether this rule has antecedents, i.e. whether it is a default rule
+	 * 
+	 * @return True if the rule is not default
 	 */
 	public boolean hasAntds() {
 		return m_literals.size() > 0;
@@ -126,13 +157,15 @@ public class VfdrRule {
 
 	/**
 	 * The size of the rule, i.e. number of antecedents
+	 * 
+	 * @return the number of antecedents
 	 */
 	public double size() {
 		return m_literals.size();
 	}
 
 	/**
-	 * Computes the Hoeffding bound
+	 * Computes the Hoeffding bound for the given parameters
 	 * 
 	 * @param range
 	 *            Range of the split metric
@@ -144,6 +177,24 @@ public class VfdrRule {
 	 */
 	public double computeHoeffding(double range, double confidence, double weight) {
 		return Math.sqrt(((range * range) * Math.log(1.0 / confidence)) / (2.0 * weight));
+	}
+
+	/**
+	 * Returns a descriptive string
+	 * 
+	 * @return A descriptive string
+	 */
+	public String toString() {
+		if (m_literals.size() == 0) {
+			return "{Default rule}";
+		} else {
+			String s = "{" + m_literals.get(0);
+			for (int i = 1; i < m_literals.size(); i++) {
+				s += " and " + m_literals.get(i).toString();
+			}
+			return s + "}";
+		}
+
 	}
 
 }

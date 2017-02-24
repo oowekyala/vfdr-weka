@@ -5,6 +5,7 @@ import java.util.List;
 
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.UpdateableClassifier;
+import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.WeightedInstancesHandler;
@@ -34,12 +35,12 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 	private boolean m_orderedSet = false;
 
 	/**
-	 * Minimal number of uncovered examples needed to expand a rule.
+	 * Minimal number of covered examples needed to consider expanding a rule.
 	 */
-	private int m_gracePeriod = 40;
+	private int m_gracePeriod = 60;
 
 	/**
-	 * The metric used to determine best expansions
+	 * The metric used to determine the best expansions
 	 */
 	private ExpansionMetric m_expMetric = new EntropyMetric();
 
@@ -49,8 +50,24 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 	private List<VfdrRule> m_ruleSet;
 	private VfdrRule m_defaultRule;
 
+	
+	public double[] distributionForInstance(Instance inst) throws Exception {
+		
+		Attribute classAtt = inst.classAttribute();
+		double[] prediction = new double[classAtt.numValues()];
+		
+		
+		
+		
+		return prediction;
+	}
+	
+	
+	
+	
 	/**
-	 * 
+	 * Builds the classifier with the given training set. It can be updated
+	 * later.
 	 */
 	@Override
 	public void buildClassifier(Instances instances) throws Exception {
@@ -73,7 +90,6 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 		for (Instance x : instances) {
 			updateClassifier(x);
 		}
-
 	}
 
 	/**
@@ -109,8 +125,6 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 			if (m_defaultRule.getStats().totalWeight() > m_gracePeriod) {
 				m_ruleSet.add(m_defaultRule.expand(m_expMetric));
 			}
-
 		}
-
 	}
 }

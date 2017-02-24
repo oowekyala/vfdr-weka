@@ -9,24 +9,27 @@ import weka.core.Attribute;
 import weka.core.Instance;
 
 /**
- * Sufficient statistics used to grow rules.
+ * Sufficient statistics used to grow rules and make predictions on unlabeled
+ * instances.
  * 
  * @author cl-fo
  *
  */
-public class SufficientStats {
+public abstract class SufficientStats {
 
-	private int m_totalWeight = 0;
+	protected int m_totalWeight = 0;
 
 	/**
 	 * Stores the class distribution for the examples covered by this rule.
 	 */
-	private Map<String, Integer> m_classDistribution = new LinkedHashMap<>();
+	protected Map<String, Integer> m_classDistribution = new LinkedHashMap<>();
 
 	/**
 	 * Map indexed on attributes, storing stats for individual attributes
 	 */
-	private Map<String, AttributeStats> m_attributeLookup = new LinkedHashMap<>();
+	protected Map<String, AttributeStats> m_attributeLookup = new LinkedHashMap<>();
+
+	public abstract double[] makePrediction(Instance inst, Attribute classAtt) throws Exception;
 
 	/**
 	 * Updates the sufficient statistics to take one more example in account.

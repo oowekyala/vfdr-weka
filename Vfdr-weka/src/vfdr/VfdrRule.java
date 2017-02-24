@@ -1,9 +1,11 @@
 package vfdr;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import weka.core.Copyable;
 import weka.core.Instance;
 
 /**
@@ -19,6 +21,8 @@ public class VfdrRule {
 	 */
 	private List<String> m_attributesLeft;
 
+	private static List<String> m_fullAttributes;
+
 	/**
 	 * One minus the desired probability of choosing the correct attribute (used
 	 * in the computation of the Hoeffding bound)
@@ -32,29 +36,67 @@ public class VfdrRule {
 	/**
 	 * Builds a VfdrRule
 	 */
-	public VfdrRule(Instance template) {
+	public VfdrRule() {
 		m_literals = new ArrayList<>();
 		m_lr = new SufficientStats();
-		m_attributesLeft = new ArrayList<>();
+		m_attributesLeft = new ArrayList<>(m_fullAttributes);
+	}
+
+	public static void init(Instance template) {
+		m_fullAttributes = new ArrayList<>();
 		for (int i = 0; i < template.numAttributes(); i++) {
-			m_attributesLeft.add(template.attribute(i).name());
+			m_fullAttributes.add(template.attribute(i).name());
 		}
 	}
 
 	/**
 	 * Expands a rule according to its sufficient statistics.
 	 * 
-	 * FIXME TODO
+	 * @param expMetric
+	 *            The metric used to get the best expansion possible
+	 * @return a new VfdrRule if the default rule was expanded, or {@code this}
+	 *         otherwise
+	 * 
 	 */
-	public VfdrRule expand(Instance x) {
+	public VfdrRule expand(ExpansionMetric expMetric) {
 
 		// i.e. distribution is impure
 		if (m_lr.classDistribution().size() > 1) {
-			double hoeffding = computeHoeffding(1, m_confidence, m_lr.totalWeight());
 
+			List<CandidateAntd> bestCandidates = m_lr.getExpansionCandidates(expMetric);
+			Collections.sort(bestCandidates);
+
+			boolean doExpand = false;
+
+			if (bestCandidates.size() > 0) {
+				double hoeffding = computeHoeffding(expMetric.getMetricRange(), m_confidence, m_lr.totalWeight());
+
+				CandidateAntd best = bestCandidates.get(bestCandidates.size() - 1);
+				CandidateAntd secondBest = bestCandidates.get(bestCandidates.size() - 2);
+
+				if (best.expMerit() - secondBest.expMerit() > hoeffding) {
+					doExpand = true;
+				}
+			}
+
+			if (doExpand) {
+				CandidateAntd best = bestCandidates.get(bestCandidates.size() - 1);
+
+				// It's an expansion of the default rule
+				if (m_literals.size() == 0) {
+					VfdrRule newRule = new VfdrRule();
+					newRule.m_literals.add(best.antd());
+					newRule.m_attributesLeft.remove(best.antd().getAttr().name());
+					return newRule;
+
+				} else {
+					m_literals.add(best.antd());
+					return this;
+				}
+
+			}
 		}
 		return this;
-
 	}
 
 	/**
@@ -72,7 +114,6 @@ public class VfdrRule {
 			if (!x.covers(datum))
 				return false;
 		}
-		// TODO update lr here (or higher in call stack)
 		return true;
 	}
 
@@ -94,9 +135,7 @@ public class VfdrRule {
 	 * Computes the Hoeffding bound
 	 * 
 	 * @param range
-	 *            Range of the split metric (log2(n) for n-class classification
-	 *            problems, that is, 1 for binary classification; see
-	 *            https://www-users.cs.umn.edu/~kumar/dmbook/ch4.pdf fig. 4.13)
+	 *            Range of the split metric
 	 * @param confidence
 	 *            Confidence threshold
 	 * @param weight

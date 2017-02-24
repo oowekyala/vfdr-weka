@@ -56,4 +56,10 @@ public class EntropyMetric extends ExpansionMetric {
 		return scores;
 	}
 
+	
+	@Override
+	public double getMetricRange() {
+		return 1;
+	}
+
 }

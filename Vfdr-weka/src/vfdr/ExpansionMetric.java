@@ -29,4 +29,11 @@ public abstract class ExpansionMetric {
 	 */
 	public abstract double[] evaluateSplit(Map<String, Integer> preDist, List<Map<String, Integer>> postDists);
 
+	/**
+	 * Gets the range of the metric. Used to compute Hoeffding's bound
+	 * 
+	 * @return The range of the metric
+	 */
+	public abstract double getMetricRange();
+
 }

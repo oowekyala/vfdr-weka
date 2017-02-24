@@ -69,20 +69,17 @@ public class SufficientStats {
 	/**
 	 * Gets the best antecedents that have been worked out for each attribute
 	 * 
-	 * @return
+	 * @return a list of best antecedents for every attribute
 	 */
 	public List<CandidateAntd> getExpansionCandidates(ExpansionMetric expMetric) {
 
 		List<CandidateAntd> candids = new ArrayList<>();
-		
+
 		for (Map.Entry<String, AttributeStats> en : m_attributeLookup.entrySet()) {
 			AttributeStats astat = en.getValue();
-			
-			// best candidate for this attribute
-			CandidateAntd acand = astat.bestCandidate(expMetric, m_classDistribution);
+			candids.add(astat.bestCandidate(expMetric, m_classDistribution));
 		}
 
-		
 		return candids;
 	}
 

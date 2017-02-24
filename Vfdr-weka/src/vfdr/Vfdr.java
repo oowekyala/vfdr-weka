@@ -31,12 +31,17 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 	/**
 	 * Whether the set of rules is ordered or not
 	 */
-	private boolean m_orderedSet;
+	private boolean m_orderedSet = false;
 
 	/**
 	 * Minimal number of uncovered examples needed to expand a rule.
 	 */
 	private int m_gracePeriod = 40;
+
+	/**
+	 * The metric used to determine best expansions
+	 */
+	private ExpansionMetric m_expMetric = new EntropyMetric();
 
 	/**
 	 * Set of rules built
@@ -52,18 +57,17 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 		// can classifier handle the data?
 		// getCapabilities().testWithFail(instances); // TODO
 
-		
 		instances = new Instances(instances);
 		instances.deleteWithMissingClass();
 
 		// TODO examples must be randomized (see Domingos & Hulten, Mining
 		// high-speed data streams, page 2 note 1)
 
-		m_ruleSet = new ArrayList<>();
-		m_defaultRule = new VfdrRule(instances.get(0));
-		
 		Antd.init(instances.get(0));
-		
+		VfdrRule.init(instances.get(0));
+
+		m_ruleSet = new ArrayList<>();
+		m_defaultRule = new VfdrRule();
 
 		// TODO make subsets
 		for (Instance x : instances) {
@@ -91,7 +95,7 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 				lr.update(x);
 
 				if (lr.totalWeight() > m_gracePeriod) {
-					r = r.expand(x);
+					r = r.expand(m_expMetric);
 				}
 
 				if (m_orderedSet) {
@@ -103,7 +107,7 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 		if (trigerred == 0) {
 			m_defaultRule.getStats().update(x);
 			if (m_defaultRule.getStats().totalWeight() > m_gracePeriod) {
-				m_ruleSet.add(m_defaultRule.expand(x));
+				m_ruleSet.add(m_defaultRule.expand(m_expMetric));
 			}
 
 		}

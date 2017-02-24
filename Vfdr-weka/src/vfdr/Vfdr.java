@@ -15,7 +15,8 @@ import weka.core.WeightedInstancesHandler;
  * unweighted classification.
  * 
  * @author Clément Fournier (clement.fournier@insa-rennes.fr)
- *
+ * @version VFDR-Base
+ * 
  */
 public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 

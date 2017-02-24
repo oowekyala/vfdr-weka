@@ -16,7 +16,7 @@ import weka.estimators.UnivariateNormalEstimator;
  * the observed distribution of values.
  * 
  * @author Clément Fournier (clement.fournier@insa-rennes.fr)
- *
+ * @version VFDR-Base
  */
 public class GaussianAttributeStats extends AttributeStats {
 

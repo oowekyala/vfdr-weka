@@ -9,7 +9,8 @@ import java.util.Map;
  * the values of its attribute for each class. In effect, it stores an
  * estimation of P(attr = value | class).
  * 
-* @author Clément Fournier (clement.fournier@insa-rennes.fr)
+ * @author Clément Fournier (clement.fournier@insa-rennes.fr)
+ * @version VFDR-Base
  */
 public abstract class AttributeStats {
 
@@ -47,7 +48,4 @@ public abstract class AttributeStats {
 	 */
 	public abstract CandidateAntd bestCandidate(ExpansionMetric splitMetric, Map<String, Integer> preSplitDist);
 
-	
-	
-	
 }

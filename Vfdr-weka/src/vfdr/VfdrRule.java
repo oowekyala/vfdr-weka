@@ -12,6 +12,8 @@ import weka.core.Instance;
  * determine the strategy used to classify instances.
  * 
  * @author Clément Fournier (clement.fournier@insa-rennes.fr)
+ * @version VFDR-Base
+ * 
  * @see SufficientStats
  */
 public class VfdrRule {

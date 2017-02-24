@@ -13,7 +13,7 @@ import weka.core.Utils;
  * acknowledge examples.
  * 
  * @author Clément Fournier (clement.fournier@insa-rennes.fr)
- *
+ * @version VFDR-Base
  */
 public class NominalAttributeStats extends AttributeStats {
 

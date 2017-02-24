@@ -5,7 +5,7 @@ package vfdr;
  * antecedent and the score calculated by an {@link ExpansionMetric}.
  * 
  * @author Clément Fournier (clement.fournier@insa-rennes.fr)
- *
+ * @version VFDR-Base
  */
 public class CandidateAntd implements Comparable<CandidateAntd> {
 

@@ -8,11 +8,10 @@ import weka.core.Utils;
  * Implements the majority class strategy to classify an instance.
  * 
  * @author Clément Fournier (clement.fournier@insa-rennes.fr)
- *
+ * @version VFDR-Base
  */
 public class MCStrategyStats extends SufficientStats {
 
-	
 	/**
 	 * Returns the probabilities for each class for a given instance.
 	 * 

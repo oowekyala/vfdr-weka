@@ -8,7 +8,7 @@ import weka.core.Instance;
  * represented by its index.
  * 
  * @author Clément Fournier (clement.fournier@insa-rennes.fr)
- *
+ * @version VFDR-Base
  */
 public class NominalAntd extends Antd {
 

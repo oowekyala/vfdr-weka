@@ -10,7 +10,7 @@ import weka.core.Instance;
  * or numeric, depending on the nature of the attribute they're pertaining to.
  * 
  * @author Clément Fournier (clement.fournier@insa-rennes.fr)
- *
+ * @version VFDR-Base
  */
 public abstract class Antd {
 
@@ -70,7 +70,8 @@ public abstract class Antd {
 	/**
 	 * Builds a new numeric antecedent from the name of its attribute
 	 * 
-	 * @param attName	The name of the attribute
+	 * @param attName
+	 *            The name of the attribute
 	 * @return A new numeric antecedent
 	 */
 	public static NumericAntd buildNumericAntd(String attName) {

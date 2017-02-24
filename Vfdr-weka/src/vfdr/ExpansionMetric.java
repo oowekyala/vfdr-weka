@@ -8,7 +8,7 @@ import java.util.Map;
  * class distribution) to chose the best.
  * 
  * @author Clément Fournier (clement.fournier@insa-rennes.fr)
- *
+ * @version VFDR-Base
  */
 public abstract class ExpansionMetric {
 
@@ -19,8 +19,8 @@ public abstract class ExpansionMetric {
 	 * returned.
 	 * 
 	 * When evaluating an expansion on a numeric attribute, once the splitpoint
-	 * is chosen, the antecedent could take either a &lt;= or &gt; condition. Both
-	 * distributions are evaluated so as to chose the best condition
+	 * is chosen, the antecedent could take either a &lt;= or &gt; condition.
+	 * Both distributions are evaluated so as to chose the best condition
 	 * 
 	 * @param preDist
 	 *            Previous distribution

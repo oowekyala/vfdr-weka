@@ -14,6 +14,8 @@ import weka.core.Instance;
  * used : naive bayes or majority class.
  * 
  * @author Clément Fournier (clement.fournier@insa-rennes.fr)
+ * @version VFDR-Base
+ * 
  * @see NBStrategyStats
  * @see MCStrategyStats
  *

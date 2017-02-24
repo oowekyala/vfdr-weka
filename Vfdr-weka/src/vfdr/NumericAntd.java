@@ -9,7 +9,7 @@ import weka.core.Instance;
  * is stored as a boolean, and the split point as a double.
  * 
  * @author Clément Fournier (clement.fournier@insa-rennes.fr)
- * 
+ * @version VFDR-Base
  */
 public class NumericAntd extends Antd {
 

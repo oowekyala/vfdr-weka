@@ -9,7 +9,7 @@ import weka.core.ContingencyTables;
  * Actually based on information gain for the moment
  * 
  * @author Clément Fournier (clement.fournier@insa-rennes.fr)
- *
+ * @version VFDR-Base
  */
 public class EntropyMetric extends ExpansionMetric {
 
@@ -20,8 +20,8 @@ public class EntropyMetric extends ExpansionMetric {
 	 * returned.
 	 * 
 	 * When evaluating an expansion on a numeric attribute, once the splitpoint
-	 * is chosen, the antecedent could take either a &lt;= or &gt; condition. Both
-	 * distributions are evaluated so as to chose the best condition
+	 * is chosen, the antecedent could take either a &lt;= or &gt; condition.
+	 * Both distributions are evaluated so as to chose the best condition
 	 * 
 	 * @param preDist
 	 *            Previous distribution

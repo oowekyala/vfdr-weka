@@ -9,7 +9,7 @@ import weka.core.Instance;
  * instances.
  * 
  * @author Clément Fournier (clement.fournier@insa-rennes.fr)
- *
+ * @version VFDR-Base
  */
 public class NBStrategyStats extends MCStrategyStats {
 

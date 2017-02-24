@@ -30,7 +30,7 @@ public class EntropyMetric extends ExpansionMetric {
 	 * @return An array of one score for each post-expansion distribution
 	 */
 	@Override
-	public double[] evaluateSplit(Map<String, Integer> preDist, List<Map<String, Integer>> postDist) {
+	public double[] evaluateSplit(Map<String, Integer> preDist, List<Map<String, Integer>> postDists) {
 
 		double[] pre = new double[preDist.size()];
 		int count = 0;
@@ -40,18 +40,17 @@ public class EntropyMetric extends ExpansionMetric {
 
 		double preEntropy = ContingencyTables.entropy(pre);
 
-		double[] scores = new double[postDist.size()];
+		double[] scores = new double[postDists.size()];
 		count = 0;
-		for (Map<String, Integer> dist : postDist) {
+		for (Map<String, Integer> dist : postDists) {
 
 			double[] post = new double[dist.size()];
 			int i = 0;
-			for (Map.Entry<String, Integer> e : preDist.entrySet()) {
-				pre[i++] = e.getValue();
+			for (Map.Entry<String, Integer> e : dist.entrySet()) {
+				post[i++] = e.getValue();
 			}
 
-			scores[count++] = preEntropy - ContingencyTables.entropy(pre);
-
+			scores[count++] = preEntropy - ContingencyTables.entropy(post);
 		}
 
 		return scores;

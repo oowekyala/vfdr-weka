@@ -142,6 +142,29 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 		}
 	}
 
+	/**
+	 * Returns the rule set induced by training
+	 * 
+	 * @return the rule set
+	 */
+	public List<VfdrRule> ruleSet() {
+		return m_ruleSet;
+	}
+
+	/**
+	 * Returns whether the set is ordered or not
+	 * 
+	 * @return Whether the set is ordered or not
+	 */
+	public boolean isSetOrdered() {
+		return m_orderedSet;
+	}
+
+	/**
+	 * Returns a string describing the rule set
+	 * 
+	 * @return A string describing the rule set
+	 */
 	public String ruleSetToString() {
 		String s = "[\n";
 		for (VfdrRule r : m_ruleSet) {

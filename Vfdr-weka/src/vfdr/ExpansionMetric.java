@@ -71,7 +71,7 @@ public abstract class ExpansionMetric {
 
 				scores[count++] = preEntropy - ContingencyTables.entropy(post);
 			}
-			System.err.println("@ExpansionMetric.Entropy.evaluateExpansions: pre = " + preEntropy + ", scores = " + Arrays.toString(scores));
+	//		System.err.println("@ExpansionMetric.Entropy.evaluateExpansions: pre = " + preEntropy + ", scores = " + Arrays.toString(scores));
 			return scores;
 		}
 

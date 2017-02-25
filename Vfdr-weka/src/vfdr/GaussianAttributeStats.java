@@ -123,7 +123,7 @@ public class GaussianAttributeStats extends AttributeStats {
 		bestAntd.setConditionHigher(isConditionHigher);
 		bestAntd.setSplitPoint(bestSplitPoint);
 
-		System.err.println("@NumericAttributeStats.bestCandidate:\tBest antecedent devised is " + bestAntd.toString());
+//		System.err.println("@NumericAttributeStats.bestCandidate:\tBest antecedent devised is " + bestAntd.toString());
 
 		return new CandidateAntd(bestAntd, bestScoreYet);
 	}

@@ -23,13 +23,6 @@ public class VfdrRule {
 	private static boolean m_useNaiveBayes = true;
 
 	/**
-	 * After each expansion, the attribute used in the new antecedent is removed
-	 */
-	private List<String> m_attributesLeft;
-
-	private static List<String> m_fullAttributes;
-
-	/**
 	 * One minus the desired probability of choosing the correct attribute (used
 	 * in the computation of the Hoeffding bound)
 	 */
@@ -46,23 +39,6 @@ public class VfdrRule {
 	public VfdrRule() {
 		m_literals = new ArrayList<>();
 		m_lr = m_useNaiveBayes ? new SufficientStats.NaiveBayes(Vfdr.m_header) : new SufficientStats.MajorityClass();
-		m_attributesLeft = new ArrayList<>(m_fullAttributes);
-	}
-
-	/**
-	 * Initialises static members, must be used before any instantiation of this
-	 * class !
-	 * 
-	 * @param template
-	 *            A template for the instances subsequently created rules can
-	 *            handle
-	 */
-	public static void init(Instance template) {
-		m_fullAttributes = new ArrayList<>();
-		for (int i = 0; i < template.numAttributes(); i++) {
-			if (i != template.classIndex())
-				m_fullAttributes.add(template.attribute(i).name());
-		}
 	}
 
 	/**
@@ -87,8 +63,6 @@ public class VfdrRule {
 	 */
 	public VfdrRule expand(ExpansionMetric expMetric) {
 
-		System.err.println("@VfdrRule.expand: Rule " + toString() + " candidate for expansion");
-
 		// i.e. distribution is impure
 		if (m_lr.classDistribution().size() > 1) {
 
@@ -104,25 +78,19 @@ public class VfdrRule {
 				CandidateAntd secondBest = bestCandidates.get(bestCandidates.size() - 2);
 
 				double diff = best.expMerit() - secondBest.expMerit();
-				if (diff > hoeffding || m_tieThreshold > diff) {
+				if (diff > hoeffding || m_tieThreshold < hoeffding) {
 					doExpand = true;
 				}
-				System.err.println("The antecedents tested were " + best.antd().toString() + " (" + best.expMerit()
-						+ "), and " + secondBest.antd().toString() + "(" + secondBest.expMerit() + ")");
-				System.err.println("@VfdrRule.expand: n = " + m_lr.totalWeight() + "; hoeffding = " + hoeffding
-						+ ", compare to " + (best.expMerit() - secondBest.expMerit()));
-
 			}
 
 			if (doExpand) {
-				System.err.println("\t\t\tSuccess! Rule will be expanded\n");
 				CandidateAntd best = bestCandidates.get(bestCandidates.size() - 1);
 
 				// It's an expansion of the default rule
 				if (m_literals.size() == 0) {
 					VfdrRule newRule = new VfdrRule();
 					newRule.m_literals.add(best.antd());
-					newRule.m_attributesLeft.remove(best.antd().getAttr().name());
+					newRule.m_lr.forbidAttribute(best.antd().getAttr().index());
 					m_lr = m_useNaiveBayes ? new SufficientStats.NaiveBayes(Vfdr.m_header)
 							: new SufficientStats.MajorityClass();
 					return newRule;
@@ -207,7 +175,8 @@ public class VfdrRule {
 		if (m_literals.size() == 0) {
 			String s = "{} -> ";
 			for (Map.Entry<String, Integer> e : m_lr.m_classDistribution.entrySet()) {
-				s += e.getKey() + " (" + (e.getValue().doubleValue() / (double) m_lr.m_totalWeight) + "), ";
+				s += e.getKey() + " ("
+						+ Math.floor(1000 * e.getValue().doubleValue() / (double) m_lr.m_totalWeight) / 1000 + "), ";
 			}
 			return s;
 		} else {
@@ -218,7 +187,8 @@ public class VfdrRule {
 			s += "} -> ";
 
 			for (Map.Entry<String, Integer> e : m_lr.m_classDistribution.entrySet()) {
-				s += e.getKey() + " (" + (e.getValue().doubleValue() / (double) m_lr.m_totalWeight) + "), ";
+				s += e.getKey() + " ("
+						+ Math.floor(1000 * e.getValue().doubleValue() / (double) m_lr.m_totalWeight) / 1000 + "), ";
 			}
 
 			return s;

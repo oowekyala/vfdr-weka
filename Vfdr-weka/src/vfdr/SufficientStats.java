@@ -38,6 +38,12 @@ public abstract class SufficientStats {
 	protected Map<String, AttributeStats> m_attributeLookup = new LinkedHashMap<>();
 
 	/**
+	 * Indices of the attributes which should not be candidate for expansion.
+	 * Stats are not updated for those attributes.
+	 */
+	protected List<Integer> m_usedAttributes = new ArrayList<>();
+
+	/**
 	 * Returns the probabilities for each class for a given instance.
 	 * 
 	 * @param inst
@@ -71,7 +77,8 @@ public abstract class SufficientStats {
 
 		// update stats for each attribute
 		for (int i = 0; i < inst.numAttributes(); i++) {
-			if (i != inst.classIndex()) {
+
+			if (i != inst.classIndex() && !m_usedAttributes.contains(i)) {
 				Attribute a = inst.attribute(i);
 				AttributeStats stats = m_attributeLookup.get(a.name());
 				if (stats == null) {
@@ -116,6 +123,17 @@ public abstract class SufficientStats {
 	 */
 	public int totalWeight() {
 		return m_totalWeight;
+	}
+
+	/**
+	 * Marks an attribute as already used in the rule, so it can not be used to
+	 * become a new antecedent in the same rule
+	 * 
+	 * @param i
+	 *            Index of the attribute to forbid
+	 */
+	public void forbidAttribute(int i) {
+		m_usedAttributes.add(i);
 	}
 
 	/**

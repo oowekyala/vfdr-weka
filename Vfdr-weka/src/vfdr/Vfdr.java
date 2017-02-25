@@ -27,7 +27,7 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 	/**
 	 * Whether the set of rules is ordered or not
 	 */
-	private boolean m_orderedSet = false;
+	private boolean m_orderedSet = true;
 
 	private boolean m_initialised = false;
 
@@ -87,7 +87,6 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 		instances.randomize(r);
 
 		Antd.init(instances.get(0));
-		VfdrRule.init(instances.get(0));
 
 		// store the header as a static variable for algorithm utilities to use.
 		m_header = new Instances(instances);

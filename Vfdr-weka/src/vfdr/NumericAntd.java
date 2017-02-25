@@ -40,7 +40,7 @@ public class NumericAntd extends Antd {
 
 	@Override
 	public String toString() {
-		return m_attribute.name() + (m_conditionHigher ? " > " : " <= ") + m_splitPoint;
+		return m_attribute.name() + (m_conditionHigher ? " > " : " <= ") + Math.floor(m_splitPoint * 1000) / 1000;
 	}
 
 	/**

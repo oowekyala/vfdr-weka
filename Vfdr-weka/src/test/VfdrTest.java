@@ -18,20 +18,23 @@ import weka.core.Instances;
  * @author Clément Fournier (clement.fournier@insa-rennes.fr)
  *
  */
-public class VfdrTest // extends AbstractClassifierTest
-{
+public class VfdrTest {
 
 	private Instances trainingSet;
 
-	// public VfdrTest(String name) { super(name); }
-
-	/** Creates a default HoeffdingTree */
+	/** Creates a default Vfdr */
 	public Classifier getClassifier() {
 		return new Vfdr();
 	}
 
-	public VfdrTest() {
-		try (BufferedReader br = new BufferedReader(new FileReader("./scripts/fisher-iris.arff"))) {
+	/**
+	 * Builds a training set
+	 * 
+	 * @param path
+	 *            Path of the arff file to use
+	 */
+	public VfdrTest(String path) {
+		try (BufferedReader br = new BufferedReader(new FileReader(path))) {
 			trainingSet = new Instances(br);
 			trainingSet.setClassIndex(4);
 		} catch (IOException e) {
@@ -40,17 +43,24 @@ public class VfdrTest // extends AbstractClassifierTest
 	}
 
 	public static void main(String[] args) {
-		VfdrTest test = new VfdrTest();
-		Classifier vfdr = (Classifier) new Vfdr();
+		VfdrTest test = new VfdrTest("./test/testabcd.arff");
+		Classifier vfdr = new Vfdr();
 		try {
 			vfdr.buildClassifier(test.trainingSet);
 			System.out.println(((Vfdr) vfdr).ruleSetToString());
-		//	Instance inst = new DenseInstance(4);
-			
-		//	System.out.println(Arrays.toString(vfdr.distributionForInstance(inst)));
+			Instance inst = new DenseInstance(5);
+			inst.setValue(0, 1);
+			inst.setValue(1, 0);
+			inst.setValue(2, 0);
+			inst.setValue(3, 0);
+
+			inst.setDataset(test.trainingSet);
+
+			inst.setClassMissing();
+
+			System.out.println(Arrays.toString(vfdr.distributionForInstance(inst)));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 }

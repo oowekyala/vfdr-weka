@@ -33,7 +33,7 @@ public class VfdrRule {
 	 * in the computation of the Hoeffding bound)
 	 */
 	private static double m_confidence = 0.05;
-	private static double m_hoeffdingTieThreshold = 0.05;
+	private static double m_tieThreshold = .05;
 
 	private List<Antd> m_literals;
 
@@ -102,11 +102,11 @@ public class VfdrRule {
 				CandidateAntd best = bestCandidates.get(bestCandidates.size() - 1);
 				CandidateAntd secondBest = bestCandidates.get(bestCandidates.size() - 2);
 
-				if (best.expMerit() - secondBest.expMerit() > hoeffding || hoeffding < m_hoeffdingTieThreshold) {
+				if (best.expMerit() - secondBest.expMerit() > hoeffding || hoeffding < m_tieThreshold) {
 					doExpand = true;
 				}
-				System.err.println("The antecedents tested were " + best.antd().toString() + ", and "
-						+ secondBest.antd().toString());
+				System.err.println("The antecedents tested were " + best.antd().toString() + " (" + best.expMerit()
+						+ "), and " + secondBest.antd().toString() + "(" + secondBest.expMerit() + ")");
 				System.err.println("@VfdrRule.expand: n = " + m_lr.totalWeight() + "; hoeffding = " + hoeffding
 						+ ", compare to " + (best.expMerit() - secondBest.expMerit()));
 
@@ -203,7 +203,11 @@ public class VfdrRule {
 	@Override
 	public String toString() {
 		if (m_literals.size() == 0) {
-			return "{Default rule}";
+			String s = "{} -> ";
+			for (Map.Entry<String, Integer> e : m_lr.m_classDistribution.entrySet()) {
+				s += e.getKey() + " (" + (e.getValue().doubleValue() / (double) m_lr.m_totalWeight) + "), ";
+			}
+			return s;
 		} else {
 			String s = "{" + m_literals.get(0);
 			for (int i = 1; i < m_literals.size(); i++) {

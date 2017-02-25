@@ -41,8 +41,7 @@ public class NumericAntd extends Antd {
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
+		return m_attribute.name() + (m_condition ? " > " : " <= ") + m_splitPoint;
 	}
 
 	/**

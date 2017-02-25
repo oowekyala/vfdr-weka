@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import test.VfdrUtil;
 import weka.core.Utils;
 import weka.estimators.UnivariateNormalEstimator;
 
@@ -82,7 +83,8 @@ public class GaussianAttributeStats extends AttributeStats {
 			}
 			// That's in weka.estimators.UnivariateNormalEstimator
 			norm.addValue(attVal, 1);
-
+			// System.err.println( "@GaussianAttributeStats.update: @" +
+			// m_attributeName + " sumofweights =" + norm.getSumOfWeights());
 		}
 	}
 
@@ -123,6 +125,8 @@ public class GaussianAttributeStats extends AttributeStats {
 		bestAntd.setConditionHigher(isConditionHigher);
 		bestAntd.setSplitPoint(bestSplitPoint);
 
+		System.err.println("@NumericAttributeStats.bestCandidate:\tBest antecedent devised is " + bestAntd.toString());
+
 		return new CandidateAntd(bestAntd, bestScoreYet);
 	}
 
@@ -145,34 +149,20 @@ public class GaussianAttributeStats extends AttributeStats {
 
 			if (norm != null) {
 				if (selectedSplit < m_minValObservedPerClass.get(classVal)) {
-					Integer mass = rightDist.get(classVal);
-					if (mass == null) {
-						mass = new Integer(0);
-						rightDist.put(classVal, mass);
-					}
-					mass = new Integer(mass.intValue() + (int) norm.getSumOfWeights());
+					rightDist.put(classVal, new Integer((rightDist.containsKey(classVal) ? rightDist.get(classVal) : 0)
+							+ (int) norm.getSumOfWeights()));
 				} else if (selectedSplit > m_maxValObservedPerClass.get(classVal)) {
-					Integer mass = leftDist.get(classVal);
-					if (mass == null) {
-						mass = new Integer(0);
-						leftDist.put(classVal, mass);
-					}
-					mass = new Integer(mass.intValue() + (int) norm.getSumOfWeights());
+					leftDist.put(classVal, new Integer((leftDist.containsKey(classVal) ? leftDist.get(classVal) : 0)
+							+ (int) norm.getSumOfWeights()));
 				} else {
 					double[] weights = norm.weightLessThanEqualAndGreaterThan(selectedSplit);
-					Integer lmass = leftDist.get(classVal);
-					if (lmass == null) {
-						lmass = new Integer(0);
-						leftDist.put(classVal, lmass);
-					}
-					lmass = new Integer((int) (lmass.intValue() + weights[0] + weights[1]));
 
-					Integer rmass = rightDist.get(classVal);
-					if (rmass == null) {
-						rmass = new Integer(0);
-						rightDist.put(classVal, rmass);
-					}
-					rmass = new Integer(rmass.intValue() + (int) weights[2]);
+					leftDist.put(classVal,
+							new Integer((int) ((leftDist.containsKey(classVal) ? leftDist.get(classVal) : 0)
+									+ weights[0] + weights[1])));
+					rightDist.put(classVal, new Integer(
+							(rightDist.containsKey(classVal) ? rightDist.get(classVal) : 0) + (int) weights[2]));
+
 				}
 			}
 		}
@@ -181,6 +171,10 @@ public class GaussianAttributeStats extends AttributeStats {
 
 		list.add(leftDist);
 		list.add(rightDist);
+
+		// System.err.println("\t @" + m_attributeName + " Distribution found
+		// for splitpoint (" + selectedSplit + ") : "
+		// + VfdrUtil.distributionListToString(list));
 
 		return list;
 	}
@@ -256,15 +250,16 @@ public class GaussianAttributeStats extends AttributeStats {
 
 		public double[] weightLessThanEqualAndGreaterThan(double value) {
 			double stdDev = Math.sqrt(m_Variance);
+
 			double equalW = probabilityDensity(value) * m_SumOfWeights;
 
 			double lessW = (stdDev > 0)
 					? weka.core.Statistics.normalProbability((value - m_Mean) / stdDev) * m_SumOfWeights - equalW
 					: (value < m_Mean) ? m_SumOfWeights - equalW : 0.0;
+
 			double greaterW = m_SumOfWeights - equalW - lessW;
 
 			return new double[] { lessW, equalW, greaterW };
 		}
 	}
-
 }

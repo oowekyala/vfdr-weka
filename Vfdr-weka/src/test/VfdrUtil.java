@@ -3,6 +3,7 @@
  */
 package test;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,6 +25,15 @@ public class VfdrUtil {
 		String s = "";
 		for (Map.Entry<Integer, Map<String, Integer>> e : index.entrySet()) {
 			s += e.getKey() + "(" + distributionToString(e.getValue()) + "); ";
+		}
+		return s;
+	}
+	
+
+	public static String distributionListToString(List<Map<String, Integer>> index) {
+		String s = "";
+		for (Map<String, Integer> d : index) {
+			s +=   "(" + distributionToString(d) + "); ";
 		}
 		return s;
 	}

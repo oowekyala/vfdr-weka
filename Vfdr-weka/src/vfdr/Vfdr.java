@@ -2,13 +2,12 @@ package vfdr;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.UpdateableClassifier;
-import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
-import weka.core.WeightedInstancesHandler;
 
 /**
  * Implements the algorithm proper. This version only performs binary,
@@ -82,12 +81,15 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 		instances = new Instances(instances);
 		instances.deleteWithMissingClass();
 
-		// TODO examples must be randomized (see Domingos & Hulten, Mining
+		// examples must be randomized (see Domingos & Hulten, Mining
 		// high-speed data streams, page 2 note 1)
+		Random r = new Random();
+		instances.randomize(r);
 
 		Antd.init(instances.get(0));
 		VfdrRule.init(instances.get(0));
 
+		// store the header as a static variable for algorithm utilities to use.
 		m_header = new Instances(instances);
 		m_header.delete();
 
@@ -144,9 +146,11 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 	public String ruleSetToString() {
 		String s = "[\n";
 		for (VfdrRule r : m_ruleSet) {
-			s += "\t" + r.toString() + "\n";
+			s += "\t" + r + "\n";
 		}
-		return s + "]";
+		s += "\t" + m_defaultRule + "\n]";
+
+		return s;
 	}
 
 }

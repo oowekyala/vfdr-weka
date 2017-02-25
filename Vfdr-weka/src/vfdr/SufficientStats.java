@@ -64,11 +64,10 @@ public abstract class SufficientStats {
 			return;
 		}
 		String classVal = inst.stringValue(inst.classAttribute());
-		Integer m = m_classDistribution.get(classVal);
-		if (m == null)
-			m_classDistribution.put(classVal, 1);
-		else
-			m++;
+
+		// increment weight in class distribution
+		m_classDistribution.put(classVal,
+				(m_classDistribution.containsKey(classVal) ? m_classDistribution.get(classVal) : 0) + 1);
 
 		// update stats for each attribute
 		for (int i = 0; i < inst.numAttributes(); i++) {
@@ -88,7 +87,6 @@ public abstract class SufficientStats {
 			}
 		}
 		m_totalWeight++;
-
 	}
 
 	/**

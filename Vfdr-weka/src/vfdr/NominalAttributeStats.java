@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import test.VfdrUtil;
 import weka.core.Utils;
 
 /**
@@ -42,10 +43,11 @@ public class NominalAttributeStats extends AttributeStats {
 				dist = new DiscreteDistribution();
 				dist.add((int) attVal);
 				m_classLookup.put(classVal, dist);
+			}else{
+				dist.add((int) attVal);
 			}
 			m_totalWeight++;
 		}
-
 	}
 
 	@Override
@@ -66,12 +68,14 @@ public class NominalAttributeStats extends AttributeStats {
 		NominalAntd bestAntd = Antd.buildNominalAntd(m_attributeName);
 		bestAntd.setTargetValue((int) bestValueIndex);
 
+		System.err.println("@NominalAttributeStats.bestCandidate:\tBest antecedent devised is " + bestAntd.toString());
+
 		return new CandidateAntd(bestAntd, bestMerit);
 	}
 
 	private List<Map<String, Integer>> postExpansionDistributions() {
 
-		// att index keys to class distribution
+		// att value index keys to class distribution
 		Map<Integer, Map<String, Integer>> splitDists = new HashMap<Integer, Map<String, Integer>>();
 
 		for (Map.Entry<String, Object> classEntry : m_classLookup.entrySet()) {
@@ -90,18 +94,18 @@ public class NominalAttributeStats extends AttributeStats {
 
 				Integer clsCount = clsDist.get(classVal);
 
-				if (clsCount == null) {
+				if (clsCount == null)
 					clsCount = new Integer(0);
-					clsDist.put(classVal, clsCount);
-				}
 
-				clsCount = new Integer(clsCount.intValue() + attCount.intValue());
+				clsDist.put(classVal, new Integer(clsCount.intValue() + attCount.intValue()));
 			}
 
 		}
 
 		List<Map<String, Integer>> result = new LinkedList<Map<String, Integer>>();
 		for (Map.Entry<Integer, Map<String, Integer>> v : splitDists.entrySet()) {
+			System.err.println("\t @" + m_attributeName + " Distribution found for att value (" + v.getKey() + ") : "
+					+ VfdrUtil.distributionToString(v.getValue()));
 			result.add(v.getValue());
 		}
 
@@ -135,12 +139,7 @@ public class NominalAttributeStats extends AttributeStats {
 		 *            The attribute value to add
 		 */
 		public void add(int val) {
-			Integer count = m_dist.get(val);
-			if (count == null) {
-				count = new Integer(0);
-				m_dist.put(val, count);
-			}
-			count++;
+			m_dist.put(val, (m_dist.containsKey(val) ? m_dist.get(val) : 0) + 1);
 			m_sum++;
 		}
 
@@ -151,11 +150,8 @@ public class NominalAttributeStats extends AttributeStats {
 		 *            The attribute value to delete
 		 */
 		public void delete(int val) {
-			Integer count = m_dist.get(val);
-			if (count != null) {
-				count--;
-				m_sum--;
-			}
+			m_dist.put(val, (m_dist.containsKey(val) ? m_dist.get(val) - 1: 0));
+			m_sum--; //FIXME incorrect but as it is not called, bellek
 		}
 
 		/**

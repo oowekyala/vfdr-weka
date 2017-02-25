@@ -8,6 +8,7 @@ import java.util.Map;
 import weka.classifiers.bayes.NaiveBayesUpdateable;
 import weka.core.Attribute;
 import weka.core.Instance;
+import weka.core.Instances;
 import weka.core.Utils;
 
 /**
@@ -71,18 +72,20 @@ public abstract class SufficientStats {
 
 		// update stats for each attribute
 		for (int i = 0; i < inst.numAttributes(); i++) {
-			Attribute a = inst.attribute(i);
-			AttributeStats stats = m_attributeLookup.get(a.name());
-			if (stats == null) {
-				if (a.isNumeric()) {
-					stats = new GaussianAttributeStats(a.name());
-				} else {
-					stats = new NominalAttributeStats(a.name());
+			if (i != inst.classIndex()) {
+				Attribute a = inst.attribute(i);
+				AttributeStats stats = m_attributeLookup.get(a.name());
+				if (stats == null) {
+					if (a.isNumeric()) {
+						stats = new GaussianAttributeStats(a.name());
+					} else {
+						stats = new NominalAttributeStats(a.name());
+					}
+					m_attributeLookup.put(a.name(), stats);
 				}
-				m_attributeLookup.put(a.name(), stats);
-			}
 
-			m_attributeLookup.get(a.name()).update(inst.value(a), classVal);
+				m_attributeLookup.get(a.name()).update(inst.value(a), classVal);
+			}
 		}
 		m_totalWeight++;
 
@@ -178,9 +181,25 @@ public abstract class SufficientStats {
 		/**
 		 * The naive Bayes model for this rule
 		 */
-		protected NaiveBayesUpdateable m_nbayes;
+		protected NaiveBayesUpdateable m_nbayes = new NaiveBayesUpdateable();
 
-		protected double m_nbWeightThreshold;
+		protected double m_nbWeightThreshold = 20;
+
+		/**
+		 * Builds these sufficient stats with a naive Bayes classifier
+		 * initialised with the header of the data
+		 * 
+		 * @param header
+		 *            The header describing the structure of the data we're
+		 *            learning from
+		 */
+		public NaiveBayes(Instances header) {
+			try {
+				m_nbayes.buildClassifier(header);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 
 		@Override
 		public double[] makePrediction(Instance inst, Attribute classAtt) throws Exception {

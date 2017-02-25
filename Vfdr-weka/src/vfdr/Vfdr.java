@@ -35,7 +35,7 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 	/**
 	 * Minimal number of covered examples needed to consider expanding a rule.
 	 */
-	private int m_gracePeriod = 60;
+	private int m_gracePeriod = 1;
 
 	/**
 	 * The metric used to determine the best expansions
@@ -48,6 +48,11 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 	private List<VfdrRule> m_ruleSet;
 	private VfdrRule m_defaultRule;
 	private ClassificationStrategy m_classificationStrategy;
+
+	/**
+	 * Header of the relation learned from
+	 */
+	public static Instances m_header;
 
 	/**
 	 * Returns class probabilities for an instance.
@@ -82,6 +87,9 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 
 		Antd.init(instances.get(0));
 		VfdrRule.init(instances.get(0));
+
+		m_header = new Instances(instances);
+		m_header.delete();
 
 		m_ruleSet = new ArrayList<>();
 		m_defaultRule = new VfdrRule();
@@ -128,7 +136,17 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 			m_defaultRule.getStats().update(x);
 			if (m_defaultRule.getStats().totalWeight() > m_gracePeriod) {
 				m_ruleSet.add(m_defaultRule.expand(m_expMetric));
+				m_ruleSet.remove(m_defaultRule);
 			}
 		}
 	}
+
+	public String ruleSetToString() {
+		String s = "[\n";
+		for (VfdrRule r : m_ruleSet) {
+			s += "\t" + r.toString() + "\n";
+		}
+		return s + "]";
+	}
+
 }

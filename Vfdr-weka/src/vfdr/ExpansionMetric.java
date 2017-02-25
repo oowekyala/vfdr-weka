@@ -1,5 +1,6 @@
 package vfdr;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -70,7 +71,7 @@ public abstract class ExpansionMetric {
 
 				scores[count++] = preEntropy - ContingencyTables.entropy(post);
 			}
-
+			System.err.println("@ExpansionMetric.Entropy.evaluateExpansions: pre = " + preEntropy + ", scores = " + Arrays.toString(scores));
 			return scores;
 		}
 

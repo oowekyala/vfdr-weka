@@ -1,5 +1,6 @@
 package vfdr;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import weka.core.Attribute;
@@ -51,7 +52,7 @@ public abstract class Antd {
 		return !m_isNominal;
 	}
 
-	private static Map<String, Attribute> lookupTable;
+	private static Map<String, Attribute> lookupTable = new HashMap<>();
 
 	/**
 	 * Initialises the lookup table that allows us to build an antecedent

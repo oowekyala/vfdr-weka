@@ -3,6 +3,7 @@ package vfdr;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import weka.core.Instance;
 
@@ -32,6 +33,7 @@ public class VfdrRule {
 	 * in the computation of the Hoeffding bound)
 	 */
 	private static double m_confidence = 0.05;
+	private static double m_hoeffdingTieThreshold = 0.05;
 
 	private List<Antd> m_literals;
 
@@ -42,7 +44,7 @@ public class VfdrRule {
 	 */
 	public VfdrRule() {
 		m_literals = new ArrayList<>();
-		m_lr = m_useNaiveBayes ? new SufficientStats.NaiveBayes() : new SufficientStats.MajorityClass();
+		m_lr = m_useNaiveBayes ? new SufficientStats.NaiveBayes(Vfdr.m_header) : new SufficientStats.MajorityClass();
 		m_attributesLeft = new ArrayList<>(m_fullAttributes);
 	}
 
@@ -84,6 +86,8 @@ public class VfdrRule {
 	 */
 	public VfdrRule expand(ExpansionMetric expMetric) {
 
+		System.err.println("@VfdrRule.expand: Rule " + toString() + " candidate for expansion");
+
 		// i.e. distribution is impure
 		if (m_lr.classDistribution().size() > 1) {
 
@@ -98,12 +102,18 @@ public class VfdrRule {
 				CandidateAntd best = bestCandidates.get(bestCandidates.size() - 1);
 				CandidateAntd secondBest = bestCandidates.get(bestCandidates.size() - 2);
 
-				if (best.expMerit() - secondBest.expMerit() > hoeffding) {
+				if (best.expMerit() - secondBest.expMerit() > hoeffding || hoeffding < m_hoeffdingTieThreshold) {
 					doExpand = true;
 				}
+				System.err.println("The antecedents tested were " + best.antd().toString() + ", and "
+						+ secondBest.antd().toString());
+				System.err.println("@VfdrRule.expand: n = " + m_lr.totalWeight() + "; hoeffding = " + hoeffding
+						+ ", compare to " + (best.expMerit() - secondBest.expMerit()));
+
 			}
 
 			if (doExpand) {
+				System.err.println("\t\t\tSuccess! Rule will be expanded\n");
 				CandidateAntd best = bestCandidates.get(bestCandidates.size() - 1);
 
 				// It's an expansion of the default rule
@@ -111,16 +121,19 @@ public class VfdrRule {
 					VfdrRule newRule = new VfdrRule();
 					newRule.m_literals.add(best.antd());
 					newRule.m_attributesLeft.remove(best.antd().getAttr().name());
-					m_lr = m_useNaiveBayes ? new SufficientStats.NaiveBayes() : new SufficientStats.MajorityClass();
+					m_lr = m_useNaiveBayes ? new SufficientStats.NaiveBayes(Vfdr.m_header)
+							: new SufficientStats.MajorityClass();
 					return newRule;
 
 				} else {
 					m_literals.add(best.antd());
-					m_lr = m_useNaiveBayes ? new SufficientStats.NaiveBayes() : new SufficientStats.MajorityClass();
+					m_lr = m_useNaiveBayes ? new SufficientStats.NaiveBayes(Vfdr.m_header)
+							: new SufficientStats.MajorityClass();
 					return this;
 				}
 			}
 		}
+		System.err.println("");
 		return this;
 	}
 
@@ -187,6 +200,7 @@ public class VfdrRule {
 	 * 
 	 * @return A descriptive string
 	 */
+	@Override
 	public String toString() {
 		if (m_literals.size() == 0) {
 			return "{Default rule}";
@@ -195,7 +209,13 @@ public class VfdrRule {
 			for (int i = 1; i < m_literals.size(); i++) {
 				s += " and " + m_literals.get(i).toString();
 			}
-			return s + "}";
+			s += "} -> ";
+
+			for (Map.Entry<String, Integer> e : m_lr.m_classDistribution.entrySet()) {
+				s += e.getKey() + " (" + (e.getValue().doubleValue() / (double) m_lr.m_totalWeight) + "), ";
+			}
+
+			return s;
 		}
 
 	}

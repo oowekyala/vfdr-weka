@@ -5,8 +5,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import weka.classifiers.bayes.NaiveBayesUpdateable;
 import weka.core.Attribute;
 import weka.core.Instance;
+import weka.core.Utils;
 
 /**
  * Sufficient statistics used to grow rules and make predictions on unlabeled
@@ -136,4 +138,77 @@ public abstract class SufficientStats {
 		this.m_attributeLookup = m_attributeLookup;
 	}
 
+	/**
+	 * Implements the majority class strategy to classify an instance.
+	 * 
+	 * @author Clément Fournier (clement.fournier@insa-rennes.fr)
+	 * @version VFDR-Base
+	 */
+	public static class MajorityClass extends SufficientStats {
+
+		@Override
+		public double[] makePrediction(Instance inst, Attribute classAtt) throws Exception {
+
+			double[] prediction = new double[classAtt.numValues()];
+
+			for (int i = 0; i < classAtt.numValues(); i++) {
+				Integer mass = m_classDistribution.get(classAtt.value(i));
+				if (mass != null)
+					prediction[i] = mass;
+				else
+					prediction[i] = 0;
+			}
+
+			Utils.normalize(prediction);
+
+			return prediction;
+		}
+
+	}
+
+	/**
+	 * Sufficient stats for a rule that uses a naive Bayes strategy to classify
+	 * instances.
+	 * 
+	 * @author Clément Fournier (clement.fournier@insa-rennes.fr)
+	 * @version VFDR-Base
+	 */
+	public static class NaiveBayes extends MajorityClass {
+
+		/**
+		 * The naive Bayes model for this rule
+		 */
+		protected NaiveBayesUpdateable m_nbayes;
+
+		protected double m_nbWeightThreshold;
+
+		@Override
+		public double[] makePrediction(Instance inst, Attribute classAtt) throws Exception {
+
+			boolean doNB = m_nbWeightThreshold == 0 ? true : totalWeight() > m_nbWeightThreshold;
+
+			if (doNB) {
+				return m_nbayes.distributionForInstance(inst);
+			}
+
+			return super.makePrediction(inst, classAtt);
+		}
+
+		/**
+		 * Updates the naive Bayes model and other statistics.
+		 * 
+		 * @param inst
+		 *            The instance to update with
+		 */
+		@Override
+		public void update(Instance inst) {
+			super.update(inst);
+
+			try {
+				m_nbayes.updateClassifier(inst);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }

@@ -3,6 +3,8 @@ package vfdr;
 import java.util.List;
 import java.util.Map;
 
+import weka.core.ContingencyTables;
+
 /**
  * Metrics evaluate the merit of an expansion (given the pre and post expansion
  * class distribution) to chose the best.
@@ -36,5 +38,47 @@ public abstract class ExpansionMetric {
 	 * @return The range of the metric
 	 */
 	public abstract double getMetricRange();
+
+	/**
+	 * Actually based on information gain for the moment
+	 * 
+	 * @author Clément Fournier (clement.fournier@insa-rennes.fr)
+	 * @version VFDR-Base
+	 */
+	public static class Entropy extends ExpansionMetric {
+
+		@Override
+		public double[] evaluateExpansions(Map<String, Integer> preDist, List<Map<String, Integer>> postDists) {
+
+			double[] pre = new double[preDist.size()];
+			int count = 0;
+			for (Map.Entry<String, Integer> e : preDist.entrySet()) {
+				pre[count++] = e.getValue();
+			}
+
+			double preEntropy = ContingencyTables.entropy(pre);
+
+			double[] scores = new double[postDists.size()];
+			count = 0;
+			for (Map<String, Integer> dist : postDists) {
+
+				double[] post = new double[dist.size()];
+				int i = 0;
+				for (Map.Entry<String, Integer> e : dist.entrySet()) {
+					post[i++] = e.getValue();
+				}
+
+				scores[count++] = preEntropy - ContingencyTables.entropy(post);
+			}
+
+			return scores;
+		}
+
+		@Override
+		public double getMetricRange() {
+			return 1;
+		}
+
+	}
 
 }

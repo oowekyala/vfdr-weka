@@ -42,7 +42,7 @@ public class VfdrRule {
 	 */
 	public VfdrRule() {
 		m_literals = new ArrayList<>();
-		m_lr = m_useNaiveBayes ? new NBStrategyStats() : new MCStrategyStats();
+		m_lr = m_useNaiveBayes ? new SufficientStats.NaiveBayes() : new SufficientStats.MajorityClass();
 		m_attributesLeft = new ArrayList<>(m_fullAttributes);
 	}
 
@@ -111,12 +111,12 @@ public class VfdrRule {
 					VfdrRule newRule = new VfdrRule();
 					newRule.m_literals.add(best.antd());
 					newRule.m_attributesLeft.remove(best.antd().getAttr().name());
-					m_lr = m_useNaiveBayes ? new NBStrategyStats() : new MCStrategyStats();
+					m_lr = m_useNaiveBayes ? new SufficientStats.NaiveBayes() : new SufficientStats.MajorityClass();
 					return newRule;
 
 				} else {
 					m_literals.add(best.antd());
-					m_lr = m_useNaiveBayes ? new NBStrategyStats() : new MCStrategyStats();
+					m_lr = m_useNaiveBayes ? new SufficientStats.NaiveBayes() : new SufficientStats.MajorityClass();
 					return this;
 				}
 			}

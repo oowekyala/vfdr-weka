@@ -40,7 +40,7 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 	/**
 	 * The metric used to determine the best expansions
 	 */
-	private ExpansionMetric m_expMetric = new EntropyMetric();
+	private ExpansionMetric m_expMetric = new ExpansionMetric.Entropy();
 
 	/**
 	 * Set of rules
@@ -85,7 +85,8 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 
 		m_ruleSet = new ArrayList<>();
 		m_defaultRule = new VfdrRule();
-		m_classificationStrategy = m_orderedSet ? new WeightedMaxStrategy() : new FirstHitStrategy();
+		m_classificationStrategy = m_orderedSet ? new ClassificationStrategy.WeightedMax()
+				: new ClassificationStrategy.FirstHit();
 
 		m_initialised = true;
 

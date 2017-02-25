@@ -34,7 +34,7 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 	/**
 	 * Minimal number of covered examples needed to consider expanding a rule.
 	 */
-	private int m_gracePeriod = 1;
+	private int m_gracePeriod = 40;
 
 	/**
 	 * The metric used to determine the best expansions

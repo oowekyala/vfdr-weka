@@ -21,8 +21,8 @@ import weka.estimators.UnivariateNormalEstimator;
  */
 public class GaussianAttributeStats extends AttributeStats {
 
-	protected Map<String, Double> m_minValObservedPerClass = new HashMap<String, Double>();
-	protected Map<String, Double> m_maxValObservedPerClass = new HashMap<String, Double>();
+	protected Map<String, Double> m_minValObservedPerClass = new HashMap<>();
+	protected Map<String, Double> m_maxValObservedPerClass = new HashMap<>();
 
 	protected int m_numBins = 10;
 
@@ -83,8 +83,6 @@ public class GaussianAttributeStats extends AttributeStats {
 			}
 			// That's in weka.estimators.UnivariateNormalEstimator
 			norm.addValue(attVal, 1);
-			// System.err.println( "@GaussianAttributeStats.update: @" +
-			// m_attributeName + " sumofweights =" + norm.getSumOfWeights());
 		}
 	}
 
@@ -192,7 +190,6 @@ public class GaussianAttributeStats extends AttributeStats {
 		double max = Double.NEGATIVE_INFINITY;
 
 		for (String classVal : m_classLookup.keySet()) {
-
 			if (m_maxValObservedPerClass.containsKey(classVal)) {
 				if (m_maxValObservedPerClass.get(classVal) > max)
 					max = m_maxValObservedPerClass.get(classVal);
@@ -202,7 +199,6 @@ public class GaussianAttributeStats extends AttributeStats {
 				if (m_minValObservedPerClass.get(classVal) < min)
 					min = m_minValObservedPerClass.get(classVal);
 			}
-
 		}
 
 		double binWidth = (max - min) / (m_numBins + 1);

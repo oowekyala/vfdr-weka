@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Utility functions for debugging
+ * 
  * @author Clément Fournier (clement.fournier@insa-rennes.fr)
  *
  */
@@ -28,12 +30,11 @@ public class VfdrUtil {
 		}
 		return s;
 	}
-	
 
 	public static String distributionListToString(List<Map<String, Integer>> index) {
 		String s = "";
 		for (Map<String, Integer> d : index) {
-			s +=   "(" + distributionToString(d) + "); ";
+			s += "(" + distributionToString(d) + "); ";
 		}
 		return s;
 	}

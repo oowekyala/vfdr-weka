@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import weka.core.Instance;
+import weka.core.Utils;
 
 /**
  * Represents a rule for the Vfdr algorithm. Rules are made of a conjunction of
@@ -32,7 +33,7 @@ public class VfdrRule {
 	 * One minus the desired probability of choosing the correct attribute (used
 	 * in the computation of the Hoeffding bound)
 	 */
-	private static double m_confidence = 0.05;
+	private static double m_confidence = 0.0000001;
 	private static double m_tieThreshold = .05;
 
 	private List<Antd> m_literals;
@@ -102,7 +103,8 @@ public class VfdrRule {
 				CandidateAntd best = bestCandidates.get(bestCandidates.size() - 1);
 				CandidateAntd secondBest = bestCandidates.get(bestCandidates.size() - 2);
 
-				if (best.expMerit() - secondBest.expMerit() > hoeffding || hoeffding < m_tieThreshold) {
+				double diff = best.expMerit() - secondBest.expMerit();
+				if (diff > hoeffding || m_tieThreshold > diff) {
 					doExpand = true;
 				}
 				System.err.println("The antecedents tested were " + best.antd().toString() + " (" + best.expMerit()
@@ -192,7 +194,7 @@ public class VfdrRule {
 	 * @return Hoeffding bound
 	 */
 	public double computeHoeffding(double range, double confidence, double weight) {
-		return Math.sqrt(((range * range) * Math.log(1.0 / confidence)) / (2.0 * weight));
+		return Math.sqrt(((range * range) * Math.log(1.0 / confidence)) / (2.0 * weight * Utils.log2));
 	}
 
 	/**

@@ -19,7 +19,7 @@ public class NumericAntd extends Antd {
 	/**
 	 * Is 0 if the condition is <=, 1 otherwise
 	 */
-	private boolean m_condition;
+	private boolean m_conditionHigher;
 
 	/**
 	 * Builds a numeric antecedent from the attname
@@ -35,13 +35,12 @@ public class NumericAntd extends Antd {
 
 	@Override
 	public boolean covers(Instance inst) {
-
-		return false;
+		return m_conditionHigher ? inst.value(m_attribute) > m_splitPoint : inst.value(m_attribute) <= m_splitPoint;
 	}
 
 	@Override
 	public String toString() {
-		return m_attribute.name() + (m_condition ? " > " : " <= ") + m_splitPoint;
+		return m_attribute.name() + (m_conditionHigher ? " > " : " <= ") + m_splitPoint;
 	}
 
 	/**
@@ -58,11 +57,11 @@ public class NumericAntd extends Antd {
 	}
 
 	public boolean isConditionHigher() {
-		return m_condition;
+		return m_conditionHigher;
 	}
 
 	public void setConditionHigher(boolean m_condition) {
-		this.m_condition = m_condition;
+		this.m_conditionHigher = m_condition;
 	}
 
 }

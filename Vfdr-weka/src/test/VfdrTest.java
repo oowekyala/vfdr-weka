@@ -43,7 +43,7 @@ public class VfdrTest {
 	}
 
 	public static void main(String[] args) {
-		VfdrTest test = new VfdrTest("./test/testabcd.arff");
+		VfdrTest test = new VfdrTest("./test/banknote.arff");
 		Classifier vfdr = new Vfdr();
 		try {
 			vfdr.buildClassifier(test.trainingSet);
@@ -63,4 +63,5 @@ public class VfdrTest {
 			e.printStackTrace();
 		}
 	}
+
 }

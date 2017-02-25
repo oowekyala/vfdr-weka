@@ -28,7 +28,7 @@ public class VfdrTest {
 
 	@Test
 	public void banknoteTrainingTest() throws Exception {
-		VfdrTester test = new VfdrTester("./test/banknote.arff");
+		VfdrTester test = new VfdrTester("./datafiles/banknote.arff");
 
 		test.vfdr.buildClassifier(test.trainingSet);
 
@@ -42,7 +42,7 @@ public class VfdrTest {
 
 	@Test
 	public void banknoteClassificationTest() throws Exception {
-		VfdrTester test = new VfdrTester("./test/banknote.arff");
+		VfdrTester test = new VfdrTester("./datafiles/banknote.arff");
 
 		Instance inst = new DenseInstance(5);
 		inst.setValue(0, 3.6216);
@@ -61,6 +61,12 @@ public class VfdrTest {
 		assertTrue(res[0] > res[1]);
 	}
 
+	/**
+	 * Holds a Vfdr and a training set for testing
+	 * 
+	 * @author Clément Fournier (clement.fournier@insa-rennes.fr)
+	 *
+	 */
 	public static class VfdrTester {
 
 		public Instances trainingSet;

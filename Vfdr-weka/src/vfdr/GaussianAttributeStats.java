@@ -103,27 +103,28 @@ public class GaussianAttributeStats extends AttributeStats {
 		Set<Double> splitPoints = getSplitPointCandidates();
 
 		double bestScoreYet = Double.NEGATIVE_INFINITY;
-		Double bestSplitPoint = null;
+		double bestSplitPoint = Double.NaN;
 		boolean isConditionHigher = false;
 
 		for (Double s : splitPoints) {
-			List<Map<String, Integer>> postSplitDists = postExpansionDistributions(s);
-			double[] expMerits = expMetric.evaluateExpansions(preSplitDist, postSplitDists);
+			if (s != null) {
+				List<Map<String, Integer>> postSplitDists = postExpansionDistributions(s);
+				double[] expMerits = expMetric.evaluateExpansions(preSplitDist, postSplitDists);
 
-			for (int i = 0; i < 2; i++) {
-				if (expMerits[i] > bestScoreYet) {
-					bestScoreYet = expMerits[i];
-					bestSplitPoint = s;
-					isConditionHigher = i == 1;
+				for (int i = 0; i < 2; i++) {
+					if (expMerits[i] > bestScoreYet) {
+						bestScoreYet = expMerits[i];
+						bestSplitPoint = s;
+						isConditionHigher = i == 1;
+					}
 				}
 			}
+
 		}
 
 		NumericAntd bestAntd = Antd.buildNumericAntd(m_attributeName);
 		bestAntd.setConditionHigher(isConditionHigher);
 		bestAntd.setSplitPoint(bestSplitPoint);
-
-//		System.err.println("@NumericAttributeStats.bestCandidate:\tBest antecedent devised is " + bestAntd.toString());
 
 		return new CandidateAntd(bestAntd, bestScoreYet);
 	}

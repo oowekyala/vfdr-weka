@@ -28,11 +28,11 @@ public class VfdrTest {
 
 	@Test
 	public void banknoteTrainingTest() throws Exception {
-		VfdrTester test = new VfdrTester("./datafiles/banknote.arff");
+		VfdrTester test = new VfdrTester("./datafiles/spam.arff");
 
 		test.vfdr.buildClassifier(test.trainingSet);
 
-		System.out.println("BUILDING TEST : banknote dataset\n--------------------");
+		System.out.println("BUILDING TEST : spam dataset\n--------------------");
 		System.out.println(test.trainingSet.toSummaryString() + "\n");
 
 		System.out.println("VFDR rule set: " + (test.vfdr.ruleSet().size()) + " rules induced, "
@@ -40,15 +40,15 @@ public class VfdrTest {
 		System.out.println(test.vfdr.ruleSetToString());
 	}
 
-	@Test
+/*	@Test
 	public void banknoteClassificationTest() throws Exception {
-		VfdrTester test = new VfdrTester("./datafiles/banknote.arff");
+		VfdrTester test = new VfdrTester("./datafiles/spam.arff");
 
 		Instance inst = new DenseInstance(5);
-		inst.setValue(0, 3.6216);
-		inst.setValue(1, 8.6661);
-		inst.setValue(2, -2.8073);
-		inst.setValue(3, -0.44699);
+		inst.setValue(0, 1);
+		inst.setValue(1, 0);
+		inst.setValue(2, 1);
+		inst.setValue(3, 0);
 
 		inst.setDataset(test.trainingSet);
 		inst.setClassMissing();
@@ -60,7 +60,7 @@ public class VfdrTest {
 		System.out.println(Arrays.toString(res) + "\n");
 		assertTrue(res[0] > res[1]);
 	}
-
+*/
 	/**
 	 * Holds a Vfdr and a training set for testing
 	 * 
@@ -81,7 +81,10 @@ public class VfdrTest {
 		public VfdrTester(String path) {
 			try (BufferedReader br = new BufferedReader(new FileReader(path))) {
 				trainingSet = new Instances(br);
-				trainingSet.setClassIndex(4);
+				trainingSet.setClassIndex(57);
+				trainingSet.deleteAttributeAt(56);
+				trainingSet.deleteAttributeAt(55);
+				trainingSet.deleteAttributeAt(54);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

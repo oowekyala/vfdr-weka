@@ -20,7 +20,7 @@ import weka.core.Utils;
  */
 public class VfdrRule {
 
-	private static boolean m_useNaiveBayes = true;
+	private static boolean m_useNaiveBayes = false;
 
 	/**
 	 * One minus the desired probability of choosing the correct attribute (used

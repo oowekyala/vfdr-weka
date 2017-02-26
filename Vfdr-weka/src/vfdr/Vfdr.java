@@ -27,14 +27,14 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 	/**
 	 * Whether the set of rules is ordered or not
 	 */
-	private boolean m_orderedSet = true;
+	private boolean m_orderedSet = false;
 
 	private boolean m_initialised = false;
 
 	/**
 	 * Minimal number of covered examples needed to consider expanding a rule.
 	 */
-	private int m_gracePeriod = 40;
+	private int m_gracePeriod = 200;
 
 	/**
 	 * The metric used to determine the best expansions

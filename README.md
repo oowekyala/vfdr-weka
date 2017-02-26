@@ -1,22 +1,9 @@
 # VFDR algorithm for Weka
 
-Implementation of the VFDR algorithm for the [weka](http://www.cs.waikato.ac.nz/ml/weka/) library. The algorithm is described in the following paper:
+Implementation of the VFDR algorithm for the **[Weka](http://www.cs.waikato.ac.nz/ml/weka/)** machine-learning platform. The algorithm is described in the following paper:
 
-```bibtex
-@inproceedings{Gama:2011:LDR:2283516.2283606,
- author = {Gama, Jo\~{a}o and Kosina, Petr},
- title = {Learning Decision Rules from Data Streams},
- booktitle = {Proceedings of the Twenty-Second International Joint Conference on Artificial Intelligence - Volume Volume Two},
- series = {IJCAI'11},
- year = {2011},
- isbn = {978-1-57735-514-4},
- location = {Barcelona, Catalonia, Spain},
- pages = {1255--1260},
- numpages = {6},
- url = {http://dx.doi.org/10.5591/978-1-57735-516-8/IJCAI11-213},
- doi = {10.5591/978-1-57735-516-8/IJCAI11-213},
- acmid = {2283606},
- publisher = {AAAI Press},
- keywords = {data streams, rule learning},
-}
-```
+> João Gama and Petr Kosina. Learning decision rules from data streams. In *Proceedings of the Twenty-Second International Joint Conference on Artificial Intelligence - Volume Two*, IJCAI’11, pages 1255–1260. AAAI Press, 2011.
+
+The algorithm performs **on-line binary classification** on numeric or nominal attributes. It learns **decision rules**, as opposed to VFDT's decision trees for example, and needs **only one pass** on the data to build its model. 
+
+However, this version **does not support concept drift**, nor does it support multi-class (n > 2) classification.  

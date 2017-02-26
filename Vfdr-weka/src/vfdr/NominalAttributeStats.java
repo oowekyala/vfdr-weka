@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import test.VfdrUtil;
 import weka.core.Utils;
 
 /**
@@ -104,8 +103,6 @@ public class NominalAttributeStats extends AttributeStats {
 
 		List<Map<String, Integer>> result = new LinkedList<Map<String, Integer>>();
 		for (Map.Entry<Integer, Map<String, Integer>> v : splitDists.entrySet()) {
-			System.err.println("\t @" + m_attributeName + " Distribution found for att value (" + v.getKey() + ") : "
-					+ VfdrUtil.distributionToString(v.getValue()));
 			result.add(v.getValue());
 		}
 

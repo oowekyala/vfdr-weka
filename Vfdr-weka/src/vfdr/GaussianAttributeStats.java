@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import test.VfdrUtil;
 import weka.core.Utils;
 import weka.estimators.UnivariateNormalEstimator;
 

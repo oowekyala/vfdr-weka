@@ -20,7 +20,7 @@ import weka.core.Utils;
  */
 public class VfdrRule {
 
-	private static boolean m_useNaiveBayes = false;
+	private static boolean m_useNaiveBayes = true;
 
 	/**
 	 * One minus the desired probability of choosing the correct attribute (used
@@ -171,27 +171,18 @@ public class VfdrRule {
 	 */
 	@Override
 	public String toString() {
-		if (m_literals.size() == 0) {
-			String s = "{} -> ";
-			for (Map.Entry<String, Integer> e : m_lr.m_classDistribution.entrySet()) {
-				s += e.getKey() + " ("
-						+ Math.floor(1000 * e.getValue().doubleValue() / (double) m_lr.m_totalWeight) / 1000 + "), ";
-			}
-			return s;
-		} else {
-			String s = "{" + m_literals.get(0);
-			for (int i = 1; i < m_literals.size(); i++) {
-				s += " and " + m_literals.get(i).toString();
-			}
-			s += "} -> ";
-
-			for (Map.Entry<String, Integer> e : m_lr.m_classDistribution.entrySet()) {
-				s += e.getKey() + " ("
-						+ Math.floor(1000 * e.getValue().doubleValue() / (double) m_lr.m_totalWeight) / 1000 + "), ";
-			}
-
-			return s;
+		String s = "{" + ((m_literals.size() > 0) ? m_literals.get(0) : "");
+		for (int i = 1; i < m_literals.size(); i++) {
+			s += " and " + m_literals.get(i).toString();
 		}
+		s += "} -> ";
+
+		for (Map.Entry<String, Integer> e : m_lr.m_classDistribution.entrySet()) {
+			s += e.getKey() + " (" + Math.floor(1000 * e.getValue().doubleValue() / (double) m_lr.m_totalWeight) / 1000
+					+ "), ";
+		}
+
+		return s + "\t (total weight: " + m_lr.m_totalWeight + ")";
 
 	}
 

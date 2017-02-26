@@ -5,6 +5,7 @@ import java.util.Map;
 
 import weka.core.Attribute;
 import weka.core.Instance;
+import weka.core.Instances;
 
 /**
  * Simple antecedent class that make up rules. Antecedents can either be nominal
@@ -58,12 +59,12 @@ public abstract class Antd {
 	 * Initialises the lookup table that allows us to build an antecedent
 	 * without its attribute (only its name).
 	 * 
-	 * @param template
+	 * @param structure
 	 *            An instance used to determine what the attribute names are
 	 */
-	public static void init(Instance template) {
-		for (int i = 0; i < template.numAttributes(); i++) {
-			Attribute a = template.attribute(i);
+	public static void init(Instances structure) {
+		for (int i = 0; i < structure.numAttributes(); i++) {
+			Attribute a = structure.attribute(i);
 			lookupTable.put(a.name(), a);
 		}
 	}

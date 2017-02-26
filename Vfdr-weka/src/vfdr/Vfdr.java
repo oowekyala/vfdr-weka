@@ -86,7 +86,7 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 		Random r = new Random();
 		instances.randomize(r);
 
-		Antd.init(instances.get(0));
+		Antd.init(instances);
 
 		// store the header as a static variable for algorithm utilities to use.
 		m_header = new Instances(instances);
@@ -99,7 +99,6 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 
 		m_initialised = true;
 
-		// TODO make subsets
 		for (Instance x : instances) {
 			updateClassifier(x);
 		}
@@ -161,6 +160,15 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 	}
 
 	/**
+	 * Returns true if the classifier is ready to accept new training instances
+	 * 
+	 * @return true if the classifier is ready to accept new training instances
+	 */
+	public boolean initialised() {
+		return m_initialised;
+	}
+
+	/**
 	 * Returns a string describing the rule set
 	 * 
 	 * @return A string describing the rule set
@@ -173,6 +181,10 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 		s += "\t" + m_defaultRule + "\n]";
 
 		return s;
+	}
+
+	public String toString() {
+		return m_initialised ? ruleSetToString() : "You must build this classifier first";
 	}
 
 }

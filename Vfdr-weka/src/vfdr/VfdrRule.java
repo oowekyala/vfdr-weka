@@ -103,7 +103,6 @@ public class VfdrRule {
 				}
 			}
 		}
-		System.err.println("");
 		return this;
 	}
 

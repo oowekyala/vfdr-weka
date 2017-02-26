@@ -17,16 +17,19 @@ public abstract class ClassificationStrategy {
 	/**
 	 * Classifies the given instance
 	 * 
+	 * @param ruleSet
+	 *            The rule set to use
+	 * @param defaultRule
+	 *            The default rule of the set (kept separately)
 	 * @param inst
 	 *            The instance to classify
 	 * @return An array of probabilities
 	 * @throws Exception
 	 *             Case the instance could not be classified
 	 */
-	public abstract double[] distributionForInstance(List<VfdrRule> ruleSet, VfdrRule defaultRule, Instance inst) throws Exception;
+	public abstract double[] distributionForInstance(List<VfdrRule> ruleSet, VfdrRule defaultRule, Instance inst)
+			throws Exception;
 
-	
-	
 	/**
 	 * Classification strategy for ordered sets.
 	 * 
@@ -38,27 +41,27 @@ public abstract class ClassificationStrategy {
 		/*
 		 * (non-Javadoc)
 		 * 
-		 * @see
-		 * vfdr.ClassificationStrategy#distributionForInstance(weka.core.Instance)
+		 * @see vfdr.ClassificationStrategy#distributionForInstance(weka.core.
+		 * Instance)
 		 */
 		@Override
-		public double[] distributionForInstance(List<VfdrRule> ruleSet, VfdrRule defaultRule, Instance inst) throws Exception {
+		public double[] distributionForInstance(List<VfdrRule> ruleSet, VfdrRule defaultRule, Instance inst)
+				throws Exception {
 
 			List<VfdrRule> fullRuleSet = new ArrayList<>(ruleSet);
 			fullRuleSet.add(defaultRule);
-			
+
 			for (VfdrRule r : fullRuleSet) {
 				if (r.covers(inst))
 					return r.getStats().makePrediction(inst, inst.classAttribute());
 			}
-			
+
 			throw new Exception("@FirstHitStrategy: None of the rules matched!");
 
 		}
 
 	}
-	
-	
+
 	/**
 	 * Classification strategy for unordered rule sets.
 	 * 
@@ -71,15 +74,16 @@ public abstract class ClassificationStrategy {
 		/*
 		 * (non-Javadoc)
 		 * 
-		 * @see
-		 * vfdr.ClassificationStrategy#distributionForInstance(weka.core.Instance)
+		 * @see vfdr.ClassificationStrategy#distributionForInstance(weka.core.
+		 * Instance)
 		 */
 		@Override
-		public double[] distributionForInstance(List<VfdrRule> ruleSet, VfdrRule defaultRule, Instance inst) throws Exception {
+		public double[] distributionForInstance(List<VfdrRule> ruleSet, VfdrRule defaultRule, Instance inst)
+				throws Exception {
 
 			List<VfdrRule> fullRuleSet = new ArrayList<>(ruleSet);
 			fullRuleSet.add(defaultRule);
-			
+
 			List<VfdrRule> trigerred = new ArrayList<>();
 
 			for (VfdrRule r : fullRuleSet) {
@@ -106,15 +110,4 @@ public abstract class ClassificationStrategy {
 
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }

@@ -14,13 +14,12 @@ import weka.core.Utils;
 /**
  * Sufficient statistics used to grow rules and make predictions on unlabeled
  * instances. They can be of two types depending on the classification strategy
- * used : naive bayes or majority class.
+ * used : naive bayes or majority class. These flavours are implemented here, as
+ * static nested classes.
  * 
  * @author Clément Fournier (clement.fournier@insa-rennes.fr)
  * @version VFDR-Base
  * 
- * @see NBStrategyStats
- * @see MCStrategyStats
  *
  */
 public abstract class SufficientStats {

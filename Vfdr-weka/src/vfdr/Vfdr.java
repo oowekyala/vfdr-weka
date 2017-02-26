@@ -56,7 +56,7 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 	/**
 	 * Returns class probabilities for an instance.
 	 * 
-	 * @param instance
+	 * @param inst
 	 *            the instance to compute the distribution for
 	 * @return the class probabilities
 	 * @throws Exception

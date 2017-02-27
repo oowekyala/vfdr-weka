@@ -13,6 +13,9 @@ import weka.core.Instance;
  */
 public class NumericAntd extends Antd {
 	
+	/** For serialisation */
+	private static final long serialVersionUID = 8837859958896793453L;
+
 	/** The split point for this numeric antecedent */
 	private double	m_splitPoint;
 	

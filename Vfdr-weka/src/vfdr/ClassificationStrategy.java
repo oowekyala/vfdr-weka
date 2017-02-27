@@ -1,5 +1,6 @@
 package vfdr;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,8 +13,11 @@ import weka.core.Instance;
  * @version VFDR-Base
  * 
  */
-public abstract class ClassificationStrategy {
+public abstract class ClassificationStrategy implements Serializable{
 	
+	/** For serialisation */
+	private static final long serialVersionUID = -277569966336976691L;
+
 	/**
 	 * Classifies the given instance
 	 * 
@@ -38,6 +42,9 @@ public abstract class ClassificationStrategy {
 	 */
 	public static class FirstHit extends ClassificationStrategy {
 		
+		/** For serialisation */
+		private static final long serialVersionUID = -1976085095160281915L;
+
 		/*
 		 * (non-Javadoc)
 		 * 
@@ -71,6 +78,9 @@ public abstract class ClassificationStrategy {
 	 */
 	public static class WeightedMax extends ClassificationStrategy {
 		
+		/** For serialisation */
+		private static final long serialVersionUID = -2963034166669216846L;
+
 		/*
 		 * (non-Javadoc)
 		 * 

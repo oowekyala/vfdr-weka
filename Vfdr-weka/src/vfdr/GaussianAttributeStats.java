@@ -18,7 +18,10 @@ import weka.estimators.UnivariateNormalEstimator;
  * @author Clément Fournier (clement.fournier@insa-rennes.fr)
  * @version VFDR-Base
  */
-public class GaussianAttributeStats extends AttributeStats {
+public class GaussianAttributeStats extends AttributeStats implements Serializable {
+	
+	/** For serialisation */
+	private static final long		serialVersionUID			= -3563592381482652966L;
 	
 	protected Map<String, Double>	m_minValObservedPerClass	= new HashMap<>();
 	protected Map<String, Double>	m_maxValObservedPerClass	= new HashMap<>();

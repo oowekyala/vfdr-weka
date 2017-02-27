@@ -1,6 +1,6 @@
 package vfdr;
 
-import java.util.Arrays;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +13,10 @@ import weka.core.ContingencyTables;
  * @author Clément Fournier (clement.fournier@insa-rennes.fr)
  * @version VFDR-Base
  */
-public abstract class ExpansionMetric {
+public abstract class ExpansionMetric implements Serializable {
+
+	/** For serialisation */
+	private static final long serialVersionUID = -7919168729241552035L;
 
 	/**
 	 * Evaluates expansion candidates based on the post-expansion class
@@ -47,6 +50,9 @@ public abstract class ExpansionMetric {
 	 * @version VFDR-Base
 	 */
 	public static class Entropy extends ExpansionMetric {
+
+		/** For serialisation */
+		private static final long serialVersionUID = 1960468521503854676L;
 
 		@Override
 		public double[] evaluateExpansions(Map<String, Integer> preDist, List<Map<String, Integer>> postDists) {

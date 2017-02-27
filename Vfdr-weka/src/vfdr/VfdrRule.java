@@ -22,7 +22,7 @@ import weka.core.Utils;
  */
 public class VfdrRule implements Serializable {
 	
-	/** For serialization */
+	/** For serialisation */
 	private static final long	serialVersionUID	= -388653429728539867L;
 	
 	/* FIELDS */
@@ -169,8 +169,7 @@ public class VfdrRule implements Serializable {
 		s += "} -> ";
 		
 		for (Map.Entry<String, Integer> e : m_lr.m_classDistribution.entrySet()) {
-			s += e.getKey() + " (" + Math.floor(1000 * e.getValue().doubleValue() / (double) m_lr.m_totalWeight) / 1000
-					+ "), ";
+			s += e.getKey() + " (" + Math.floor(1000 * e.getValue().doubleValue() / m_lr.m_totalWeight) / 1000 + "), ";
 		}
 		
 		return s + "\t (total weight: " + m_lr.m_totalWeight + ")";

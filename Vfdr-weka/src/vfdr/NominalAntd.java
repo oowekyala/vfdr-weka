@@ -12,6 +12,9 @@ import weka.core.Instance;
  */
 public class NominalAntd extends Antd {
 	
+	/** For serialisation */
+	private static final long serialVersionUID = -740966347715078947L;
+	
 	/**
 	 * Index of the value of the attribute that is tested
 	 */

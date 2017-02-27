@@ -17,6 +17,9 @@ import weka.core.Utils;
  */
 public class NominalAttributeStats extends AttributeStats {
 	
+	/** For serialisation */
+	private static final long serialVersionUID = -3508694664971580426L;
+	
 	/**
 	 * Cumulated weight of all distributions (that is, for all classes)
 	 */

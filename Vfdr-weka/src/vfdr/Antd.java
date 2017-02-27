@@ -1,5 +1,7 @@
 package vfdr;
 
+import java.io.Serializable;
+
 import weka.core.Attribute;
 import weka.core.Instance;
 
@@ -10,11 +12,13 @@ import weka.core.Instance;
  * @author Clément Fournier (clement.fournier@insa-rennes.fr)
  * @version VFDR-Base
  */
-public abstract class Antd {
+public abstract class Antd implements Serializable {
+	/** For serialisation */
+	private static final long	serialVersionUID	= -6617990702800935349L;
 	
 	/** The attribute of the antecedent */
-	protected Attribute	m_attribute;
-	protected boolean	m_isNominal;
+	protected Attribute			m_attribute;
+	protected boolean			m_isNominal;
 	
 	public abstract boolean covers(Instance inst);
 	

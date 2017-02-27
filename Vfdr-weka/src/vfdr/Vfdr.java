@@ -30,7 +30,7 @@ import weka.core.Utils;
 public class Vfdr extends AbstractClassifier
 		implements UpdateableClassifier, Serializable, OptionHandler, TechnicalInformationHandler {
 	
-	/** For serialization */
+	/** For serialisation */
 	private static final long		serialVersionUID		= 845742169720545806L;
 	
 	/** Whether the set of rules is ordered or not */

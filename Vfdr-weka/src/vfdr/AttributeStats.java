@@ -1,5 +1,6 @@
 package vfdr;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,10 +13,13 @@ import java.util.Map;
  * @author Clément Fournier (clement.fournier@insa-rennes.fr)
  * @version VFDR-Base
  */
-public abstract class AttributeStats {
+public abstract class AttributeStats implements Serializable {
 	
-	protected String	m_attributeName;
-	protected Vfdr		m_classifierCallback;
+	/** For serialisation */
+	private static final long	serialVersionUID	= -5701874161750880562L;
+	
+	protected String			m_attributeName;
+	protected Vfdr				m_classifierCallback;
 	
 	public AttributeStats(String attName, Vfdr vfdr) {
 		m_attributeName = attName;

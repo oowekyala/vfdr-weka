@@ -1,5 +1,7 @@
 package vfdr;
 
+import java.io.Serializable;
+
 /**
  * Class holding a antecedent that is candidate for rule expansion. Stores the
  * antecedent and the score calculated by an {@link ExpansionMetric}.
@@ -7,8 +9,11 @@ package vfdr;
  * @author Clément Fournier (clement.fournier@insa-rennes.fr)
  * @version VFDR-Base
  */
-public class CandidateAntd implements Comparable<CandidateAntd> {
+public class CandidateAntd implements Comparable<CandidateAntd>, Serializable {
 	
+	/** For serialisation */
+	private static final long serialVersionUID = -2493852936246069334L;
+
 	private Antd	m_antd;
 	
 	/** The merit of the expansion (metric-dependent) */

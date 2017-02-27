@@ -1,5 +1,6 @@
 package vfdr;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -22,8 +23,11 @@ import weka.core.Utils;
  * 
  *
  */
-public abstract class SufficientStats {
+public abstract class SufficientStats implements Serializable {
 	
+	/** For serialisation */
+	private static final long serialVersionUID = 8985499450710619405L;
+
 	protected int							m_totalWeight		= 0;
 	
 	/**
@@ -170,6 +174,9 @@ public abstract class SufficientStats {
 	 */
 	public static class MajorityClass extends SufficientStats {
 		
+		/** For serialisation */
+		private static final long serialVersionUID = -1856208946240830010L;
+
 		public MajorityClass(Vfdr vfdr) {
 			super(vfdr);
 		}
@@ -203,6 +210,9 @@ public abstract class SufficientStats {
 	 */
 	public static class NaiveBayes extends MajorityClass {
 		
+		/** For serialisation */
+		private static final long serialVersionUID = 1150651994740861066L;
+
 		/**
 		 * The naive Bayes model for this rule
 		 */

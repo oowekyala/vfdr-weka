@@ -2,8 +2,10 @@ package vfdr;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Random;
+import java.util.Vector;
 
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.UpdateableClassifier;
@@ -11,9 +13,10 @@ import weka.core.Capabilities;
 import weka.core.Capabilities.Capability;
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.Option;
 import weka.core.OptionHandler;
 import weka.core.RevisionHandler;
-import weka.core.SelectedTag;
+import weka.core.RevisionUtils;
 import weka.core.TechnicalInformation;
 import weka.core.TechnicalInformation.Field;
 import weka.core.TechnicalInformation.Type;
@@ -21,32 +24,42 @@ import weka.core.TechnicalInformationHandler;
 import weka.core.Utils;
 
 /**
- * Implements the algorithm proper. This version only performs binary,
- * unweighted classification.
+ * <!-- globalinfo-start -->
+ * 
+ * <!-- globalinfo-end -->
+ * 
+ * <!-- technical-bibtex-start -->
+ * 
+ * <!-- technical-bibtex-end -->
+ * 
+ * <!-- options-start -->
+ * 
+ * <!-- options-end -->
+ * 
  * 
  * @author Clément Fournier (clement.fournier@insa-rennes.fr)
  * @version VFDR-Base
  */
 public class Vfdr extends AbstractClassifier
-		implements UpdateableClassifier, Serializable, OptionHandler, TechnicalInformationHandler {
+		implements UpdateableClassifier, Serializable, OptionHandler, RevisionHandler, TechnicalInformationHandler {
 	
 	/** For serialisation */
 	private static final long		serialVersionUID		= 845742169720545806L;
 	
 	/** Whether the set of rules is ordered or not */
 	private boolean					m_orderedSet			= false;
-	/**
-	 * Minimal number of covered examples needed to consider expanding a rule.
-	 */
+	/** Minimal number of covered examples needed to consider rule expansion */
 	private int						m_gracePeriod			= 200;
 	/** Whether prediction strategy uses naive Bayes or not */
 	private boolean					m_useNaiveBayes			= true;
 	/** Allowable error in attribute selection when expanding a rule */
-	private double					m_hoeffdingConfidence	= 0.0000001;
-	/**
-	 * Threshold below which an expansion will be forced in order to break ties
-	 */
+	private double					m_hoeffdingConfidence	= .0000001;
+	/** Threshold below which an expansion will be forced to to break ties */
 	private double					m_tieThreshold			= .05;
+	
+	/* These are for option parsing */
+	public static final int			USE_MAJ_CLASS			= 0;
+	public static final int			USE_NB					= 1;
 	
 	/* FIELDS */
 	private List<VfdrRule>			m_ruleSet;
@@ -58,8 +71,21 @@ public class Vfdr extends AbstractClassifier
 	
 	/** Resets this classifier to default parameters. */
 	public void reset() {
+		m_orderedSet = false;
+		m_gracePeriod = 200;
+		m_useNaiveBayes = true;
+		m_hoeffdingConfidence = .0000001;
+		m_tieThreshold = .05;
 		
+		m_ruleSet = null;
+		m_defaultRule = null;
+		m_classificationStrategy = null;
+		m_expMetric = new ExpansionMetric.Entropy();
+		m_header = null;
+		m_initialised = false;
 	}
+	
+	/* METHODS FOR WEKA */
 	
 	/**
 	 * Returns a string describing classifier
@@ -85,8 +111,8 @@ public class Vfdr extends AbstractClassifier
 		result = new TechnicalInformation(Type.INPROCEEDINGS);
 		result.setValue(Field.AUTHOR, "Gama, João and Kosina, Petr");
 		result.setValue(Field.TITLE, "Learning Decision Rules from Data Streams");
-		result.setValue(Field.BOOKTITLE,
-				"Proceedings of the Twenty-Second International Joint Conference on Artificial Intelligence - Volume Volume Two");
+		result.setValue(Field.BOOKTITLE, "Proceedings of the Twenty-Second International Joint Conference on"
+				+ " Artificial Intelligence - Volume Two");
 		result.setValue(Field.YEAR, "2011");
 		result.setValue(Field.PAGES, "1255-1260");
 		result.setValue(Field.PUBLISHER, "AAAI Press");
@@ -109,12 +135,34 @@ public class Vfdr extends AbstractClassifier
 		result.enable(Capability.NUMERIC_ATTRIBUTES);
 		result.enable(Capability.MISSING_VALUES);
 		
-		result.enable(Capability.MISSING_CLASS_VALUES);
+		// result.enable(Capability.MISSING_CLASS_VALUES);
 		result.enable(Capability.BINARY_CLASS);
+		result.disable(Capability.NOMINAL_CLASS);
 		
 		result.setMinimumNumberInstances(0);
 		
 		return result;
+	}
+	
+	@Override
+	public Enumeration<Option> listOptions() {
+		Vector<Option> newVector = new Vector<>();
+		
+		newVector.add(
+				new Option("\tThe prediction strategy to use. 0 = majority class, 1 = naive Bayes.\n\t(default = 1)",
+						"S", 1, "-S"));
+		newVector.add(new Option(
+				"\tThe allowable error in an expansion decision --- values closer to zero will take longer to decide\n\t(default = 1e-7)",
+				"C", 1, "-C"));
+		newVector.add(new Option(
+				"\tThreshold below which an expansion will be forced in order to break ties\n\t(default = 0.05)", "T",
+				1, "-T"));
+		newVector.add(new Option(
+				"\tGrace period - the number of instances a rule should observe to consider expansion\n\t(default = 200)",
+				"G", 1, "-G"));
+		newVector.add(new Option("\tUse an ordered set of rules.", "O", 0, "-O"));
+		
+		return newVector.elements();
 	}
 	
 	@Override
@@ -123,15 +171,56 @@ public class Vfdr extends AbstractClassifier
 		
 		super.setOptions(options);
 		
-		String opt = Utils.getOption('O', options);
-		if (opt.length() > 0) {
-			m_orderedSet = Boolean.parseBoolean(opt);
-		}
+		m_orderedSet = Utils.getFlag('O', options);
 		
+		String opt = Utils.getOption('G', options);
+		if (opt.length() > 0)
+			setGracePeriod(Double.parseDouble(opt));
+		
+		opt = Utils.getOption('C', options);
+		if (opt.length() > 0)
+			setHoeffdingConfidence(Double.parseDouble(opt));
+		
+		opt = Utils.getOption('T', options);
+		if (opt.length() > 0)
+			setTieThreshold(Double.parseDouble(opt));
+		
+		opt = Utils.getOption('S', options);
+		if (opt.length() > 0)
+			setPredictionStrategy(Integer.parseInt(opt));
+		
+	}
+	
+	/**
+	 * Gets the current settings of the Classifier.
+	 * 
+	 * @return an array of strings suitable for passing to setOptions
+	 */
+	@Override
+	public String[] getOptions() {
+		ArrayList<String> options = new ArrayList<>();
+		
+		options.add("-S");
+		options.add("" + (m_useNaiveBayes ? "1" : "0"));
+		
+		options.add("-C");
+		options.add("" + getHoeffdingConfidence());
+		
+		options.add("-T");
+		options.add("" + getTieThreshold());
+		
+		options.add("-G");
+		options.add("" + getGracePeriod());
+		
+		if (m_orderedSet)
+			options.add("-O");
+		
+		return options.toArray(new String[1]);
 	}
 	
 	/* METHODS FOR THE CLASSIFIER */
 	
+	@Override
 	public double[] distributionForInstance(Instance inst) throws Exception {
 		if (m_initialised)
 			return m_classificationStrategy.distributionForInstance(m_ruleSet, m_defaultRule, inst);
@@ -141,16 +230,12 @@ public class Vfdr extends AbstractClassifier
 	
 	@Override
 	public void buildClassifier(Instances instances) throws Exception {
-		// can classifier handle the data?
-		// getCapabilities().testWithFail(instances); // TODO
-		
-		if (instances.classIndex() < 0)
-			throw new Exception("These instances have no class set!");
+		reset();
 		
 		// copy
 		instances = new Instances(instances);
 		
-		if (!instances.isEmpty()) // case of incremental learning
+	//	if (!instances.isEmpty()) // case of incremental learning
 			instances.deleteWithMissingClass();
 			
 		// examples must be randomized (see Domingos & Hulten, Mining
@@ -158,9 +243,7 @@ public class Vfdr extends AbstractClassifier
 		instances.randomize(new Random());
 		
 		// store the header as a static variable for algorithm utilities to use.
-		// TODO shitty design, please correct
-		setHeader(new Instances(instances));
-		getHeader().delete();
+		setHeader(new Instances(instances, 0));
 		
 		m_ruleSet = new ArrayList<>();
 		m_defaultRule = new VfdrRule(this);
@@ -169,33 +252,32 @@ public class Vfdr extends AbstractClassifier
 		
 		m_initialised = true;
 		
-		for (Instance x : instances) {
+		for (Instance x : instances)
 			updateClassifier(x);
-		}
+		
+		// can classifier handle the data?
+		getCapabilities().testWithFail(instances);
 	}
 	
 	@Override
 	public void updateClassifier(Instance x) throws Exception {
-		if (x.classIndex() < 0)
+		if (x.classIsMissing())
 			return;
 		
 		int trigerred = 0;
 		
-		for (VfdrRule r : m_ruleSet) {
+		for (VfdrRule r : m_ruleSet)
 			if (r.covers(x)) {
 				trigerred++;
 				SufficientStats lr = r.getStats();
 				lr.update(x);
 				
-				if (lr.totalWeight() > m_gracePeriod) {
+				if (lr.totalWeight() > m_gracePeriod)
 					r = r.expand(m_expMetric);
-				}
 				
-				if (m_orderedSet) {
+				if (m_orderedSet)
 					break;
-				}
 			}
-		}
 		
 		if (trigerred == 0) {
 			m_defaultRule.getStats().update(x);
@@ -235,14 +317,14 @@ public class Vfdr extends AbstractClassifier
 	 */
 	public String ruleSetToString() {
 		String s = "[\n";
-		for (VfdrRule r : m_ruleSet) {
+		for (VfdrRule r : m_ruleSet)
 			s += "\t" + r + "\n";
-		}
 		s += "\t" + m_defaultRule + "\n]";
 		
 		return s;
 	}
 	
+	@Override
 	public String toString() {
 		return m_initialised ? ruleSetToString() : "You must build this classifier first";
 	}
@@ -283,15 +365,22 @@ public class Vfdr extends AbstractClassifier
 	
 	/**
 	 * Sets whether subsequently created instances will use naive bayes or not
-	 * to make predictions. A {@code false} parameter corresponds to majority
-	 * class, a {@code true} parameter corresponds to naive Bayes. Default is to
-	 * use naive Bayes.
+	 * to make predictions. A parameter of 0 will set the strategy to majority
+	 * class.
 	 * 
 	 * @param b
 	 *            Whether rules will use naive Bayes or not
 	 */
-	public void setUseNaiveBayes(boolean b) {
-		m_useNaiveBayes = b;
+	public void setPredictionStrategy(int n) {
+		m_useNaiveBayes = n == USE_NB;
+	}
+	
+	public void setGracePeriod(double n) {
+		m_gracePeriod = (int) n;
+	}
+	
+	public void setOrderedSet(boolean b) {
+		m_orderedSet = b;
 	}
 	
 	public double getHoeffdingConfidence() {
@@ -300,6 +389,10 @@ public class Vfdr extends AbstractClassifier
 	
 	public double getTieThreshold() {
 		return m_tieThreshold;
+	}
+	
+	public int getGracePeriod() {
+		return m_gracePeriod;
 	}
 	
 	public boolean getUseNaiveBayes() {
@@ -335,6 +428,36 @@ public class Vfdr extends AbstractClassifier
 	 */
 	public boolean initialised() {
 		return m_initialised;
+	}
+	
+	public String gracePeriodTipText() {
+		return "Number of instances (or total weight of instances) a rule should observe between expansion attempts.";
+	}
+	
+	public String hoeffdingTieThresholdTipText() {
+		return "Theshold below which a rule expansion will be forced in order to break ties.";
+	}
+	
+	public String hoeffdingConfidenceTipText() {
+		return "The allowable error in the decision to expand a rule. Values closer to zero will take longer to decide.";
+	}
+	
+	public String predictionStrategyTipText() {
+		return "The prediction strategy to use";
+	}
+	
+	public String orderedSetTipText() {
+		return "Whether the rule set is ordered or not";
+	}
+	
+	/**
+	 * Returns the revision string.
+	 * 
+	 * @return the revision
+	 */
+	@Override
+	public String getRevision() {
+		return RevisionUtils.extract("$Revision: 1.0 $");
 	}
 	
 }

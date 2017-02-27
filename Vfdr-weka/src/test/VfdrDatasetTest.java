@@ -18,22 +18,23 @@ import weka.core.Instances;
 import weka.core.converters.ArffLoader;
 
 /**
- * Test class for the algorithm, which performs static tests.
- * 
- * BE CAUTIOUS WITH INCREMENTAL TESTING ! INSTANCES MUST BE RANDOMIZED !
+ * Test class for the algorithm, which can be used to analyse data sets easily.
+ * Batch and incremental learning are supported, but be careful to randomise
+ * instances in your file when you use incremental learning. With batch
+ * learning, instances are randomised in Vfdr$buildClassifier.
  * 
  * @author Clément Fournier (clement.fournier@insa-rennes.fr)
  *
  */
 public class VfdrDatasetTest {
-
+	
 	@Test
 	public void spamTest() throws Exception {
 		VfdrTester tester = new VfdrTester("./datafiles/spam.arff", "spam", 57);
-
+		
 		tester.randomizedOfflineBuildTest();
 	}
-
+	
 	/**
 	 * Holds a Vfdr and a training set for testing
 	 * 
@@ -41,12 +42,12 @@ public class VfdrDatasetTest {
 	 *
 	 */
 	public static class VfdrTester {
-
-		public File file;
-		public Vfdr vfdr;
-		public String datasetName;
-		public int classIndex;
-
+		
+		public File		file;
+		public Vfdr		vfdr;
+		public String	datasetName;
+		public int		classIndex;
+		
 		/**
 		 * Builds a training set
 		 * 
@@ -61,7 +62,7 @@ public class VfdrDatasetTest {
 			file = new File(path);
 			vfdr = new Vfdr();
 		}
-
+		
 		/**
 		 * Builds the classifier with an offline strategy (instances are loaded
 		 * all at once). Instances are randomized (necessary for the classifier
@@ -72,20 +73,20 @@ public class VfdrDatasetTest {
 		 *             case something goes wrong
 		 */
 		public void randomizedOfflineBuildTest() throws Exception {
-
+			
 			Reader reader = new BufferedReader(new FileReader(file));
 			Instances trainingSet = new Instances(reader);
 			trainingSet.setClassIndex(classIndex);
-
+			
 			vfdr.buildClassifier(trainingSet);
-
+			
 			System.out.println("BUILDING TEST : " + datasetName + " dataset\n--------------------");
 			System.out.println("VFDR rule set: " + (vfdr.ruleSet().size()) + " rules induced, "
 					+ (vfdr.isSetOrdered() ? "ordered" : "unordered"));
 			System.out.println(vfdr.ruleSetToString());
-
+			
 		}
-
+		
 		/**
 		 * Builds the classifier with an incremental strategy (instances are
 		 * loaded one by one)
@@ -94,17 +95,17 @@ public class VfdrDatasetTest {
 		 *             case something goes wrong
 		 */
 		public void incrementalBuildTest() throws Exception {
-
+			
 			long meanProcessingPerInstance = 0;
 			int instancesProcessed = 0;
-
+			
 			ArffLoader loader = new ArffLoader();
 			loader.setFile(file);
 			Instances structure = loader.getStructure();
 			structure.setClassIndex(classIndex);
-
+			
 			vfdr.buildClassifier(structure);
-
+			
 			Instance current;
 			while ((current = loader.getNextInstance(structure)) != null) {
 				long start = System.nanoTime();
@@ -112,19 +113,19 @@ public class VfdrDatasetTest {
 				meanProcessingPerInstance += System.nanoTime() - start;
 				instancesProcessed++;
 			}
-
+			
 			// conversion to milliseconds
 			meanProcessingPerInstance /= instancesProcessed * 1000;
-
+			
 			System.out.println("BUILDING TEST : " + datasetName + " dataset\n--------------------");
 			System.out.println("Instances processed: " + instancesProcessed
 					+ ", average processing time per instance (ms) :" + meanProcessingPerInstance);
 			System.out.println("VFDR rule set: " + (vfdr.ruleSet().size()) + " rules induced, "
 					+ (vfdr.isSetOrdered() ? "ordered" : "unordered"));
 			System.out.println(vfdr.ruleSetToString());
-
+			
 		}
-
+		
 		/**
 		 * Classifies an instance and outputs confidence levels
 		 * 
@@ -136,7 +137,7 @@ public class VfdrDatasetTest {
 			if (!vfdr.initialised()) {
 				throw new Exception("The classifier has not been trained!");
 			}
-
+			
 			double[] res = vfdr.distributionForInstance(inst);
 			System.out.println("CLASSIFICATION TEST : " + datasetName + " dataset\n--------------------");
 			System.out.println("Classification resulted in the following class probabilities: ");
@@ -145,6 +146,6 @@ public class VfdrDatasetTest {
 						+ Math.floor(1000 * res[0]) / 1000 + ") ");
 			}
 		}
-
+		
 	}
 }

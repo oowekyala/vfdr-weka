@@ -1,6 +1,3 @@
-/**
- * 
- */
 package test;
 
 import junit.framework.TestSuite;
@@ -15,18 +12,18 @@ import weka.classifiers.Classifier;
  *
  */
 public class VfdrTest extends AbstractClassifierTest {
-
+	
 	public VfdrTest(String name) {
 		super(name);
 	}
-
+	
 	/** Creates a default Vfdr */
 	public Classifier getClassifier() {
 		return new Vfdr();
 	}
-
+	
 	public static void main(String[] args) {
 		junit.textui.TestRunner.run(new TestSuite(VfdrTest.class));
 	}
-
+	
 }

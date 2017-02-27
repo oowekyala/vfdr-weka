@@ -1,9 +1,9 @@
 package test;
 
 import junit.framework.TestSuite;
-import vfdr.Vfdr;
 import weka.classifiers.AbstractClassifierTest;
 import weka.classifiers.Classifier;
+import weka.classifiers.rules.Vfdr;
 
 /**
  * Test for weka package integration
@@ -18,6 +18,7 @@ public class VfdrTest extends AbstractClassifierTest {
 	}
 	
 	/** Creates a default Vfdr */
+	@Override
 	public Classifier getClassifier() {
 		return new Vfdr();
 	}

@@ -1,4 +1,4 @@
-package vfdr;
+package weka.classifiers.rules.vfdr;
 
 import java.io.Serializable;
 import java.util.ArrayList;

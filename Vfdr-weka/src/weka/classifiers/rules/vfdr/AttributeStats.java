@@ -1,8 +1,10 @@
-package vfdr;
+package weka.classifiers.rules.vfdr;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+
+import weka.classifiers.rules.Vfdr;
 
 /**
  * Stores the sufficient statistics about an attribute for a given rule. An

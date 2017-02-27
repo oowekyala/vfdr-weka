@@ -1,4 +1,4 @@
-package vfdr;
+package weka.classifiers.rules.vfdr;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import weka.classifiers.rules.Vfdr;
 import weka.core.Utils;
 import weka.estimators.UnivariateNormalEstimator;
 

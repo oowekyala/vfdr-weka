@@ -1,4 +1,4 @@
-package vfdr;
+package weka.classifiers.rules.vfdr;
 
 import weka.core.Attribute;
 import weka.core.Instance;

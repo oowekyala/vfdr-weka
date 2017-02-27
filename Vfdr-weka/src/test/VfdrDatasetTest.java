@@ -12,7 +12,7 @@ import java.io.UncheckedIOException;
 
 import org.junit.Test;
 
-import vfdr.Vfdr;
+import weka.classifiers.rules.Vfdr;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ArffLoader;

@@ -1,4 +1,4 @@
-package vfdr;
+package weka.classifiers.rules.vfdr;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import weka.classifiers.rules.Vfdr;
 import weka.core.Utils;
 
 /**

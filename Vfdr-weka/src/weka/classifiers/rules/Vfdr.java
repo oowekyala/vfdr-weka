@@ -1,4 +1,4 @@
-package vfdr;
+package weka.classifiers.rules;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,6 +9,15 @@ import java.util.Vector;
 
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.UpdateableClassifier;
+import weka.classifiers.rules.vfdr.ClassificationStrategy;
+import weka.classifiers.rules.vfdr.ExpansionMetric;
+import weka.classifiers.rules.vfdr.NominalAntd;
+import weka.classifiers.rules.vfdr.NumericAntd;
+import weka.classifiers.rules.vfdr.SufficientStats;
+import weka.classifiers.rules.vfdr.VfdrRule;
+import weka.classifiers.rules.vfdr.ClassificationStrategy.FirstHit;
+import weka.classifiers.rules.vfdr.ClassificationStrategy.WeightedMax;
+import weka.classifiers.rules.vfdr.ExpansionMetric.Entropy;
 import weka.core.Capabilities;
 import weka.core.Capabilities.Capability;
 import weka.core.Instance;
@@ -94,7 +103,13 @@ public class Vfdr extends AbstractClassifier
 	 *         explorer/experimenter gui
 	 */
 	public String globalInfo() {
-		return "";
+		return "VFDR (Very Fast Decision Rules) is an incremental rule-learning "
+				+ "classifier able to learn on very large datasets, needing only "
+				+ "one pass on the input data. It does not, however, support "
+				+ "distributions that change over time (concept drift). It is quite "
+				+ "similar to VFDT (Hoeffding trees), in that it uses the Hoeffding "
+				+ "bound to estimate to estimate the number of observations needed to "
+				+ "take near-optimal decisions when expanding rules (in the case of VFDT," + " splitting leaves). ";
 	}
 	
 	/**
@@ -235,9 +250,9 @@ public class Vfdr extends AbstractClassifier
 		// copy
 		instances = new Instances(instances);
 		
-	//	if (!instances.isEmpty()) // case of incremental learning
-			instances.deleteWithMissingClass();
-			
+		// if (!instances.isEmpty()) // case of incremental learning
+		instances.deleteWithMissingClass();
+		
 		// examples must be randomized (see Domingos & Hulten, Mining
 		// high-speed data streams, page 2 note 1)
 		instances.randomize(new Random());

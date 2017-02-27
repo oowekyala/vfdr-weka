@@ -18,8 +18,9 @@ import weka.core.Instances;
 import weka.core.converters.ArffLoader;
 
 /**
- * Test class for the algorithm, which performs static tests BE CAUTIOUS WITH
- * INCREMENTAL TESTING ! INSTANCES MUST BE RANDOMIZED !
+ * Test class for the algorithm, which performs static tests.
+ * 
+ * BE CAUTIOUS WITH INCREMENTAL TESTING ! INSTANCES MUST BE RANDOMIZED !
  * 
  * @author Clément Fournier (clement.fournier@insa-rennes.fr)
  *
@@ -44,6 +45,7 @@ public class VfdrDatasetTest {
 		public ArffLoader loader;
 		public Vfdr vfdr;
 		public String datasetName;
+		public int classIndex;
 
 		/**
 		 * Builds a training set
@@ -55,11 +57,11 @@ public class VfdrDatasetTest {
 		 */
 		public VfdrTester(String path, String name, int classIndex) {
 			datasetName = name;
+			this.classIndex = classIndex;
 			try {
 				loader = new ArffLoader();
 				loader.setFile(new File(path));
 
-				loader.getStructure().setClassIndex(classIndex);
 				vfdr = new Vfdr();
 			} catch (IOException e) {
 				throw new UncheckedIOException("Error initialising the incremental dataset. Is the file path correct?",
@@ -80,6 +82,8 @@ public class VfdrDatasetTest {
 
 			Reader reader = new BufferedReader(new FileReader(loader.retrieveFile()));
 			Instances trainingSet = new Instances(reader);
+			trainingSet.setClassIndex(classIndex);
+
 			vfdr.buildClassifier(trainingSet);
 
 			System.out.println("BUILDING TEST : " + datasetName + " dataset\n--------------------");
@@ -102,6 +106,8 @@ public class VfdrDatasetTest {
 			int instancesProcessed = 0;
 
 			Instances structure = loader.getStructure();
+
+			structure.setClassIndex(classIndex);
 
 			vfdr.buildClassifier(structure);
 

@@ -78,17 +78,23 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 		// can classifier handle the data?
 		// getCapabilities().testWithFail(instances); // TODO
 
+		if (instances.classIndex() < 0)
+			throw new Exception("These instances have no class set!");
+
+		// copy
 		instances = new Instances(instances);
-		instances.deleteWithMissingClass();
+
+		if (!instances.isEmpty()) // case of incremental learning
+			instances.deleteWithMissingClass();
 
 		// examples must be randomized (see Domingos & Hulten, Mining
 		// high-speed data streams, page 2 note 1)
-		Random r = new Random();
-		instances.randomize(r);
+		instances.randomize(new Random());
 
 		Antd.init(instances);
 
 		// store the header as a static variable for algorithm utilities to use.
+		// TODO shitty design, please correct
 		m_header = new Instances(instances);
 		m_header.delete();
 
@@ -114,6 +120,9 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 	 */
 	@Override
 	public void updateClassifier(Instance x) throws Exception {
+		if (x.classIndex() < 0)
+			return;
+
 		int trigerred = 0;
 
 		for (VfdrRule r : m_ruleSet) {

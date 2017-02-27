@@ -8,12 +8,12 @@ package vfdr;
  * @version VFDR-Base
  */
 public class CandidateAntd implements Comparable<CandidateAntd> {
-
-	private Antd m_antd;
-
+	
+	private Antd	m_antd;
+	
 	/** The merit of the expansion (metric-dependent) */
-	private double m_expMerit;
-
+	private double	m_expMerit;
+	
 	/**
 	 * Builds a CandidateAntd given an antecedent and the merit of this
 	 * antecedent previously calculated by an expansion metric.
@@ -27,7 +27,7 @@ public class CandidateAntd implements Comparable<CandidateAntd> {
 		m_antd = antd;
 		m_expMerit = expMerit;
 	}
-
+	
 	/**
 	 * Returns the split merit of this candidate
 	 * 
@@ -36,7 +36,7 @@ public class CandidateAntd implements Comparable<CandidateAntd> {
 	public double expMerit() {
 		return m_expMerit;
 	}
-
+	
 	/**
 	 * Gets the antecedent for this candidate
 	 * 
@@ -45,7 +45,7 @@ public class CandidateAntd implements Comparable<CandidateAntd> {
 	public Antd antd() {
 		return m_antd;
 	}
-
+	
 	/**
 	 * Implements comparable
 	 * 
@@ -57,5 +57,5 @@ public class CandidateAntd implements Comparable<CandidateAntd> {
 	public int compareTo(CandidateAntd ca) {
 		return Double.compare(m_expMerit, ca.m_expMerit);
 	}
-
+	
 }

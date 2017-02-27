@@ -13,9 +13,15 @@ import java.util.Map;
  * @version VFDR-Base
  */
 public abstract class AttributeStats {
-
-	protected String m_attributeName;
-
+	
+	protected String	m_attributeName;
+	protected Vfdr		m_classifierCallback;
+	
+	public AttributeStats(String attName, Vfdr vfdr) {
+		m_attributeName = attName;
+		m_classifierCallback = vfdr;
+	}
+	
 	/**
 	 * Maps every class to a distribution estimator. The estimator is here of
 	 * type Object, but will be specialised later depending on whether the
@@ -23,7 +29,7 @@ public abstract class AttributeStats {
 	 * inside the children classes of this one.
 	 */
 	protected Map<String, Object> m_classLookup = new HashMap<String, Object>();
-
+	
 	/**
 	 * Updates the statistics held by this object based on the attribute values
 	 * and the class of the instance which was used.
@@ -34,7 +40,7 @@ public abstract class AttributeStats {
 	 *            The class of the instance acknowledged
 	 */
 	public abstract void update(double attVal, String classVal);
-
+	
 	/**
 	 * Returns the best antecedent that could be found for this attribute, as a
 	 * {@link CandidateAntd} object (holds the antecedent and the score
@@ -47,5 +53,5 @@ public abstract class AttributeStats {
 	 * @return The best antecedent, as a antecedent candidate for rule expansion
 	 */
 	public abstract CandidateAntd bestCandidate(ExpansionMetric splitMetric, Map<String, Integer> preSplitDist);
-
+	
 }

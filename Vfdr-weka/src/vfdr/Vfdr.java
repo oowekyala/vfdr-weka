@@ -1,13 +1,24 @@
 package vfdr;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.UpdateableClassifier;
+import weka.core.Capabilities;
+import weka.core.Capabilities.Capability;
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.OptionHandler;
+import weka.core.RevisionHandler;
+import weka.core.SelectedTag;
+import weka.core.TechnicalInformation;
+import weka.core.TechnicalInformation.Field;
+import weka.core.TechnicalInformation.Type;
+import weka.core.TechnicalInformationHandler;
+import weka.core.Utils;
 
 /**
  * Implements the algorithm proper. This version only performs binary,
@@ -15,132 +26,177 @@ import weka.core.Instances;
  * 
  * @author Clément Fournier (clement.fournier@insa-rennes.fr)
  * @version VFDR-Base
- * 
  */
-public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
-
-	/**
-	 * For serialization
-	 */
-	private static final long serialVersionUID = 845742169720545806L;
-
-	/**
-	 * Whether the set of rules is ordered or not
-	 */
-	private boolean m_orderedSet = false;
-
-	private boolean m_initialised = false;
-
+public class Vfdr extends AbstractClassifier
+		implements UpdateableClassifier, Serializable, OptionHandler, TechnicalInformationHandler {
+	
+	/** For serialization */
+	private static final long		serialVersionUID		= 845742169720545806L;
+	
+	/** Whether the set of rules is ordered or not */
+	private boolean					m_orderedSet			= false;
 	/**
 	 * Minimal number of covered examples needed to consider expanding a rule.
 	 */
-	private int m_gracePeriod = 200;
-
+	private int						m_gracePeriod			= 200;
+	/** Whether prediction strategy uses naive Bayes or not */
+	private boolean					m_useNaiveBayes			= true;
+	/** Allowable error in attribute selection when expanding a rule */
+	private double					m_hoeffdingConfidence	= 0.0000001;
 	/**
-	 * The metric used to determine the best expansions
+	 * Threshold below which an expansion will be forced in order to break ties
 	 */
-	private ExpansionMetric m_expMetric = new ExpansionMetric.Entropy();
-
+	private double					m_tieThreshold			= .05;
+	
+	/* FIELDS */
+	private List<VfdrRule>			m_ruleSet;
+	private VfdrRule				m_defaultRule;
+	private ClassificationStrategy	m_classificationStrategy;
+	private ExpansionMetric			m_expMetric				= new ExpansionMetric.Entropy();
+	private Instances				m_header;
+	private boolean					m_initialised			= false;
+	
+	/** Resets this classifier to default parameters. */
+	public void reset() {
+		
+	}
+	
 	/**
-	 * Set of rules
-	 */
-	private List<VfdrRule> m_ruleSet;
-	private VfdrRule m_defaultRule;
-	private ClassificationStrategy m_classificationStrategy;
-
-	/**
-	 * Header of the relation learned from
-	 */
-	public static Instances m_header;
-
-	/**
-	 * Returns class probabilities for an instance.
+	 * Returns a string describing classifier
 	 * 
-	 * @param inst
-	 *            the instance to compute the distribution for
-	 * @return the class probabilities
-	 * @throws Exception
-	 *             if distribution can't be computed successfully
+	 * @return a description suitable for displaying in the
+	 *         explorer/experimenter gui
 	 */
+	public String globalInfo() {
+		return "";
+	}
+	
+	/**
+	 * Returns an instance of a TechnicalInformation object, containing detailed
+	 * information about the technical background of this class, e.g., paper
+	 * reference or book this class is based on.
+	 * 
+	 * @return the technical information about this class
+	 */
+	@Override
+	public TechnicalInformation getTechnicalInformation() {
+		TechnicalInformation result;
+		
+		result = new TechnicalInformation(Type.INPROCEEDINGS);
+		result.setValue(Field.AUTHOR, "Gama, João and Kosina, Petr");
+		result.setValue(Field.TITLE, "Learning Decision Rules from Data Streams");
+		result.setValue(Field.BOOKTITLE,
+				"Proceedings of the Twenty-Second International Joint Conference on Artificial Intelligence - Volume Volume Two");
+		result.setValue(Field.YEAR, "2011");
+		result.setValue(Field.PAGES, "1255-1260");
+		result.setValue(Field.PUBLISHER, "AAAI Press");
+		
+		return result;
+	}
+	
+	/**
+	 * Returns default capabilities of the classifier.
+	 * 
+	 * @return the capabilities of this classifier
+	 */
+	@Override
+	public Capabilities getCapabilities() {
+		Capabilities result = super.getCapabilities();
+		result.disableAll();
+		
+		// attributes
+		result.enable(Capability.NOMINAL_ATTRIBUTES);
+		result.enable(Capability.NUMERIC_ATTRIBUTES);
+		result.enable(Capability.MISSING_VALUES);
+		
+		result.enable(Capability.MISSING_CLASS_VALUES);
+		result.enable(Capability.BINARY_CLASS);
+		
+		result.setMinimumNumberInstances(0);
+		
+		return result;
+	}
+	
+	@Override
+	public void setOptions(String[] options) throws Exception {
+		reset();
+		
+		super.setOptions(options);
+		
+		String opt = Utils.getOption('O', options);
+		if (opt.length() > 0) {
+			m_orderedSet = Boolean.parseBoolean(opt);
+		}
+		
+	}
+	
+	/* METHODS FOR THE CLASSIFIER */
+	
 	public double[] distributionForInstance(Instance inst) throws Exception {
 		if (m_initialised)
 			return m_classificationStrategy.distributionForInstance(m_ruleSet, m_defaultRule, inst);
 		else
 			throw new Exception("You must build this classifier before trying to classify an instance");
 	}
-
-	/**
-	 * Builds the classifier with the given training set. It can be updated
-	 * later.
-	 */
+	
 	@Override
 	public void buildClassifier(Instances instances) throws Exception {
 		// can classifier handle the data?
 		// getCapabilities().testWithFail(instances); // TODO
-
+		
 		if (instances.classIndex() < 0)
 			throw new Exception("These instances have no class set!");
-
+		
 		// copy
 		instances = new Instances(instances);
-
+		
 		if (!instances.isEmpty()) // case of incremental learning
 			instances.deleteWithMissingClass();
-
+			
 		// examples must be randomized (see Domingos & Hulten, Mining
 		// high-speed data streams, page 2 note 1)
 		instances.randomize(new Random());
-
-		Antd.init(instances);
-
+		
 		// store the header as a static variable for algorithm utilities to use.
 		// TODO shitty design, please correct
-		m_header = new Instances(instances);
-		m_header.delete();
-
+		setHeader(new Instances(instances));
+		getHeader().delete();
+		
 		m_ruleSet = new ArrayList<>();
-		m_defaultRule = new VfdrRule();
+		m_defaultRule = new VfdrRule(this);
 		m_classificationStrategy = m_orderedSet ? new ClassificationStrategy.WeightedMax()
 				: new ClassificationStrategy.FirstHit();
-
+		
 		m_initialised = true;
-
+		
 		for (Instance x : instances) {
 			updateClassifier(x);
 		}
 	}
-
-	/**
-	 * Updates the classifier with the given instance.
-	 * 
-	 * @param x
-	 *            the new training instance to include in the model
-	 * @throws Exception
-	 *             if the instance could not be incorporated in the model.
-	 */
+	
 	@Override
 	public void updateClassifier(Instance x) throws Exception {
 		if (x.classIndex() < 0)
 			return;
-
+		
 		int trigerred = 0;
-
+		
 		for (VfdrRule r : m_ruleSet) {
 			if (r.covers(x)) {
 				trigerred++;
 				SufficientStats lr = r.getStats();
 				lr.update(x);
-
+				
 				if (lr.totalWeight() > m_gracePeriod) {
 					r = r.expand(m_expMetric);
 				}
-
+				
 				if (m_orderedSet) {
 					break;
 				}
 			}
 		}
-
+		
 		if (trigerred == 0) {
 			m_defaultRule.getStats().update(x);
 			if (m_defaultRule.getStats().totalWeight() > m_gracePeriod) {
@@ -149,34 +205,29 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 			}
 		}
 	}
-
+	
 	/**
-	 * Returns the rule set induced by training
+	 * Builds a new numeric antecedent from the name of its attribute
 	 * 
-	 * @return the rule set
+	 * @param attName
+	 *            The name of the attribute
+	 * @return A new numeric antecedent
 	 */
-	public List<VfdrRule> ruleSet() {
-		return m_ruleSet;
+	public NumericAntd buildNumericAntd(String attName) {
+		return new NumericAntd(m_header.attribute(attName));
 	}
-
+	
 	/**
-	 * Returns whether the set is ordered or not
+	 * Builds a new nominal antecedent from the name of its attribute
 	 * 
-	 * @return Whether the set is ordered or not
+	 * @param attName
+	 *            The name of the attribute
+	 * @return A new nominal antecedent
 	 */
-	public boolean isSetOrdered() {
-		return m_orderedSet;
+	public NominalAntd buildNominalAntd(String attName) {
+		return new NominalAntd(m_header.attribute(attName));
 	}
-
-	/**
-	 * Returns true if the classifier is ready to accept new training instances
-	 * 
-	 * @return true if the classifier is ready to accept new training instances
-	 */
-	public boolean initialised() {
-		return m_initialised;
-	}
-
+	
 	/**
 	 * Returns a string describing the rule set
 	 * 
@@ -188,12 +239,102 @@ public class Vfdr extends AbstractClassifier implements UpdateableClassifier {
 			s += "\t" + r + "\n";
 		}
 		s += "\t" + m_defaultRule + "\n]";
-
+		
 		return s;
 	}
-
+	
 	public String toString() {
 		return m_initialised ? ruleSetToString() : "You must build this classifier first";
 	}
-
+	
+	/* GETTERS AND SETTERS */
+	
+	/**
+	 * Specify the structure of the instances to classify.
+	 * 
+	 * @param m_header
+	 */
+	public void setHeader(Instances m_header) {
+		this.m_header = m_header;
+	}
+	
+	/**
+	 * Sets the allowable error in an expansion decision. Its value is one minus
+	 * the desired probability of choosing the correct attribute. Used in the
+	 * computation of the Hoeffding bound. Default is 1E-7.
+	 *
+	 * @param c
+	 *            New confidence value
+	 */
+	public void setHoeffdingConfidence(double c) {
+		m_hoeffdingConfidence = c;
+	}
+	
+	/**
+	 * Sets the threshold below which an expansion will be forced in order to
+	 * break ties. Default is 0.05.
+	 * 
+	 * @param t
+	 *            New tie threshold
+	 */
+	public void setTieThreshold(double t) {
+		m_tieThreshold = t;
+	}
+	
+	/**
+	 * Sets whether subsequently created instances will use naive bayes or not
+	 * to make predictions. A {@code false} parameter corresponds to majority
+	 * class, a {@code true} parameter corresponds to naive Bayes. Default is to
+	 * use naive Bayes.
+	 * 
+	 * @param b
+	 *            Whether rules will use naive Bayes or not
+	 */
+	public void setUseNaiveBayes(boolean b) {
+		m_useNaiveBayes = b;
+	}
+	
+	public double getHoeffdingConfidence() {
+		return m_hoeffdingConfidence;
+	}
+	
+	public double getTieThreshold() {
+		return m_tieThreshold;
+	}
+	
+	public boolean getUseNaiveBayes() {
+		return m_useNaiveBayes;
+	}
+	
+	public Instances getHeader() {
+		return m_header;
+	}
+	
+	/**
+	 * Returns the rule set induced by training
+	 * 
+	 * @return the rule set
+	 */
+	public List<VfdrRule> ruleSet() {
+		return m_ruleSet;
+	}
+	
+	/**
+	 * Returns whether the set is ordered or not
+	 * 
+	 * @return Whether the set is ordered or not
+	 */
+	public boolean isSetOrdered() {
+		return m_orderedSet;
+	}
+	
+	/**
+	 * Returns true if the classifier is ready to accept new training instances
+	 * 
+	 * @return true if the classifier is ready to accept new training instances
+	 */
+	public boolean initialised() {
+		return m_initialised;
+	}
+	
 }

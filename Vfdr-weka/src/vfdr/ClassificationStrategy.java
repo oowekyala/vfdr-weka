@@ -13,7 +13,7 @@ import weka.core.Instance;
  * 
  */
 public abstract class ClassificationStrategy {
-
+	
 	/**
 	 * Classifies the given instance
 	 * 
@@ -29,7 +29,7 @@ public abstract class ClassificationStrategy {
 	 */
 	public abstract double[] distributionForInstance(List<VfdrRule> ruleSet, VfdrRule defaultRule, Instance inst)
 			throws Exception;
-
+	
 	/**
 	 * Classification strategy for ordered sets.
 	 * 
@@ -37,7 +37,7 @@ public abstract class ClassificationStrategy {
 	 *
 	 */
 	public static class FirstHit extends ClassificationStrategy {
-
+		
 		/*
 		 * (non-Javadoc)
 		 * 
@@ -47,21 +47,21 @@ public abstract class ClassificationStrategy {
 		@Override
 		public double[] distributionForInstance(List<VfdrRule> ruleSet, VfdrRule defaultRule, Instance inst)
 				throws Exception {
-
+			
 			List<VfdrRule> fullRuleSet = new ArrayList<>(ruleSet);
 			fullRuleSet.add(defaultRule);
-
+			
 			for (VfdrRule r : fullRuleSet) {
 				if (r.covers(inst))
 					return r.getStats().makePrediction(inst, inst.classAttribute());
 			}
-
+			
 			throw new Exception("@FirstHitStrategy: None of the rules matched!");
-
+			
 		}
-
+		
 	}
-
+	
 	/**
 	 * Classification strategy for unordered rule sets.
 	 * 
@@ -70,7 +70,7 @@ public abstract class ClassificationStrategy {
 	 * 
 	 */
 	public static class WeightedMax extends ClassificationStrategy {
-
+		
 		/*
 		 * (non-Javadoc)
 		 * 
@@ -80,17 +80,17 @@ public abstract class ClassificationStrategy {
 		@Override
 		public double[] distributionForInstance(List<VfdrRule> ruleSet, VfdrRule defaultRule, Instance inst)
 				throws Exception {
-
+			
 			List<VfdrRule> fullRuleSet = new ArrayList<>(ruleSet);
 			fullRuleSet.add(defaultRule);
-
+			
 			List<VfdrRule> trigerred = new ArrayList<>();
-
+			
 			for (VfdrRule r : fullRuleSet) {
 				if (r.covers(inst))
 					trigerred.add(r);
 			}
-
+			
 			int maxWeight = Integer.MIN_VALUE;
 			VfdrRule winningRule = null;
 			for (VfdrRule r : trigerred) {
@@ -99,15 +99,15 @@ public abstract class ClassificationStrategy {
 					winningRule = r;
 				}
 			}
-
+			
 			if (winningRule != null) {
 				return winningRule.getStats().makePrediction(inst, inst.classAttribute());
 			} else {
 				throw new Exception("@WeightedMaxStrategy: no rule in that set");
 			}
-
+			
 		}
-
+		
 	}
-
+	
 }

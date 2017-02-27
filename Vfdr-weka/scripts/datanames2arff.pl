@@ -61,6 +61,7 @@ while (my $line = <$names_fh>){
 		chomp $attvalues;
 		$attvalues =~ s/^(.+)://;
 		$attvalues =~ s/\..*+//;
+		$attvalues =~ s/([^,]) /\1-/g;
 		print $arff_fh "\@ATTRIBUTE\t$attname\t{$attvalues }\n"
 	}
 }
@@ -80,6 +81,7 @@ if (!$opt_d){
 	print $arff_fh "\n\n\@DATA\n";
 
 	while (my $line = <$data_fh>){
+		$line =~ s/([^,]) /\1-/g;
 		print $arff_fh $line;
 	}
 	close $data_fh;

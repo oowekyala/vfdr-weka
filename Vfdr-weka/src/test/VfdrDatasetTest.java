@@ -42,7 +42,7 @@ public class VfdrDatasetTest {
 	 */
 	public static class VfdrTester {
 
-		public ArffLoader loader;
+		public File file;
 		public Vfdr vfdr;
 		public String datasetName;
 		public int classIndex;
@@ -58,15 +58,8 @@ public class VfdrDatasetTest {
 		public VfdrTester(String path, String name, int classIndex) {
 			datasetName = name;
 			this.classIndex = classIndex;
-			try {
-				loader = new ArffLoader();
-				loader.setFile(new File(path));
-
-				vfdr = new Vfdr();
-			} catch (IOException e) {
-				throw new UncheckedIOException("Error initialising the incremental dataset. Is the file path correct?",
-						e);
-			}
+			file = new File(path);
+			vfdr = new Vfdr();
 		}
 
 		/**
@@ -80,7 +73,7 @@ public class VfdrDatasetTest {
 		 */
 		public void randomizedOfflineBuildTest() throws Exception {
 
-			Reader reader = new BufferedReader(new FileReader(loader.retrieveFile()));
+			Reader reader = new BufferedReader(new FileReader(file));
 			Instances trainingSet = new Instances(reader);
 			trainingSet.setClassIndex(classIndex);
 
@@ -105,8 +98,9 @@ public class VfdrDatasetTest {
 			long meanProcessingPerInstance = 0;
 			int instancesProcessed = 0;
 
+			ArffLoader loader = new ArffLoader();
+			loader.setFile(file);
 			Instances structure = loader.getStructure();
-
 			structure.setClassIndex(classIndex);
 
 			vfdr.buildClassifier(structure);

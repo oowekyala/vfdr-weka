@@ -57,7 +57,7 @@ public class GaussianAttributeStats extends AttributeStats implements Serializab
 	 * @see #getNumBins()
 	 */
 	public void setNumBins(int numBins) {
-		this.m_numBins = numBins;
+		m_numBins = numBins;
 	}
 	
 	/**
@@ -109,21 +109,18 @@ public class GaussianAttributeStats extends AttributeStats implements Serializab
 		double bestSplitPoint = Double.NaN;
 		boolean isConditionHigher = false;
 		
-		for (Double s : splitPoints) {
+		for (Double s : splitPoints)
 			if (s != null) {
 				List<Map<String, Integer>> postSplitDists = postExpansionDistributions(s);
 				double[] expMerits = expMetric.evaluateExpansions(preSplitDist, postSplitDists);
 				
-				for (int i = 0; i < 2; i++) {
+				for (int i = 0; i < 2; i++)
 					if (expMerits[i] > bestScoreYet) {
 						bestScoreYet = expMerits[i];
 						bestSplitPoint = s;
 						isConditionHigher = i == 1;
 					}
-				}
 			}
-			
-		}
 		
 		NumericAntd bestAntd = m_classifierCallback.buildNumericAntd(m_attributeName);
 		bestAntd.setConditionHigher(isConditionHigher);
@@ -133,7 +130,7 @@ public class GaussianAttributeStats extends AttributeStats implements Serializab
 	}
 	
 	/**
-	 * Returns a list with the class distribution for lower or equal
+	 * Returns a list with the class distributions for a given selected split
 	 * 
 	 * @param selectedSplit
 	 *            The split point
@@ -149,14 +146,14 @@ public class GaussianAttributeStats extends AttributeStats implements Serializab
 			String classVal = e.getKey();
 			GaussianEstimator norm = (GaussianEstimator) e.getValue();
 			
-			if (norm != null) {
-				if (selectedSplit < m_minValObservedPerClass.get(classVal)) {
+			if (norm != null)
+				if (selectedSplit < m_minValObservedPerClass.get(classVal))
 					rightDist.put(classVal, new Integer((rightDist.containsKey(classVal) ? rightDist.get(classVal) : 0)
 							+ (int) norm.getSumOfWeights()));
-				} else if (selectedSplit > m_maxValObservedPerClass.get(classVal)) {
+				else if (selectedSplit > m_maxValObservedPerClass.get(classVal))
 					leftDist.put(classVal, new Integer((leftDist.containsKey(classVal) ? leftDist.get(classVal) : 0)
 							+ (int) norm.getSumOfWeights()));
-				} else {
+				else {
 					double[] weights = norm.weightLessThanEqualAndGreaterThan(selectedSplit);
 					
 					leftDist.put(classVal,
@@ -166,17 +163,11 @@ public class GaussianAttributeStats extends AttributeStats implements Serializab
 							(rightDist.containsKey(classVal) ? rightDist.get(classVal) : 0) + (int) weights[2]));
 					
 				}
-			}
 		}
 		
 		List<Map<String, Integer>> list = new ArrayList<>();
-		
 		list.add(leftDist);
 		list.add(rightDist);
-		
-		// System.err.println("\t @" + m_attributeName + " Distribution found
-		// for splitpoint (" + selectedSplit + ") : "
-		// + VfdrUtil.distributionListToString(list));
 		
 		return list;
 	}
@@ -189,20 +180,18 @@ public class GaussianAttributeStats extends AttributeStats implements Serializab
 	 * @return The set of all breakpoints between bins
 	 */
 	private Set<Double> getSplitPointCandidates() {
-		Set<Double> splitPoints = new TreeSet<Double>();
+		Set<Double> splitPoints = new TreeSet<>();
 		double min = Double.POSITIVE_INFINITY;
 		double max = Double.NEGATIVE_INFINITY;
 		
 		for (String classVal : m_classLookup.keySet()) {
-			if (m_maxValObservedPerClass.containsKey(classVal)) {
+			if (m_maxValObservedPerClass.containsKey(classVal))
 				if (m_maxValObservedPerClass.get(classVal) > max)
 					max = m_maxValObservedPerClass.get(classVal);
-			}
-			
-			if (m_minValObservedPerClass.containsKey(classVal)) {
+				
+			if (m_minValObservedPerClass.containsKey(classVal))
 				if (m_minValObservedPerClass.get(classVal) < min)
 					min = m_minValObservedPerClass.get(classVal);
-			}
 		}
 		
 		double binWidth = (max - min) / (m_numBins + 1);
@@ -224,9 +213,7 @@ public class GaussianAttributeStats extends AttributeStats implements Serializab
 	 */
 	protected class GaussianEstimator extends UnivariateNormalEstimator implements Serializable {
 		
-		/**
-		 * For serialization
-		 */
+		/** For serialization */
 		private static final long serialVersionUID = 4756032800685001315L;
 		
 		public double getSumOfWeights() {

@@ -10,7 +10,6 @@ import weka.classifiers.bayes.NaiveBayesUpdateable;
 import weka.classifiers.rules.Vfdr;
 import weka.core.Attribute;
 import weka.core.Instance;
-import weka.core.Instances;
 import weka.core.Utils;
 
 /**
@@ -27,8 +26,8 @@ import weka.core.Utils;
 public abstract class SufficientStats implements Serializable {
 	
 	/** For serialisation */
-	private static final long serialVersionUID = 8985499450710619405L;
-
+	private static final long				serialVersionUID	= 8985499450710619405L;
+	
 	protected int							m_totalWeight		= 0;
 	
 	/**
@@ -76,9 +75,8 @@ public abstract class SufficientStats implements Serializable {
 	public void update(Instance inst) {
 		
 		// update the class distribution for the rule
-		if (inst.classIsMissing()) {
+		if (inst.classIsMissing())
 			return;
-		}
 		String classVal = inst.stringValue(inst.classAttribute());
 		
 		// increment weight in class distribution
@@ -86,23 +84,20 @@ public abstract class SufficientStats implements Serializable {
 				(m_classDistribution.containsKey(classVal) ? m_classDistribution.get(classVal) : 0) + 1);
 		
 		// update stats for each attribute
-		for (int i = 0; i < inst.numAttributes(); i++) {
-			
+		for (int i = 0; i < inst.numAttributes(); i++)
 			if (i != inst.classIndex() && !m_usedAttributes.contains(i)) {
 				Attribute a = inst.attribute(i);
 				AttributeStats stats = m_attributeLookup.get(a.name());
 				if (stats == null) {
-					if (a.isNumeric()) {
+					if (a.isNumeric())
 						stats = new GaussianAttributeStats(a.name(), m_classifierCallback);
-					} else {
+					else
 						stats = new NominalAttributeStats(a.name(), m_classifierCallback);
-					}
 					m_attributeLookup.put(a.name(), stats);
 				}
 				
 				m_attributeLookup.get(a.name()).update(inst.value(a), classVal);
 			}
-		}
 		m_totalWeight++;
 	}
 	
@@ -177,7 +172,7 @@ public abstract class SufficientStats implements Serializable {
 		
 		/** For serialisation */
 		private static final long serialVersionUID = -1856208946240830010L;
-
+		
 		public MajorityClass(Vfdr vfdr) {
 			super(vfdr);
 		}
@@ -212,8 +207,8 @@ public abstract class SufficientStats implements Serializable {
 	public static class NaiveBayes extends MajorityClass {
 		
 		/** For serialisation */
-		private static final long serialVersionUID = 1150651994740861066L;
-
+		private static final long		serialVersionUID	= 1150651994740861066L;
+		
 		/**
 		 * The naive Bayes model for this rule
 		 */
@@ -229,10 +224,10 @@ public abstract class SufficientStats implements Serializable {
 		 *            The header describing the structure of the data we're
 		 *            learning from
 		 */
-		public NaiveBayes(Instances header, Vfdr vfdr) {
+		public NaiveBayes(Vfdr vfdr) {
 			super(vfdr);
 			try {
-				m_nbayes.buildClassifier(header);
+				m_nbayes.buildClassifier(m_classifierCallback.getHeader());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -243,9 +238,8 @@ public abstract class SufficientStats implements Serializable {
 			
 			boolean doNB = m_nbWeightThreshold == 0 ? true : totalWeight() > m_nbWeightThreshold;
 			
-			if (doNB) {
+			if (doNB)
 				return m_nbayes.distributionForInstance(inst);
-			}
 			
 			return super.makePrediction(inst, classAtt);
 		}

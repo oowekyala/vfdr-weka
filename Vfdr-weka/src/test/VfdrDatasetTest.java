@@ -6,13 +6,13 @@ package test;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.Reader;
-import java.io.UncheckedIOException;
+import java.util.Arrays;
 
 import org.junit.Test;
 
 import weka.classifiers.rules.Vfdr;
+import weka.core.DenseInstance;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ArffLoader;
@@ -31,8 +31,39 @@ public class VfdrDatasetTest {
 	@Test
 	public void spamTest() throws Exception {
 		VfdrTester tester = new VfdrTester("./datafiles/spam.arff", "spam", 57);
-		
 		tester.randomizedOfflineBuildTest();
+	}
+	
+	@Test
+	public void multiABCDTest() throws Exception {
+		VfdrTester tester = new VfdrTester("./datafiles/testmultiabcd.arff", "multiclass ABCD", 4);
+		// tester.vfdr.setOrderedSet(true);
+		tester.randomizedOfflineBuildTest();
+	}
+	
+	@Test
+	public void testUseOfClassValue() throws Exception {
+		VfdrTester tester = new VfdrTester("./datafiles/testmultiabcd.arff", "multiclass ABCD", 4);
+		// tester.vfdr.setOrderedSet(true);
+		tester.randomizedOfflineBuildTest();
+		
+		Instance inst = new DenseInstance(5);
+		inst.setDataset(tester.vfdr.getHeader());
+		inst.setClassValue(1);
+		inst.setValue(0, 1);
+		inst.setValue(1, 1);
+		inst.setValue(2, 0);
+		inst.setValue(3, 1);
+		Instance classMissingInst = (Instance) inst.copy();
+		classMissingInst.setDataset(tester.vfdr.getHeader());
+		classMissingInst.setClassMissing();
+		
+		double[] res = tester.vfdr.distributionForInstance(inst);
+		double[] resClassMissing = tester.vfdr.distributionForInstance(classMissingInst);
+		
+		System.out.println(Arrays.toString(res));
+		System.out.println(Arrays.toString(resClassMissing));
+		
 	}
 	
 	/**
@@ -134,17 +165,15 @@ public class VfdrDatasetTest {
 		 * @throws Exception
 		 */
 		public void classificationTest(Instance inst) throws Exception {
-			if (!vfdr.initialised()) {
+			if (!vfdr.initialised())
 				throw new Exception("The classifier has not been trained!");
-			}
 			
 			double[] res = vfdr.distributionForInstance(inst);
 			System.out.println("CLASSIFICATION TEST : " + datasetName + " dataset\n--------------------");
 			System.out.println("Classification resulted in the following class probabilities: ");
-			for (int i = 0; i < res.length; i++) {
+			for (int i = 0; i < res.length; i++)
 				System.out.print(inst.dataset().classAttribute().value(i) + " (conf. "
 						+ Math.floor(1000 * res[0]) / 1000 + ") ");
-			}
 		}
 		
 	}

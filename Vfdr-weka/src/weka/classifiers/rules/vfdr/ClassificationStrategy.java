@@ -13,11 +13,11 @@ import weka.core.Instance;
  * @version VFDR-Base
  * 
  */
-public abstract class ClassificationStrategy implements Serializable{
+public abstract class ClassificationStrategy implements Serializable {
 	
 	/** For serialisation */
 	private static final long serialVersionUID = -277569966336976691L;
-
+	
 	/**
 	 * Classifies the given instance
 	 * 
@@ -44,7 +44,7 @@ public abstract class ClassificationStrategy implements Serializable{
 		
 		/** For serialisation */
 		private static final long serialVersionUID = -1976085095160281915L;
-
+		
 		/*
 		 * (non-Javadoc)
 		 * 
@@ -58,15 +58,12 @@ public abstract class ClassificationStrategy implements Serializable{
 			List<VfdrRule> fullRuleSet = new ArrayList<>(ruleSet);
 			fullRuleSet.add(defaultRule);
 			
-			for (VfdrRule r : fullRuleSet) {
+			for (VfdrRule r : fullRuleSet)
 				if (r.covers(inst))
 					return r.getStats().makePrediction(inst, inst.classAttribute());
-			}
-			
-			throw new Exception("@FirstHitStrategy: None of the rules matched!");
-			
+				
+			throw new Exception("@FirstHitStrategy: None of the rules matched (not even default)");
 		}
-		
 	}
 	
 	/**
@@ -80,7 +77,7 @@ public abstract class ClassificationStrategy implements Serializable{
 		
 		/** For serialisation */
 		private static final long serialVersionUID = -2963034166669216846L;
-
+		
 		/*
 		 * (non-Javadoc)
 		 * 
@@ -96,25 +93,22 @@ public abstract class ClassificationStrategy implements Serializable{
 			
 			List<VfdrRule> trigerred = new ArrayList<>();
 			
-			for (VfdrRule r : fullRuleSet) {
+			for (VfdrRule r : fullRuleSet)
 				if (r.covers(inst))
 					trigerred.add(r);
-			}
-			
+				
 			int maxWeight = Integer.MIN_VALUE;
 			VfdrRule winningRule = null;
-			for (VfdrRule r : trigerred) {
+			for (VfdrRule r : trigerred)
 				if (r.getStats().totalWeight() > maxWeight) {
 					maxWeight = r.getStats().totalWeight();
 					winningRule = r;
 				}
-			}
 			
-			if (winningRule != null) {
+			if (winningRule != null)
 				return winningRule.getStats().makePrediction(inst, inst.classAttribute());
-			} else {
-				throw new Exception("@WeightedMaxStrategy: no rule in that set");
-			}
+			else
+				throw new Exception("@WeightedMaxStrategy: no rule in that set (not even default)");
 			
 		}
 		

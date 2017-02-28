@@ -14,15 +14,15 @@ import weka.core.Instance;
 public class NumericAntd extends Antd {
 	
 	/** For serialisation */
-	private static final long serialVersionUID = 8837859958896793453L;
-
+	private static final long	serialVersionUID	= 8837859958896793453L;
+	
 	/** The split point for this numeric antecedent */
-	private double	m_splitPoint;
+	private double				m_splitPoint;
 	
 	/**
 	 * Is 0 if the condition is <=, 1 otherwise
 	 */
-	private boolean	m_conditionHigher;
+	private boolean				m_conditionHigher;
 	
 	/**
 	 * Builds a numeric antecedent from the attname
@@ -64,7 +64,7 @@ public class NumericAntd extends Antd {
 	}
 	
 	public void setConditionHigher(boolean m_condition) {
-		this.m_conditionHigher = m_condition;
+		m_conditionHigher = m_condition;
 	}
 	
 }

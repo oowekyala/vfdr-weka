@@ -19,12 +19,12 @@ import weka.core.Utils;
 public class NominalAttributeStats extends AttributeStats {
 	
 	/** For serialisation */
-	private static final long serialVersionUID = -3508694664971580426L;
+	private static final long	serialVersionUID	= -3508694664971580426L;
 	
 	/**
 	 * Cumulated weight of all distributions (that is, for all classes)
 	 */
-	protected int m_totalWeight = 0;
+	protected int				m_totalWeight		= 0;
 	
 	/**
 	 * 
@@ -46,9 +46,8 @@ public class NominalAttributeStats extends AttributeStats {
 				dist = new DiscreteDistribution();
 				dist.add((int) attVal);
 				m_classLookup.put(classVal, dist);
-			} else {
+			} else
 				dist.add((int) attVal);
-			}
 			m_totalWeight++;
 		}
 	}
@@ -61,17 +60,14 @@ public class NominalAttributeStats extends AttributeStats {
 		
 		double bestMerit = Double.NEGATIVE_INFINITY;
 		double bestValueIndex = -1;
-		for (int i = 0; i < expMerits.length; i++) {
+		for (int i = 0; i < expMerits.length; i++)
 			if (expMerits[i] > bestMerit) {
 				bestMerit = expMerits[i];
 				bestValueIndex = i;
 			}
-		}
 		
 		NominalAntd bestAntd = m_classifierCallback.buildNominalAntd(m_attributeName);
 		bestAntd.setTargetValue((int) bestValueIndex);
-		
-		System.err.println("@NominalAttributeStats.bestCandidate:\tBest antecedent devised is " + bestAntd.toString());
 		
 		return new CandidateAntd(bestAntd, bestMerit);
 	}
@@ -79,7 +75,7 @@ public class NominalAttributeStats extends AttributeStats {
 	private List<Map<String, Integer>> postExpansionDistributions() {
 		
 		// att value index keys to class distribution
-		Map<Integer, Map<String, Integer>> splitDists = new HashMap<Integer, Map<String, Integer>>();
+		Map<Integer, Map<String, Integer>> splitDists = new HashMap<>();
 		
 		for (Map.Entry<String, Object> classEntry : m_classLookup.entrySet()) {
 			String classVal = classEntry.getKey();
@@ -91,7 +87,7 @@ public class NominalAttributeStats extends AttributeStats {
 				
 				Map<String, Integer> clsDist = splitDists.get(attVal);
 				if (clsDist == null) {
-					clsDist = new HashMap<String, Integer>();
+					clsDist = new HashMap<>();
 					splitDists.put(attVal, clsDist);
 				}
 				
@@ -105,10 +101,9 @@ public class NominalAttributeStats extends AttributeStats {
 			
 		}
 		
-		List<Map<String, Integer>> result = new LinkedList<Map<String, Integer>>();
-		for (Map.Entry<Integer, Map<String, Integer>> v : splitDists.entrySet()) {
+		List<Map<String, Integer>> result = new LinkedList<>();
+		for (Map.Entry<Integer, Map<String, Integer>> v : splitDists.entrySet())
 			result.add(v.getValue());
-		}
 		
 		return result;
 	}
@@ -126,7 +121,7 @@ public class NominalAttributeStats extends AttributeStats {
 		 * Maps the values of the attributes (as their indices) to the number of
 		 * occurences observed
 		 */
-		protected final Map<Integer, Integer>	m_dist	= new LinkedHashMap<Integer, Integer>();
+		protected final Map<Integer, Integer>	m_dist	= new LinkedHashMap<>();
 		
 		/**
 		 * Total number of instances observed
@@ -164,9 +159,8 @@ public class NominalAttributeStats extends AttributeStats {
 		 */
 		public double getWeight(int val) {
 			Integer count = m_dist.get(val);
-			if (count != null) {
+			if (count != null)
 				return count;
-			}
 			
 			return 0.0;
 		}

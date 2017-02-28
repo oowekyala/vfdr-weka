@@ -35,8 +35,7 @@ public class VfdrRule implements Serializable {
 	public VfdrRule(Vfdr vfdr) {
 		m_classifierCallback = vfdr;
 		m_literals = new ArrayList<>();
-		m_lr = m_classifierCallback.getUseNaiveBayes()
-				? new SufficientStats.NaiveBayes(m_classifierCallback.getHeader(), m_classifierCallback)
+		m_lr = m_classifierCallback.getUseNaiveBayes() ? new SufficientStats.NaiveBayes(m_classifierCallback)
 				: new SufficientStats.MajorityClass(m_classifierCallback);
 		
 	}
@@ -69,16 +68,15 @@ public class VfdrRule implements Serializable {
 			boolean doExpand = false;
 			
 			if (bestCandidates.size() > 0) {
-				double hoeffding = computeHoeffding(expMetric.getMetricRange(),
+				double hoeffding = computeHoeffding(expMetric.getMetricRange(m_lr.m_classDistribution),
 						m_classifierCallback.getHoeffdingConfidence(), m_lr.totalWeight());
 				
 				CandidateAntd best = bestCandidates.get(bestCandidates.size() - 1);
 				CandidateAntd secondBest = bestCandidates.get(bestCandidates.size() - 2);
 				
 				double diff = best.expMerit() - secondBest.expMerit();
-				if (diff > hoeffding || m_classifierCallback.getTieThreshold() < hoeffding) {
+				if (diff > hoeffding || m_classifierCallback.getTieThreshold() < hoeffding)
 					doExpand = true;
-				}
 			}
 			
 			if (doExpand) {
@@ -90,14 +88,14 @@ public class VfdrRule implements Serializable {
 					newRule.m_literals.add(best.antd());
 					newRule.m_lr.forbidAttribute(best.antd().getAttr().index());
 					m_lr = m_classifierCallback.getUseNaiveBayes()
-							? new SufficientStats.NaiveBayes(m_classifierCallback.getHeader(), m_classifierCallback)
+							? new SufficientStats.NaiveBayes(m_classifierCallback)
 							: new SufficientStats.MajorityClass(m_classifierCallback);
 					return newRule;
 					
 				} else {
 					m_literals.add(best.antd());
 					m_lr = m_classifierCallback.getUseNaiveBayes()
-							? new SufficientStats.NaiveBayes(m_classifierCallback.getHeader(), m_classifierCallback)
+							? new SufficientStats.NaiveBayes(m_classifierCallback)
 							: new SufficientStats.MajorityClass(m_classifierCallback);
 					return this;
 				}
@@ -115,10 +113,9 @@ public class VfdrRule implements Serializable {
 	 * @return Whether the rule covers the example or not.
 	 */
 	public boolean covers(Instance datum) {
-		for (Antd x : m_literals) {
+		for (Antd x : m_literals)
 			if (!x.covers(datum))
 				return false;
-		}
 		return true;
 	}
 	
@@ -164,14 +161,12 @@ public class VfdrRule implements Serializable {
 	@Override
 	public String toString() {
 		String s = "{" + ((m_literals.size() > 0) ? m_literals.get(0) : "");
-		for (int i = 1; i < m_literals.size(); i++) {
+		for (int i = 1; i < m_literals.size(); i++)
 			s += " and " + m_literals.get(i).toString();
-		}
 		s += "} -> ";
 		
-		for (Map.Entry<String, Integer> e : m_lr.m_classDistribution.entrySet()) {
+		for (Map.Entry<String, Integer> e : m_lr.m_classDistribution.entrySet())
 			s += e.getKey() + " (" + Math.floor(1000 * e.getValue().doubleValue() / m_lr.m_totalWeight) / 1000 + "), ";
-		}
 		
 		return s + "\t (total weight: " + m_lr.m_totalWeight + ")";
 		

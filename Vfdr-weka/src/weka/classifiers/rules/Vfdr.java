@@ -2,6 +2,7 @@ package weka.classifiers.rules;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Random;
@@ -15,9 +16,6 @@ import weka.classifiers.rules.vfdr.NominalAntd;
 import weka.classifiers.rules.vfdr.NumericAntd;
 import weka.classifiers.rules.vfdr.SufficientStats;
 import weka.classifiers.rules.vfdr.VfdrRule;
-import weka.classifiers.rules.vfdr.ClassificationStrategy.FirstHit;
-import weka.classifiers.rules.vfdr.ClassificationStrategy.WeightedMax;
-import weka.classifiers.rules.vfdr.ExpansionMetric.Entropy;
 import weka.core.Capabilities;
 import weka.core.Capabilities.Capability;
 import weka.core.Instance;
@@ -108,8 +106,8 @@ public class Vfdr extends AbstractClassifier
 				+ "one pass on the input data. It does not, however, support "
 				+ "distributions that change over time (concept drift). It is quite "
 				+ "similar to VFDT (Hoeffding trees), in that it uses the Hoeffding "
-				+ "bound to estimate to estimate the number of observations needed to "
-				+ "take near-optimal decisions when expanding rules (in the case of VFDT," + " splitting leaves). ";
+				+ "bound to estimate the number of observations needed to "
+				+ "take a near-optimal decision when expanding a rule (in the case of VFDT, splitting leaves). ";
 	}
 	
 	/**
@@ -150,9 +148,9 @@ public class Vfdr extends AbstractClassifier
 		result.enable(Capability.NUMERIC_ATTRIBUTES);
 		result.enable(Capability.MISSING_VALUES);
 		
-		// result.enable(Capability.MISSING_CLASS_VALUES);
+		result.enable(Capability.MISSING_CLASS_VALUES);
 		result.enable(Capability.BINARY_CLASS);
-		result.disable(Capability.NOMINAL_CLASS);
+		result.enable(Capability.NOMINAL_CLASS);
 		
 		result.setMinimumNumberInstances(0);
 		
@@ -238,7 +236,14 @@ public class Vfdr extends AbstractClassifier
 	@Override
 	public double[] distributionForInstance(Instance inst) throws Exception {
 		if (m_initialised)
-			return m_classificationStrategy.distributionForInstance(m_ruleSet, m_defaultRule, inst);
+			if (m_ruleSet.isEmpty() && m_defaultRule.getStats().totalWeight() < 1) {
+				// All classes have equal probability
+				double[] res = new double[m_header.classAttribute().numValues()];
+				Arrays.fill(res, 1);
+				Utils.normalize(res);
+				return res;
+			} else
+				return m_classificationStrategy.distributionForInstance(m_ruleSet, m_defaultRule, inst);
 		else
 			throw new Exception("You must build this classifier before trying to classify an instance");
 	}
@@ -246,20 +251,14 @@ public class Vfdr extends AbstractClassifier
 	@Override
 	public void buildClassifier(Instances instances) throws Exception {
 		reset();
+		getCapabilities().testWithFail(instances);
 		
-		// copy
-		instances = new Instances(instances);
-		
-		// if (!instances.isEmpty()) // case of incremental learning
+		instances = new Instances(instances); // copy
 		instances.deleteWithMissingClass();
 		
-		// examples must be randomized (see Domingos & Hulten, Mining
-		// high-speed data streams, page 2 note 1)
-		instances.randomize(new Random());
+		instances.randomize(new Random()); // examples must be randomized
 		
-		// store the header as a static variable for algorithm utilities to use.
 		setHeader(new Instances(instances, 0));
-		
 		m_ruleSet = new ArrayList<>();
 		m_defaultRule = new VfdrRule(this);
 		m_classificationStrategy = m_orderedSet ? new ClassificationStrategy.WeightedMax()
@@ -270,8 +269,6 @@ public class Vfdr extends AbstractClassifier
 		for (Instance x : instances)
 			updateClassifier(x);
 		
-		// can classifier handle the data?
-		getCapabilities().testWithFail(instances);
 	}
 	
 	@Override

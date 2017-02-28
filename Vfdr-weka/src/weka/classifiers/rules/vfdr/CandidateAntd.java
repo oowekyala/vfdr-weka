@@ -12,12 +12,12 @@ import java.io.Serializable;
 public class CandidateAntd implements Comparable<CandidateAntd>, Serializable {
 	
 	/** For serialisation */
-	private static final long serialVersionUID = -2493852936246069334L;
-
-	private Antd	m_antd;
+	private static final long	serialVersionUID	= -2493852936246069334L;
+	
+	private Antd				m_antd;
 	
 	/** The merit of the expansion (metric-dependent) */
-	private double	m_expMerit;
+	private double				m_expMerit;
 	
 	/**
 	 * Builds a CandidateAntd given an antecedent and the merit of this

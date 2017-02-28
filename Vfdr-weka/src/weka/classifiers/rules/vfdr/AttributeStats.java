@@ -34,7 +34,7 @@ public abstract class AttributeStats implements Serializable {
 	 * attribute is nominal or not. The two types of estimators are defined
 	 * inside the children classes of this one.
 	 */
-	protected Map<String, Object> m_classLookup = new HashMap<String, Object>();
+	protected Map<String, Object> m_classLookup = new HashMap<>();
 	
 	/**
 	 * Updates the statistics held by this object based on the attribute values

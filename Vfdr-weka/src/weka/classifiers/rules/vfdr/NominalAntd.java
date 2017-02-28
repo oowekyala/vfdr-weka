@@ -13,12 +13,12 @@ import weka.core.Instance;
 public class NominalAntd extends Antd {
 	
 	/** For serialisation */
-	private static final long serialVersionUID = -740966347715078947L;
+	private static final long	serialVersionUID		= -740966347715078947L;
 	
 	/**
 	 * Index of the value of the attribute that is tested
 	 */
-	private int m_targetAttributeValue = -1;
+	private int					m_targetAttributeValue	= -1;
 	
 	public NominalAntd(Attribute attributeName) {
 		m_attribute = attributeName;
@@ -40,7 +40,7 @@ public class NominalAntd extends Antd {
 	}
 	
 	public void setTargetValue(int m_attributeValue) {
-		this.m_targetAttributeValue = m_attributeValue;
+		m_targetAttributeValue = m_attributeValue;
 	}
 	
 }

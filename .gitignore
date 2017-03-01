@@ -1,12 +1,17 @@
-.gitignore
-# One really big data file
-**census-income*
-
+# CUSTOM
+weka-src/**
+wekarefs
+make_dist.ps1
 
 #################
 ## Eclipse
 #################
 
+.classpath
+.project
+.settings
+
+**.settings/
 **bin/
 **tmp/
 **.tmp

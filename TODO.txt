@@ -1,6 +1,0 @@
-Implement classification strategies for ordered and unordered rule sets (First Hit & Weighted Max)
-
-  TODO implement weka interfaces : WeightedInstancesHandler,
- *         OptionHandler, RevisionHandler, TechnicalInformationHandler
- * 
- *         TODO implement options and capabilities

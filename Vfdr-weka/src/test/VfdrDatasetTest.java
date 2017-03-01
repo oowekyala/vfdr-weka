@@ -7,12 +7,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.Reader;
-import java.util.Arrays;
 
 import org.junit.Test;
 
 import weka.classifiers.rules.Vfdr;
-import weka.core.DenseInstance;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ArffLoader;
@@ -41,29 +39,45 @@ public class VfdrDatasetTest {
 		tester.randomizedOfflineBuildTest();
 	}
 	
+	/*
+	 * @Test public void testUseOfClassValue() throws Exception { VfdrTester
+	 * tester = new VfdrTester("./datafiles/testmultiabcd.arff",
+	 * "multiclass ABCD", 4); // tester.vfdr.setOrderedSet(true);
+	 * tester.randomizedOfflineBuildTest();
+	 * 
+	 * Instance inst = new DenseInstance(5);
+	 * inst.setDataset(tester.vfdr.getHeader()); inst.setClassValue(1);
+	 * inst.setValue(0, 1); inst.setValue(1, 1); inst.setValue(2, 0);
+	 * inst.setValue(3, 1); Instance classMissingInst = (Instance) inst.copy();
+	 * classMissingInst.setDataset(tester.vfdr.getHeader());
+	 * classMissingInst.setClassMissing();
+	 * 
+	 * double[] res = tester.vfdr.distributionForInstance(inst); double[]
+	 * resClassMissing = tester.vfdr.distributionForInstance(classMissingInst);
+	 * 
+	 * System.out.println(Arrays.toString(res));
+	 * System.out.println(Arrays.toString(resClassMissing));
+	 * 
+	 * }
+	 */
+	
 	@Test
-	public void testUseOfClassValue() throws Exception {
-		VfdrTester tester = new VfdrTester("./datafiles/testmultiabcd.arff", "multiclass ABCD", 4);
-		// tester.vfdr.setOrderedSet(true);
-		tester.randomizedOfflineBuildTest();
+	public void testStudent() throws Exception {
+		VfdrTester tester = new VfdrTester("./datafiles/student-por.arff", "student-por", 32);
+		// tester.randomizedOfflineBuildTest();
 		
-		Instance inst = new DenseInstance(5);
-		inst.setDataset(tester.vfdr.getHeader());
-		inst.setClassValue(1);
-		inst.setValue(0, 1);
-		inst.setValue(1, 1);
-		inst.setValue(2, 0);
-		inst.setValue(3, 1);
-		Instance classMissingInst = (Instance) inst.copy();
-		classMissingInst.setDataset(tester.vfdr.getHeader());
-		classMissingInst.setClassMissing();
+		Reader reader = new BufferedReader(new FileReader(tester.file));
+		Instances trainingSet = new Instances(reader);
+		trainingSet.setClassIndex(tester.classIndex);
+		trainingSet.deleteAttributeAt(31);
+		trainingSet.deleteAttributeAt(30);
 		
-		double[] res = tester.vfdr.distributionForInstance(inst);
-		double[] resClassMissing = tester.vfdr.distributionForInstance(classMissingInst);
+		tester.vfdr.buildClassifier(trainingSet);
 		
-		System.out.println(Arrays.toString(res));
-		System.out.println(Arrays.toString(resClassMissing));
-		
+		System.out.println("BUILDING TEST : " + tester.datasetName + " dataset\n--------------------");
+		System.out.println("VFDR rule set: " + (tester.vfdr.ruleSet().size()) + " rules induced, "
+				+ (tester.vfdr.isOrderedSet() ? "ordered" : "unordered"));
+		System.out.println(tester.vfdr.ruleSetToString());
 	}
 	
 	/**
@@ -113,7 +127,7 @@ public class VfdrDatasetTest {
 			
 			System.out.println("BUILDING TEST : " + datasetName + " dataset\n--------------------");
 			System.out.println("VFDR rule set: " + (vfdr.ruleSet().size()) + " rules induced, "
-					+ (vfdr.isSetOrdered() ? "ordered" : "unordered"));
+					+ (vfdr.isOrderedSet() ? "ordered" : "unordered"));
 			System.out.println(vfdr.ruleSetToString());
 			
 		}
@@ -152,7 +166,7 @@ public class VfdrDatasetTest {
 			System.out.println("Instances processed: " + instancesProcessed
 					+ ", average processing time per instance (ms) :" + meanProcessingPerInstance);
 			System.out.println("VFDR rule set: " + (vfdr.ruleSet().size()) + " rules induced, "
-					+ (vfdr.isSetOrdered() ? "ordered" : "unordered"));
+					+ (vfdr.isOrderedSet() ? "ordered" : "unordered"));
 			System.out.println(vfdr.ruleSetToString());
 			
 		}

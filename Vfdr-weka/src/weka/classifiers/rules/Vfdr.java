@@ -3,10 +3,8 @@ package weka.classifiers.rules;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Random;
-import java.util.Vector;
 
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.UpdateableClassifier;
@@ -20,8 +18,8 @@ import weka.core.Capabilities;
 import weka.core.Capabilities.Capability;
 import weka.core.Instance;
 import weka.core.Instances;
-import weka.core.Option;
 import weka.core.OptionHandler;
+import weka.core.OptionMetadata;
 import weka.core.RevisionHandler;
 import weka.core.RevisionUtils;
 import weka.core.TechnicalInformation;
@@ -62,7 +60,7 @@ public class Vfdr extends AbstractClassifier
 	/** Allowable error in attribute selection when expanding a rule */
 	private double					m_hoeffdingConfidence	= .0000001;
 	/** Threshold below which an expansion will be forced to to break ties */
-	private double					m_tieThreshold			= .05;
+	private double					m_hoeffdingTieThreshold	= .05;
 	
 	/* These are for option parsing */
 	public static final int			USE_MAJ_CLASS			= 0;
@@ -82,7 +80,7 @@ public class Vfdr extends AbstractClassifier
 		m_gracePeriod = 200;
 		m_useNaiveBayes = true;
 		m_hoeffdingConfidence = .0000001;
-		m_tieThreshold = .05;
+		m_hoeffdingTieThreshold = .05;
 		
 		m_ruleSet = null;
 		m_defaultRule = null;
@@ -155,80 +153,6 @@ public class Vfdr extends AbstractClassifier
 		result.setMinimumNumberInstances(0);
 		
 		return result;
-	}
-	
-	@Override
-	public Enumeration<Option> listOptions() {
-		Vector<Option> newVector = new Vector<>();
-		
-		newVector.add(
-				new Option("\tThe prediction strategy to use. 0 = majority class, 1 = naive Bayes.\n\t(default = 1)",
-						"S", 1, "-S"));
-		newVector.add(new Option(
-				"\tThe allowable error in an expansion decision --- values closer to zero will take longer to decide\n\t(default = 1e-7)",
-				"C", 1, "-C"));
-		newVector.add(new Option(
-				"\tThreshold below which an expansion will be forced in order to break ties\n\t(default = 0.05)", "T",
-				1, "-T"));
-		newVector.add(new Option(
-				"\tGrace period - the number of instances a rule should observe to consider expansion\n\t(default = 200)",
-				"G", 1, "-G"));
-		newVector.add(new Option("\tUse an ordered set of rules.", "O", 0, "-O"));
-		
-		return newVector.elements();
-	}
-	
-	@Override
-	public void setOptions(String[] options) throws Exception {
-		reset();
-		
-		super.setOptions(options);
-		
-		m_orderedSet = Utils.getFlag('O', options);
-		
-		String opt = Utils.getOption('G', options);
-		if (opt.length() > 0)
-			setGracePeriod(Double.parseDouble(opt));
-		
-		opt = Utils.getOption('C', options);
-		if (opt.length() > 0)
-			setHoeffdingConfidence(Double.parseDouble(opt));
-		
-		opt = Utils.getOption('T', options);
-		if (opt.length() > 0)
-			setTieThreshold(Double.parseDouble(opt));
-		
-		opt = Utils.getOption('S', options);
-		if (opt.length() > 0)
-			setPredictionStrategy(Integer.parseInt(opt));
-		
-	}
-	
-	/**
-	 * Gets the current settings of the Classifier.
-	 * 
-	 * @return an array of strings suitable for passing to setOptions
-	 */
-	@Override
-	public String[] getOptions() {
-		ArrayList<String> options = new ArrayList<>();
-		
-		options.add("-S");
-		options.add("" + (m_useNaiveBayes ? "1" : "0"));
-		
-		options.add("-C");
-		options.add("" + getHoeffdingConfidence());
-		
-		options.add("-T");
-		options.add("" + getTieThreshold());
-		
-		options.add("-G");
-		options.add("" + getGracePeriod());
-		
-		if (m_orderedSet)
-			options.add("-O");
-		
-		return options.toArray(new String[1]);
 	}
 	
 	/* METHODS FOR THE CLASSIFIER */
@@ -348,7 +272,7 @@ public class Vfdr extends AbstractClassifier
 	 * 
 	 * @param m_header
 	 */
-	public void setHeader(Instances m_header) {
+	private void setHeader(Instances m_header) {
 		this.m_header = m_header;
 	}
 	
@@ -360,6 +284,9 @@ public class Vfdr extends AbstractClassifier
 	 * @param c
 	 *            New confidence value
 	 */
+	@OptionMetadata(displayName = "hoeffdingConfidence", commandLineParamName = "C",
+			description = "The allowable error in the decision to expand a rule. Values closer to zero will take longer to decide.",
+			commandLineParamSynopsis = "-C <confidence value>", displayOrder = 4)
 	public void setHoeffdingConfidence(double c) {
 		m_hoeffdingConfidence = c;
 	}
@@ -371,8 +298,11 @@ public class Vfdr extends AbstractClassifier
 	 * @param t
 	 *            New tie threshold
 	 */
-	public void setTieThreshold(double t) {
-		m_tieThreshold = t;
+	@OptionMetadata(displayName = "hoeffdingTieThreshold", commandLineParamName = "T",
+			description = "Theshold below which a rule expansion will be forced in order to break ties.",
+			commandLineParamSynopsis = "-T <threshold value>", displayOrder = 4)
+	public void setHoeffdingTieThreshold(double t) {
+		m_hoeffdingTieThreshold = t;
 	}
 	
 	/**
@@ -383,14 +313,38 @@ public class Vfdr extends AbstractClassifier
 	 * @param b
 	 *            Whether rules will use naive Bayes or not
 	 */
+	@OptionMetadata(displayName = "predictionStrategy", commandLineParamName = "S",
+			description = "The prediction strategy to use (0 = majority class, 1 = naive Bayes)",
+			commandLineParamSynopsis = "-S <strategy code>", displayOrder = 4)
 	public void setPredictionStrategy(int n) {
 		m_useNaiveBayes = n == USE_NB;
 	}
 	
+	/**
+	 * Sets the number of instances a rule should observe between expansion
+	 * attempts.
+	 * 
+	 * @param n
+	 *            The new grace period
+	 */
+	@OptionMetadata(displayName = "gracePeriod", commandLineParamName = "G",
+			description = "Number of instances a rule should observe between expansion attempts. "
+					+ "You should adapt this to the size of your training set",
+			commandLineParamSynopsis = "-G <period value>", displayOrder = 6)
 	public void setGracePeriod(double n) {
 		m_gracePeriod = (int) n;
 	}
 	
+	/**
+	 * Returns true if the rule set is ordered. An ordered rule set uses a First
+	 * Hit classification strategy and examples update only the first rule that
+	 * covers them.
+	 * 
+	 * @param b
+	 *            true if the rule set is ordered
+	 */
+	@OptionMetadata(displayName = "orderedSet", commandLineParamName = "O", description = "Is the rule set ordered?",
+			commandLineParamSynopsis = "-O", commandLineParamIsFlag = true, displayOrder = 4)
 	public void setOrderedSet(boolean b) {
 		m_orderedSet = b;
 	}
@@ -400,11 +354,15 @@ public class Vfdr extends AbstractClassifier
 	}
 	
 	public double getTieThreshold() {
-		return m_tieThreshold;
+		return m_hoeffdingTieThreshold;
 	}
 	
 	public int getGracePeriod() {
 		return m_gracePeriod;
+	}
+	
+	public int getPredictionStrategy() {
+		return m_useNaiveBayes ? USE_NB : USE_MAJ_CLASS;
 	}
 	
 	public boolean getUseNaiveBayes() {
@@ -429,7 +387,7 @@ public class Vfdr extends AbstractClassifier
 	 * 
 	 * @return Whether the set is ordered or not
 	 */
-	public boolean isSetOrdered() {
+	public boolean isOrderedSet() {
 		return m_orderedSet;
 	}
 	
@@ -440,26 +398,6 @@ public class Vfdr extends AbstractClassifier
 	 */
 	public boolean initialised() {
 		return m_initialised;
-	}
-	
-	public String gracePeriodTipText() {
-		return "Number of instances (or total weight of instances) a rule should observe between expansion attempts.";
-	}
-	
-	public String hoeffdingTieThresholdTipText() {
-		return "Theshold below which a rule expansion will be forced in order to break ties.";
-	}
-	
-	public String hoeffdingConfidenceTipText() {
-		return "The allowable error in the decision to expand a rule. Values closer to zero will take longer to decide.";
-	}
-	
-	public String predictionStrategyTipText() {
-		return "The prediction strategy to use";
-	}
-	
-	public String orderedSetTipText() {
-		return "Whether the rule set is ordered or not";
 	}
 	
 	/**

@@ -20,9 +20,21 @@ public abstract class AttributeStats implements Serializable {
 	/** For serialisation */
 	private static final long	serialVersionUID	= -5701874161750880562L;
 	
+	/** The name of the attribute */
 	protected String			m_attributeName;
+	
+	/** A callback to the classifier */
 	protected Vfdr				m_classifierCallback;
 	
+	/**
+	 * Builds a new attribute stats using the name of the attribute and a
+	 * callback to the classifier
+	 * 
+	 * @param attName
+	 *            The name of the attribute
+	 * @param vfdr
+	 *            The classifier which owns this object
+	 */
 	public AttributeStats(String attName, Vfdr vfdr) {
 		m_attributeName = attName;
 		m_classifierCallback = vfdr;

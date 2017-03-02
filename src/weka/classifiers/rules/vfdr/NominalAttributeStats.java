@@ -26,11 +26,6 @@ public class NominalAttributeStats extends AttributeStats {
 	 */
 	protected int				m_totalWeight		= 0;
 	
-	/**
-	 * 
-	 * @param attName
-	 *            The name of the attribute
-	 */
 	public NominalAttributeStats(String attName, Vfdr vfdr) {
 		super(attName, vfdr);
 	}

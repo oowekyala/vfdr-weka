@@ -19,9 +19,7 @@ public class NumericAntd extends Antd {
 	/** The split point for this numeric antecedent */
 	private double				m_splitPoint;
 	
-	/**
-	 * Is 0 if the condition is <=, 1 otherwise
-	 */
+	/** Is 0 if the condition is &lt;=, 1 otherwise */
 	private boolean				m_conditionHigher;
 	
 	/**

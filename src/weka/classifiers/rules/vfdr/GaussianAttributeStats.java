@@ -29,12 +29,6 @@ public class GaussianAttributeStats extends AttributeStats implements Serializab
 	
 	protected int					m_numBins					= 10;
 	
-	/**
-	 * Builds a GaussianAttributeStats given the attribute's name
-	 * 
-	 * @param attName
-	 *            The attribute's name
-	 */
 	public GaussianAttributeStats(String attName, Vfdr vfdr) {
 		super(attName, vfdr);
 	}

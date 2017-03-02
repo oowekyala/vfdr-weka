@@ -14,6 +14,8 @@ import weka.classifiers.rules.Vfdr;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ArffLoader;
+import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.NumericToNominal;
 
 /**
  * Test class for the algorithm, which can be used to analyse data sets easily.
@@ -72,8 +74,18 @@ public class VfdrDatasetTest {
 		trainingSet.deleteAttributeAt(31);
 		trainingSet.deleteAttributeAt(30);
 		
-		tester.vfdr.buildClassifier(trainingSet);
+		Filter filter = new NumericToNominal();
 		
+		filter.setInputFormat(trainingSet);
+		
+		trainingSet = Filter.useFilter(trainingSet, filter);
+		
+		try {
+			tester.vfdr.setGracePeriod(30);
+			tester.vfdr.buildClassifier(trainingSet);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		System.out.println("BUILDING TEST : " + tester.datasetName + " dataset\n--------------------");
 		System.out.println("VFDR rule set: " + (tester.vfdr.ruleSet().size()) + " rules induced, "
 				+ (tester.vfdr.isOrderedSet() ? "ordered" : "unordered"));
@@ -177,6 +189,7 @@ public class VfdrDatasetTest {
 		 * @param inst
 		 *            Instance to classify
 		 * @throws Exception
+		 *             In case the classifier has not been trained
 		 */
 		public void classificationTest(Instance inst) throws Exception {
 			if (!vfdr.initialised())

@@ -51,6 +51,8 @@ public class Vfdr extends AbstractClassifier
 	/** For serialisation */
 	private static final long		serialVersionUID		= 845742169720545806L;
 	
+	/* PARAMETERS */
+	
 	/** Whether the set of rules is ordered or not */
 	private boolean					m_orderedSet			= false;
 	/** Minimal number of covered examples needed to consider rule expansion */
@@ -61,17 +63,26 @@ public class Vfdr extends AbstractClassifier
 	private double					m_hoeffdingConfidence	= .0000001;
 	/** Threshold below which an expansion will be forced to to break ties */
 	private double					m_hoeffdingTieThreshold	= .05;
+	/** The minimum weight a rule requires to make predictions using NB */
+	private double					m_nbWeightThreshold		= 10;
 	
 	/* These are for option parsing */
 	public static final int			USE_MAJ_CLASS			= 0;
 	public static final int			USE_NB					= 1;
 	
 	/* FIELDS */
+	
+	/** Set of rules */
 	private List<VfdrRule>			m_ruleSet;
+	/** Default rule */
 	private VfdrRule				m_defaultRule;
+	/** First hit or weighted max? Depends on set ordering */
 	private ClassificationStrategy	m_classificationStrategy;
+	/** The metric used to evaluate expansion decisions */
 	private ExpansionMetric			m_expMetric				= new ExpansionMetric.Entropy();
+	/** The structure of the instances this classifier can handle */
 	private Instances				m_header;
+	/** Has this classifier been initialised? */
 	private boolean					m_initialised			= false;
 	
 	/** Resets this classifier to default parameters. */
@@ -272,6 +283,7 @@ public class Vfdr extends AbstractClassifier
 	 * Specify the structure of the instances to classify.
 	 * 
 	 * @param m_header
+	 *            The header
 	 */
 	private void setHeader(Instances m_header) {
 		this.m_header = m_header;
@@ -311,8 +323,8 @@ public class Vfdr extends AbstractClassifier
 	 * to make predictions. A parameter of 0 will set the strategy to majority
 	 * class.
 	 * 
-	 * @param b
-	 *            Whether rules will use naive Bayes or not
+	 * @param n
+	 *            The code of the strategy (0 = majority class, 1 = naive Bayes)
 	 */
 	@OptionMetadata(displayName = "predictionStrategy", commandLineParamName = "S",
 			description = "The prediction strategy to use (0 = majority class, 1 = naive Bayes)",
@@ -350,6 +362,20 @@ public class Vfdr extends AbstractClassifier
 		m_orderedSet = b;
 	}
 	
+	/**
+	 * Sets the minimal weight a rule requires to make predictions using naive
+	 * Bayes.
+	 * 
+	 * @param n
+	 *            The minimal weight
+	 */
+	@OptionMetadata(displayName = "nbWeightThreshold", commandLineParamName = "N",
+			description = "The minimum weight a rule requires to make predictions using naive Bayes",
+			commandLineParamSynopsis = "-N <threshold value>", displayOrder = 4)
+	public void setNBWeightThreshold(double n) {
+		m_nbWeightThreshold = n;
+	}
+	
 	public double getHoeffdingConfidence() {
 		return m_hoeffdingConfidence;
 	}
@@ -370,6 +396,15 @@ public class Vfdr extends AbstractClassifier
 		return m_useNaiveBayes;
 	}
 	
+	public double getNBWeightThreshold() {
+		return m_nbWeightThreshold;
+	}
+	
+	/**
+	 * Gets the structure of the instances this classifier can handle
+	 * 
+	 * @return The structure
+	 */
 	public Instances getHeader() {
 		return m_header;
 	}
@@ -395,7 +430,7 @@ public class Vfdr extends AbstractClassifier
 	/**
 	 * Returns true if the classifier is ready to accept new training instances
 	 * 
-	 * @return true if the classifier is ready to accept new training instances
+	 * @return true if the classifier has been initialised
 	 */
 	public boolean initialised() {
 		return m_initialised;

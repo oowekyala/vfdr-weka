@@ -26,12 +26,21 @@ public class VfdrRule implements Serializable {
 	/** For serialisation */
 	private static final long	serialVersionUID	= -388653429728539867L;
 	
-	/* FIELDS */
+	/** The literals (antecedents) that make up this rule */
 	private List<Antd>			m_literals;
+	
+	/** Sufficient statistics */
 	private SufficientStats		m_lr;
+	
+	/** Callback to the classifier */
 	private Vfdr				m_classifierCallback;
 	
-	/** Builds a VfdrRule */
+	/**
+	 * Builds a VfdrRule
+	 * 
+	 * @param vfdr
+	 *            The classifier that owns this object
+	 */
 	public VfdrRule(Vfdr vfdr) {
 		m_classifierCallback = vfdr;
 		m_literals = new ArrayList<>();
@@ -169,7 +178,5 @@ public class VfdrRule implements Serializable {
 			s += e.getKey() + " (" + Math.floor(1000 * e.getValue().doubleValue() / m_lr.m_totalWeight) / 1000 + "), ";
 		
 		return s + "\t (total weight: " + m_lr.m_totalWeight + ")";
-		
 	}
-	
 }

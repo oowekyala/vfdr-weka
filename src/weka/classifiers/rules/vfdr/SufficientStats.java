@@ -28,16 +28,13 @@ public abstract class SufficientStats implements Serializable {
 	/** For serialisation */
 	private static final long				serialVersionUID	= 8985499450710619405L;
 	
+	/** Total weight (or number of instances) covered by this rule */
 	protected int							m_totalWeight		= 0;
 	
-	/**
-	 * Stores the class distribution for the examples covered by this rule.
-	 */
+	/** Stores the class distribution for the examples covered by this rule. */
 	protected Map<String, Integer>			m_classDistribution	= new LinkedHashMap<>();
 	
-	/**
-	 * Map indexed on attributes, storing stats for individual attributes
-	 */
+	/** Map indexed on attributes, storing stats for individual attributes */
 	protected Map<String, AttributeStats>	m_attributeLookup	= new LinkedHashMap<>();
 	
 	/**
@@ -46,6 +43,7 @@ public abstract class SufficientStats implements Serializable {
 	 */
 	protected List<Integer>					m_usedAttributes	= new ArrayList<>();
 	
+	/** Callback to the classifier */
 	protected Vfdr							m_classifierCallback;
 	
 	public SufficientStats(Vfdr vfdr) {
@@ -209,23 +207,22 @@ public abstract class SufficientStats implements Serializable {
 		/** For serialisation */
 		private static final long		serialVersionUID	= 1150651994740861066L;
 		
-		/**
-		 * The naive Bayes model for this rule
-		 */
+		/** The naive Bayes model for this rule */
 		protected NaiveBayesUpdateable	m_nbayes			= new NaiveBayesUpdateable();
 		
-		protected double				m_nbWeightThreshold	= 20;
+		/** The minimum weight a rule requires to make predictions using NB */
+		protected double				m_nbWeightThreshold;
 		
 		/**
 		 * Builds these sufficient stats with a naive Bayes classifier
 		 * initialised with the header of the data
 		 * 
-		 * @param header
-		 *            The header describing the structure of the data we're
-		 *            learning from
+		 * @param vfdr
+		 *            The classifier that owns this object
 		 */
 		public NaiveBayes(Vfdr vfdr) {
 			super(vfdr);
+			m_nbWeightThreshold = vfdr.getNBWeightThreshold();
 			try {
 				m_nbayes.buildClassifier(m_classifierCallback.getHeader());
 			} catch (Exception e) {

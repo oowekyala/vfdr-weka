@@ -15,10 +15,10 @@ import weka.core.Utils;
  * antecedents, and a set of sufficient statistics. Sufficient statistics
  * determine the strategy used to classify instances (naive Bayes/ majority
  * class).
- * 
+ *
  * @author Clément Fournier (clement.fournier@insa-rennes.fr)
  * @version VFDR-Base
- * 
+ *
  * @see SufficientStats
  */
 public class VfdrRule implements Serializable {
@@ -37,7 +37,7 @@ public class VfdrRule implements Serializable {
 	
 	/**
 	 * Builds a VfdrRule
-	 * 
+	 *
 	 * @param vfdr
 	 *            The classifier that owns this object
 	 */
@@ -51,7 +51,7 @@ public class VfdrRule implements Serializable {
 	
 	/**
 	 * Gets the sufficient statistics of the rule
-	 * 
+	 *
 	 * @return the sufficient statistics
 	 */
 	public SufficientStats getStats() {
@@ -60,7 +60,7 @@ public class VfdrRule implements Serializable {
 	
 	/**
 	 * Expands a rule according to its sufficient statistics.
-	 * 
+	 *
 	 * @param expMetric
 	 *            The metric used to get the best expansion possible
 	 * @return A new VfdrRule if the default rule was expanded, or {@code this}
@@ -84,8 +84,9 @@ public class VfdrRule implements Serializable {
 				CandidateAntd secondBest = bestCandidates.get(bestCandidates.size() - 2);
 				
 				double diff = best.expMerit() - secondBest.expMerit();
-				if (diff > hoeffding || m_classifierCallback.getTieThreshold() < hoeffding)
+				if (diff > hoeffding || m_classifierCallback.getTieThreshold() < hoeffding) {
 					doExpand = true;
+				}
 			}
 			
 			if (doExpand) {
@@ -115,23 +116,25 @@ public class VfdrRule implements Serializable {
 	
 	/**
 	 * Whether the rule covers the example or not.
-	 * 
+	 *
 	 * @param datum
 	 *            The instance to test
-	 * 
+	 *
 	 * @return Whether the rule covers the example or not.
 	 */
 	public boolean covers(Instance datum) {
-		for (Antd x : m_literals)
-			if (!x.covers(datum))
+		for (Antd x : m_literals) {
+			if (!x.covers(datum)) {
 				return false;
+			}
+		}
 		return true;
 	}
 	
 	/**
 	 * Whether this rule has antecedents, i.e. whether it is a default rule or
 	 * not
-	 * 
+	 *
 	 * @return True if the rule is not default
 	 */
 	public boolean hasAntds() {
@@ -140,7 +143,7 @@ public class VfdrRule implements Serializable {
 	
 	/**
 	 * The size of the rule, i.e. number of antecedents
-	 * 
+	 *
 	 * @return the number of antecedents
 	 */
 	public double size() {
@@ -149,7 +152,7 @@ public class VfdrRule implements Serializable {
 	
 	/**
 	 * Computes the Hoeffding bound for the given parameters
-	 * 
+	 *
 	 * @param range
 	 *            Range of the split metric
 	 * @param confidence
@@ -164,18 +167,20 @@ public class VfdrRule implements Serializable {
 	
 	/**
 	 * Returns a descriptive string
-	 * 
+	 *
 	 * @return A descriptive string
 	 */
 	@Override
 	public String toString() {
 		String s = "{" + ((m_literals.size() > 0) ? m_literals.get(0) : "");
-		for (int i = 1; i < m_literals.size(); i++)
+		for (int i = 1; i < m_literals.size(); i++) {
 			s += " and " + m_literals.get(i).toString();
+		}
 		s += "} -> ";
 		
-		for (Map.Entry<String, Integer> e : m_lr.m_classDistribution.entrySet())
+		for (Map.Entry<String, Integer> e : m_lr.m_classDistribution.entrySet()) {
 			s += e.getKey() + " (" + Math.floor(1000 * e.getValue().doubleValue() / m_lr.m_totalWeight) / 1000 + "), ";
+		}
 		
 		return s + "\t (total weight: " + m_lr.m_totalWeight + ")";
 	}

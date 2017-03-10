@@ -17,10 +17,10 @@ import weka.core.Utils;
  * instances. They can be of two types depending on the classification strategy
  * used : naive bayes or majority class. These flavours are implemented here, as
  * static nested classes.
- * 
+ *
  * @author Clément Fournier (clement.fournier@insa-rennes.fr)
  * @version VFDR-Base
- * 
+ *
  *
  */
 public abstract class SufficientStats implements Serializable {
@@ -52,7 +52,7 @@ public abstract class SufficientStats implements Serializable {
 	
 	/**
 	 * Returns the probabilities for each class for a given instance.
-	 * 
+	 *
 	 * @param inst
 	 *            The instance to classify
 	 * @param classAtt
@@ -66,15 +66,16 @@ public abstract class SufficientStats implements Serializable {
 	
 	/**
 	 * Updates the sufficient statistics to take one more example in account.
-	 * 
+	 *
 	 * @param inst
 	 *            The example with which to update.
 	 */
 	public void update(Instance inst) {
 		
 		// update the class distribution for the rule
-		if (inst.classIsMissing())
+		if (inst.classIsMissing()) {
 			return;
+		}
 		String classVal = inst.stringValue(inst.classAttribute());
 		
 		// increment weight in class distribution
@@ -82,29 +83,31 @@ public abstract class SufficientStats implements Serializable {
 				(m_classDistribution.containsKey(classVal) ? m_classDistribution.get(classVal) : 0) + 1);
 		
 		// update stats for each attribute
-		for (int i = 0; i < inst.numAttributes(); i++)
+		for (int i = 0; i < inst.numAttributes(); i++) {
 			if (i != inst.classIndex() && !m_usedAttributes.contains(i)) {
 				Attribute a = inst.attribute(i);
 				AttributeStats stats = m_attributeLookup.get(a.name());
 				if (stats == null) {
-					if (a.isNumeric())
+					if (a.isNumeric()) {
 						stats = new GaussianAttributeStats(a.name(), m_classifierCallback);
-					else
+					} else {
 						stats = new NominalAttributeStats(a.name(), m_classifierCallback);
+					}
 					m_attributeLookup.put(a.name(), stats);
 				}
 				
 				m_attributeLookup.get(a.name()).update(inst.value(a), classVal);
 			}
+		}
 		m_totalWeight++;
 	}
 	
 	/**
 	 * Gets the best antecedents that have been worked out for each attribute
-	 * 
+	 *
 	 * @param expMetric
 	 *            The expansion metric used to evaluate antecedents
-	 * 
+	 *
 	 * @return a list of best antecedents for every attribute
 	 */
 	public List<CandidateAntd> getExpansionCandidates(ExpansionMetric expMetric) {
@@ -121,7 +124,7 @@ public abstract class SufficientStats implements Serializable {
 	
 	/**
 	 * Returns the weight of examples covered by the rule.
-	 * 
+	 *
 	 * @return The weight of examples covered by the rule.
 	 */
 	public int totalWeight() {
@@ -131,7 +134,7 @@ public abstract class SufficientStats implements Serializable {
 	/**
 	 * Marks an attribute as already used in the rule, so it can not be used to
 	 * become a new antecedent in the same rule
-	 * 
+	 *
 	 * @param i
 	 *            Index of the attribute to forbid
 	 */
@@ -141,7 +144,7 @@ public abstract class SufficientStats implements Serializable {
 	
 	/**
 	 * Gets the class distribution for this rule
-	 * 
+	 *
 	 * @return the class distribution
 	 */
 	public Map<String, Integer> classDistribution() {
@@ -162,7 +165,7 @@ public abstract class SufficientStats implements Serializable {
 	
 	/**
 	 * Implements the majority class strategy to classify an instance.
-	 * 
+	 *
 	 * @author Clément Fournier (clement.fournier@insa-rennes.fr)
 	 * @version VFDR-Base
 	 */
@@ -182,10 +185,11 @@ public abstract class SufficientStats implements Serializable {
 			
 			for (int i = 0; i < classAtt.numValues(); i++) {
 				Integer mass = m_classDistribution.get(classAtt.value(i));
-				if (mass != null)
+				if (mass != null) {
 					prediction[i] = mass;
-				else
+				} else {
 					prediction[i] = 0;
+				}
 			}
 			
 			Utils.normalize(prediction);
@@ -198,7 +202,7 @@ public abstract class SufficientStats implements Serializable {
 	/**
 	 * Sufficient stats for a rule that uses a naive Bayes strategy to classify
 	 * instances.
-	 * 
+	 *
 	 * @author Clément Fournier (clement.fournier@insa-rennes.fr)
 	 * @version VFDR-Base
 	 */
@@ -216,7 +220,7 @@ public abstract class SufficientStats implements Serializable {
 		/**
 		 * Builds these sufficient stats with a naive Bayes classifier
 		 * initialised with the header of the data
-		 * 
+		 *
 		 * @param vfdr
 		 *            The classifier that owns this object
 		 */
@@ -235,15 +239,16 @@ public abstract class SufficientStats implements Serializable {
 			
 			boolean doNB = m_nbWeightThreshold == 0 ? true : totalWeight() > m_nbWeightThreshold;
 			
-			if (doNB)
+			if (doNB) {
 				return m_nbayes.distributionForInstance(inst);
+			}
 			
 			return super.makePrediction(inst, classAtt);
 		}
 		
 		/**
 		 * Updates the naive Bayes model and other statistics.
-		 * 
+		 *
 		 * @param inst
 		 *            The instance to update with
 		 */

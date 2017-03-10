@@ -14,8 +14,6 @@ import weka.classifiers.rules.Vfdr;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ArffLoader;
-import weka.filters.Filter;
-import weka.filters.unsupervised.attribute.NumericToNominal;
 
 /**
  * Test class for the algorithm, which can be used to analyse data sets easily.
@@ -65,23 +63,28 @@ public class VfdrDatasetTest {
 	
 	@Test
 	public void testStudent() throws Exception {
-		VfdrTester tester = new VfdrTester("./datafiles/student-por.arff", "student-por", 32);
+		VfdrTester tester = new VfdrTester("./datafiles/student-por.arff", "student-por", 1);
 		// tester.randomizedOfflineBuildTest();
 		
 		Reader reader = new BufferedReader(new FileReader(tester.file));
 		Instances trainingSet = new Instances(reader);
 		trainingSet.setClassIndex(tester.classIndex);
+		
+		trainingSet.deleteAttributeAt(32);
 		trainingSet.deleteAttributeAt(31);
 		trainingSet.deleteAttributeAt(30);
 		
-		Filter filter = new NumericToNominal();
-		
-		filter.setInputFormat(trainingSet);
-		
-		trainingSet = Filter.useFilter(trainingSet, filter);
-		
+		/*
+		 * trainingSet.deleteAttributeAt(31); trainingSet.deleteAttributeAt(30);
+		 * 
+		 * Filter filter = new NumericToNominal();
+		 * 
+		 * filter.setInputFormat(trainingSet);
+		 * 
+		 * trainingSet = Filter.useFilter(trainingSet, filter);
+		 */
 		try {
-			tester.vfdr.setGracePeriod(30);
+			tester.vfdr.setGracePeriod(2);
 			tester.vfdr.buildClassifier(trainingSet);
 		} catch (Exception e) {
 			e.printStackTrace();

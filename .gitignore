@@ -1,7 +1,10 @@
 # CUSTOM
-weka-src/**
 wekarefs
-make_dist.ps1
+dist/*/doc
+dist/*/src
+dist/*/lib
+dist/*/*.jar
+dist/*/build
 
 #################
 ## Eclipse

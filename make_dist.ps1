@@ -24,10 +24,10 @@ Set-Location $dist
 	ant -buildfile .\build_package.xml >$null
 
 	Write-Output "jar creation..."
-	jar cvf VFDR.jar build/classes/* >$null
+	jar cvf "VFDR-Base-$version.jar" build/classes/* >$null
 Set-Location $top
 
 Write-Output "Package archive creation..."
-Compress-Archive -Force -Path $dist\* -DestinationPath "$dist\..\vfdr-$version.zip"
+Compress-Archive -Force -Path $dist\* -DestinationPath "$dist\..\vfdr-base-$version.zip"
 
 Write-Output "Vfdr package version $version successfully created in .\dist"

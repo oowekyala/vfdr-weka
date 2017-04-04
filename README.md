@@ -9,4 +9,4 @@ The algorithm performs **on-line binary classification** on numeric or nominal a
 
 ## Building the package
 
-From the top level directory, execute `ant make_package -Dpackage="vfdr-${version}" -buildfile ./build_package.xml`, where ${version} is the version number.
+From the top level directory, execute `ant make_package -Dpackage="vfdr-${version}" -buildfile ./build_package.xml`, where ${version} is the version number. Be sure to update Description.props before!

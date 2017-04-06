@@ -47,12 +47,12 @@ import weka.core.Utils;
  */
 public class Vfdr extends RandomizableClassifier
         implements UpdateableClassifier, Serializable, OptionHandler, RevisionHandler, TechnicalInformationHandler {
-
+    
     /** For serialisation */
     private static final long      serialVersionUID        = 845742169720545806L;
-
+    
     /* PARAMETERS */
-
+    
     /** Whether the set of rules is ordered or not */
     private boolean                m_orderedSet            = false;
     /** Minimal number of covered examples needed to consider rule expansion */
@@ -65,13 +65,13 @@ public class Vfdr extends RandomizableClassifier
     private double                 m_hoeffdingTieThreshold = .05;
     /** The minimum weight a rule requires to make predictions using NB */
     private double                 m_nbWeightThreshold     = 10;
-
+    
     /* These are for option parsing */
     public static final int        USE_MAJ_CLASS           = 0;
     public static final int        USE_NB                  = 1;
-
+    
     /* FIELDS */
-
+    
     /** Set of rules */
     private List<VfdrRule>         m_ruleSet;
     /** Default rule */
@@ -84,7 +84,7 @@ public class Vfdr extends RandomizableClassifier
     private Instances              m_header;
     /** Has this classifier been initialised? */
     private boolean                m_initialised           = false;
-
+    
     /** Resets this classifier to default parameters. */
     public void reset() {
         m_orderedSet = false;
@@ -92,7 +92,7 @@ public class Vfdr extends RandomizableClassifier
         m_useNaiveBayes = true;
         m_hoeffdingConfidence = .0000001;
         m_hoeffdingTieThreshold = .05;
-
+        
         m_ruleSet = null;
         m_defaultRule = null;
         m_classificationStrategy = null;
@@ -100,9 +100,9 @@ public class Vfdr extends RandomizableClassifier
         m_header = null;
         m_initialised = false;
     }
-
+    
     /* METHODS FOR WEKA */
-
+    
     /**
      * Returns a string describing classifier
      *
@@ -117,10 +117,10 @@ public class Vfdr extends RandomizableClassifier
                 + "similar to VFDT (Hoeffding trees), in that it uses the Hoeffding "
                 + "bound to estimate the number of observations needed to "
                 + "take a near-optimal decision when expanding a rule. This allows for a"
-                + " very performant classifier, even with very large datasets. For more information, see:\n"
+                + " very performant classifier, even with very large datasets. For more information, see:\n\n"
                 + getTechnicalInformation().toString();
     }
-
+    
     /**
      * Returns an instance of a TechnicalInformation object, containing detailed
      * information about the technical background of this class, e.g., paper
@@ -131,7 +131,7 @@ public class Vfdr extends RandomizableClassifier
     @Override
     public TechnicalInformation getTechnicalInformation() {
         TechnicalInformation result;
-
+        
         result = new TechnicalInformation(Type.INPROCEEDINGS);
         result.setValue(Field.AUTHOR, "Gama, João and Kosina, Petr");
         result.setValue(Field.TITLE, "Learning Decision Rules from Data Streams");
@@ -140,10 +140,10 @@ public class Vfdr extends RandomizableClassifier
         result.setValue(Field.YEAR, "2011");
         result.setValue(Field.PAGES, "1255-1260");
         result.setValue(Field.PUBLISHER, "AAAI Press");
-
+        
         return result;
     }
-
+    
     /**
      * Returns default capabilities of the classifier.
      *
@@ -153,23 +153,23 @@ public class Vfdr extends RandomizableClassifier
     public Capabilities getCapabilities() {
         Capabilities result = super.getCapabilities();
         result.disableAll();
-
+        
         // attributes
         result.enable(Capability.NOMINAL_ATTRIBUTES);
         result.enable(Capability.NUMERIC_ATTRIBUTES);
         result.enable(Capability.MISSING_VALUES);
-
+        
         result.enable(Capability.MISSING_CLASS_VALUES);
         result.enable(Capability.BINARY_CLASS);
         result.enable(Capability.NOMINAL_CLASS);
-
+        
         result.setMinimumNumberInstances(0);
-
+        
         return result;
     }
-
+    
     /* METHODS FOR THE CLASSIFIER */
-
+    
     @Override
     public double[] distributionForInstance(Instance inst) throws Exception {
         if (m_initialised) {
@@ -186,55 +186,55 @@ public class Vfdr extends RandomizableClassifier
             throw new Exception("You must build this classifier before trying to classify an instance");
         }
     }
-
+    
     @Override
     public void buildClassifier(Instances instances) throws Exception {
         reset();
         getCapabilities().testWithFail(instances);
-
+        
         instances = new Instances(instances); // copy
         instances.deleteWithMissingClass();
-
+        
         instances.randomize(new Random(m_Seed)); // examples must be randomized
-
+        
         setHeader(new Instances(instances, 0));
         m_ruleSet = new ArrayList<>();
         m_defaultRule = new VfdrRule(this);
         m_classificationStrategy = m_orderedSet ? new ClassificationStrategy.WeightedMax()
                 : new ClassificationStrategy.FirstHit();
-
+        
         m_initialised = true;
-
+        
         for (Instance x : instances) {
             updateClassifier(x);
         }
-
+        
     }
-
+    
     @Override
     public void updateClassifier(Instance x) throws Exception {
         if (x.classIsMissing()) {
             return;
         }
-
+        
         int trigerred = 0;
-
+        
         for (VfdrRule r : m_ruleSet) {
             if (r.covers(x)) {
                 trigerred++;
                 SufficientStats lr = r.getStats();
                 lr.update(x);
-
+                
                 if (lr.totalWeight() > m_gracePeriod) {
                     r = r.expand(m_expMetric);
                 }
-
+                
                 if (m_orderedSet) {
                     break;
                 }
             }
         }
-
+        
         if (trigerred == 0) {
             m_defaultRule.getStats().update(x);
             if (m_defaultRule.getStats().totalWeight() > m_gracePeriod) {
@@ -243,7 +243,7 @@ public class Vfdr extends RandomizableClassifier
             }
         }
     }
-
+    
     /**
      * Builds a new numeric antecedent from the name of its attribute
      *
@@ -254,7 +254,7 @@ public class Vfdr extends RandomizableClassifier
     public NumericAntd buildNumericAntd(String attName) {
         return new NumericAntd(m_header.attribute(attName));
     }
-
+    
     /**
      * Builds a new nominal antecedent from the name of its attribute
      *
@@ -265,7 +265,7 @@ public class Vfdr extends RandomizableClassifier
     public NominalAntd buildNominalAntd(String attName) {
         return new NominalAntd(m_header.attribute(attName));
     }
-
+    
     /**
      * Returns a string describing the rule set
      *
@@ -277,17 +277,17 @@ public class Vfdr extends RandomizableClassifier
             s += "\t" + r + "\n";
         }
         s += "\t" + m_defaultRule + "\n]";
-
+        
         return s;
     }
-
+    
     @Override
     public String toString() {
         return m_initialised ? ruleSetToString() : "You must build this classifier first";
     }
-
+    
     /* GETTERS AND SETTERS */
-
+    
     /**
      * Specify the structure of the instances to classify.
      *
@@ -297,7 +297,7 @@ public class Vfdr extends RandomizableClassifier
     private void setHeader(Instances m_header) {
         this.m_header = m_header;
     }
-
+    
     /**
      * Sets the allowable error in an expansion decision. Its value is one minus
      * the desired probability of choosing the correct attribute. Used in the
@@ -312,7 +312,7 @@ public class Vfdr extends RandomizableClassifier
     public void setHoeffdingConfidence(double c) {
         m_hoeffdingConfidence = c;
     }
-
+    
     /**
      * Sets the threshold below which an expansion will be forced in order to
      * break ties. Default is 0.05.
@@ -326,7 +326,7 @@ public class Vfdr extends RandomizableClassifier
     public void setHoeffdingTieThreshold(double t) {
         m_hoeffdingTieThreshold = t;
     }
-
+    
     /**
      * Sets whether subsequently created instances will use naive bayes or not
      * to make predictions. A parameter of 0 will set the strategy to majority
@@ -341,7 +341,7 @@ public class Vfdr extends RandomizableClassifier
     public void setPredictionStrategy(int n) {
         m_useNaiveBayes = n == USE_NB;
     }
-
+    
     /**
      * Sets the number of instances a rule should observe between expansion
      * attempts.
@@ -356,7 +356,7 @@ public class Vfdr extends RandomizableClassifier
     public void setGracePeriod(int n) {
         m_gracePeriod = n;
     }
-
+    
     /**
      * Returns true if the rule set is ordered. An ordered rule set uses a First
      * Hit classification strategy and examples update only the first rule that
@@ -370,7 +370,7 @@ public class Vfdr extends RandomizableClassifier
     public void setOrderedSet(boolean b) {
         m_orderedSet = b;
     }
-
+    
     /**
      * Sets the minimal weight a rule requires to make predictions using naive
      * Bayes.
@@ -384,31 +384,31 @@ public class Vfdr extends RandomizableClassifier
     public void setNBWeightThreshold(double n) {
         m_nbWeightThreshold = n;
     }
-
+    
     public double getHoeffdingConfidence() {
         return m_hoeffdingConfidence;
     }
-
+    
     public double getTieThreshold() {
         return m_hoeffdingTieThreshold;
     }
-
+    
     public int getGracePeriod() {
         return m_gracePeriod;
     }
-
+    
     public int getPredictionStrategy() {
         return m_useNaiveBayes ? USE_NB : USE_MAJ_CLASS;
     }
-
+    
     public boolean getUseNaiveBayes() {
         return m_useNaiveBayes;
     }
-
+    
     public double getNBWeightThreshold() {
         return m_nbWeightThreshold;
     }
-
+    
     /**
      * Gets the structure of the instances this classifier can handle
      *
@@ -417,7 +417,7 @@ public class Vfdr extends RandomizableClassifier
     public Instances getHeader() {
         return m_header;
     }
-
+    
     /**
      * Returns the rule set induced by training
      *
@@ -426,7 +426,7 @@ public class Vfdr extends RandomizableClassifier
     public List<VfdrRule> ruleSet() {
         return m_ruleSet;
     }
-
+    
     /**
      * Returns whether the set is ordered or not
      *
@@ -435,7 +435,7 @@ public class Vfdr extends RandomizableClassifier
     public boolean isOrderedSet() {
         return m_orderedSet;
     }
-
+    
     /**
      * Returns true if the classifier is ready to accept new training instances
      *
@@ -444,7 +444,7 @@ public class Vfdr extends RandomizableClassifier
     public boolean initialised() {
         return m_initialised;
     }
-
+    
     /**
      * Returns the revision string.
      *
@@ -454,5 +454,5 @@ public class Vfdr extends RandomizableClassifier
     public String getRevision() {
         return RevisionUtils.extract("$Revision: 1.0 $");
     }
-
+    
 }

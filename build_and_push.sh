@@ -1,11 +1,10 @@
 #!/usr/bin/sh
-ant make_package -Dpackage=vfdr-1.0.0 -buildfile build_package.xml
+ant make_package -Dpackage=vfdr-1.0.0 -buildfile build_package.xml > /dev/null
 
-git add * > /dev/null
-git status
-git commit -m "Built package"
+git add * 
+git commit -qm "$0"
 
-git push origin :refs/tags/v1.0.0
-git tag -fa v1.0.0
+git push origin :refs/tags/v1.0.0 -q
+git tag -qfa v1.0.0
 git push origin master --tags
 

@@ -207,6 +207,11 @@
          <include name="src/**/*.matrix"/>
        </fileset>
     </copy>
+	<delete>
+      <fileset dir="${dist}/${package}/lib">
+        <include name="weka.jar"/>
+      </fileset>
+    </delete>
     <zip destfile="${dist}/${package}.zip" 
       basedir="${dist}/${package}">
     </zip>

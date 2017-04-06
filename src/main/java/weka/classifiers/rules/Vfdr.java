@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import weka.classifiers.RandomizableClassifier;
 import weka.classifiers.UpdateableClassifier;
@@ -116,7 +117,8 @@ public class Vfdr extends RandomizableClassifier
                 + "similar to VFDT (Hoeffding trees), in that it uses the Hoeffding "
                 + "bound to estimate the number of observations needed to "
                 + "take a near-optimal decision when expanding a rule. This allows for a"
-                + " very performant classifier, even with very large datasets." + getTechnicalInformation().toString();
+                + " very performant classifier, even with very large datasets. For more information, see:\n"
+                + getTechnicalInformation().toString();
     }
 
     /**
@@ -192,8 +194,8 @@ public class Vfdr extends RandomizableClassifier
 
         instances = new Instances(instances); // copy
         instances.deleteWithMissingClass();
-        
-        // instances.randomize(new Random()); // examples must be randomized
+
+        instances.randomize(new Random(m_Seed)); // examples must be randomized
 
         setHeader(new Instances(instances, 0));
         m_ruleSet = new ArrayList<>();

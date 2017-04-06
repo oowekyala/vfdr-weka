@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import weka.classifiers.AbstractClassifier;
+import weka.classifiers.RandomizableClassifier;
 import weka.classifiers.UpdateableClassifier;
 import weka.classifiers.rules.vfdr.ClassificationStrategy;
 import weka.classifiers.rules.vfdr.ExpansionMetric;
@@ -41,10 +42,10 @@ import weka.core.Utils;
  * <!-- options-end -->
  *
  *
- * @author Clément Fournier (clement.fournier@insa-rennes.fr)
+ * @author Clï¿½ment Fournier (clement.fournier@insa-rennes.fr)
  * @version VFDR-Base
  */
-public class Vfdr extends AbstractClassifier
+public class Vfdr extends RandomizableClassifier
         implements UpdateableClassifier, Serializable, OptionHandler, RevisionHandler, TechnicalInformationHandler {
 
     /** For serialisation */
@@ -116,7 +117,8 @@ public class Vfdr extends AbstractClassifier
                 + "similar to VFDT (Hoeffding trees), in that it uses the Hoeffding "
                 + "bound to estimate the number of observations needed to "
                 + "take a near-optimal decision when expanding a rule. This allows for a"
-                + " very performant classifier, even with very large datasets.";
+                + " very performant classifier, even with very large datasets." 
+                + getTechnicalInformation().toString();
     }
 
     /**
@@ -131,7 +133,7 @@ public class Vfdr extends AbstractClassifier
         TechnicalInformation result;
 
         result = new TechnicalInformation(Type.INPROCEEDINGS);
-        result.setValue(Field.AUTHOR, "Gama, João and Kosina, Petr");
+        result.setValue(Field.AUTHOR, "Gama, Joï¿½o and Kosina, Petr");
         result.setValue(Field.TITLE, "Learning Decision Rules from Data Streams");
         result.setValue(Field.BOOKTITLE, "Proceedings of the Twenty-Second International Joint Conference on"
                 + " Artificial Intelligence - Volume Two");

@@ -182,17 +182,19 @@ public abstract class SufficientStats implements Serializable {
         public double[] makePrediction(Instance inst, Attribute classAtt) throws Exception {
             
             double[] prediction = new double[classAtt.numValues()];
-            
+            boolean normalizable = false;
+
             for (int i = 0; i < classAtt.numValues(); i++) {
                 Integer mass = m_classDistribution.get(classAtt.value(i));
                 if (mass != null) {
                     prediction[i] = mass;
+                    normalizable = true;
                 } else {
                     prediction[i] = 0;
                 }
             }
             
-            if (prediction.length > 0) {
+            if (normalizable) {
                 Utils.normalize(prediction);
             }
             

@@ -1,7 +1,7 @@
 # CUSTOM
 wekarefs/
 datafiles/
-build/classes/
+build/classes/**
 dist/vfdr-1.0.0/
 
 #################

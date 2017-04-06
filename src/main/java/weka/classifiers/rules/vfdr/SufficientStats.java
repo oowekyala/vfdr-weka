@@ -192,11 +192,12 @@ public abstract class SufficientStats implements Serializable {
                 }
             }
             
-            Utils.normalize(prediction);
+            if (prediction.length > 0) {
+                Utils.normalize(prediction);
+            }
             
             return prediction;
         }
-        
     }
     
     /**

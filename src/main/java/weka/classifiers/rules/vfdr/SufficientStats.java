@@ -2,6 +2,7 @@ package weka.classifiers.rules.vfdr;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -182,20 +183,22 @@ public abstract class SufficientStats implements Serializable {
         public double[] makePrediction(Instance inst, Attribute classAtt) throws Exception {
             
             double[] prediction = new double[classAtt.numValues()];
-            boolean normalizable = false;
 
             for (int i = 0; i < classAtt.numValues(); i++) {
                 Integer mass = m_classDistribution.get(classAtt.value(i));
                 if (mass != null) {
                     prediction[i] = mass;
-                    normalizable = true;
                 } else {
                     prediction[i] = 0;
                 }
             }
             
-            if (normalizable) {
+            try {
                 Utils.normalize(prediction);
+            } catch (IllegalArgumentException iae) {
+                // The array is empty
+                // All classes have equal probability
+                Arrays.fill(prediction, 1.);
             }
             
             return prediction;

@@ -13,43 +13,44 @@ import weka.core.Instance;
  * @version VFDR-Base
  */
 public abstract class Antd implements Serializable {
-	/** For serialisation */
-	private static final long	serialVersionUID	= -6617990702800935349L;
 
-	/** The attribute of the antecedent */
-	protected Attribute			m_attribute;
-	protected boolean			m_isNominal;
+    /** For serialisation */
+    private static final long serialVersionUID = -6617990702800935349L;
 
-	public abstract boolean covers(Instance inst);
+    /** The attribute of the antecedent */
+    protected Attribute       m_attribute;
+    protected boolean         m_isNominal;
 
-	@Override
-	public abstract String toString();
+    public abstract boolean covers(Instance inst);
 
-	/**
-	 * Get the attribute of this antecedent
-	 *
-	 * @return The attribute of this antecedent
-	 */
-	public Attribute getAttr() {
-		return m_attribute;
-	}
+    @Override
+    public abstract String toString();
 
-	/**
-	 * Returns true if the attribute of this antecedent is nominal
-	 *
-	 * @return true if the attribute of this antecedent is nominal
-	 */
-	public boolean isNominal() {
-		return m_isNominal;
-	}
+    /**
+     * Get the attribute of this antecedent
+     *
+     * @return The attribute of this antecedent
+     */
+    public Attribute getAttr() {
+        return m_attribute;
+    }
 
-	/**
-	 * Returns true if the attribute of this antecedent is numeric
-	 *
-	 * @return true if the attribute of this antecedent is numeric
-	 */
-	public boolean isNumeric() {
-		return !m_isNominal;
-	}
+    /**
+     * Returns true if the attribute of this antecedent is nominal
+     *
+     * @return true if the attribute of this antecedent is nominal
+     */
+    public boolean isNominal() {
+        return m_isNominal;
+    }
+
+    /**
+     * Returns true if the attribute of this antecedent is numeric
+     *
+     * @return true if the attribute of this antecedent is numeric
+     */
+    public boolean isNumeric() {
+        return !m_isNominal;
+    }
 
 }

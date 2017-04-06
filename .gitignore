@@ -1,10 +1,8 @@
 # CUSTOM
-wekarefs
-dist/*/doc
-dist/*/src
-dist/*/lib
-dist/*/*.jar
-dist/*/build
+wekarefs/
+datafiles/
+build/classes/
+dist/vfdr-1.0.0/
 
 #################
 ## Eclipse

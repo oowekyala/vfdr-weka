@@ -31,9 +31,6 @@ public class NominalAttributeStats extends AttributeStats {
         super(attName, vfdr);
     }
     
-    /**
-     *
-     */
     @Override
     public void update(double attVal, String classVal) {
         if (!Utils.isMissingValue(attVal)) {

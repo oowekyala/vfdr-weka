@@ -37,7 +37,7 @@ public abstract class ClassificationStrategy implements Serializable {
     /**
      * Classification strategy for ordered sets.
      *
-     * @author Cl�ment Fournier (clement.fournier@insa-rennes.fr)
+     * @author Clément Fournier (clement.fournier@insa-rennes.fr)
      *
      */
     public static class FirstHit extends ClassificationStrategy {
@@ -71,7 +71,7 @@ public abstract class ClassificationStrategy implements Serializable {
     /**
      * Classification strategy for unordered rule sets.
      *
-     * @author Cl�ment Fournier (clement.fournier@insa-rennes.fr)
+     * @author Clément Fournier (clement.fournier@insa-rennes.fr)
      * @version VFDR-Base
      *
      */

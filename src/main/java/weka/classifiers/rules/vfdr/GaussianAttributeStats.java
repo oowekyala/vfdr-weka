@@ -16,7 +16,7 @@ import weka.estimators.UnivariateNormalEstimator;
  * Attribute stats for numeric attributes. It fits a Gaussian distribution to
  * the observed distribution of values.
  *
- * @author Clément Fournier (clement.fournier@insa-rennes.fr)
+ * @author ClÃ©ment Fournier (clement.fournier@insa-rennes.fr)
  * @version VFDR-Base
  */
 public class GaussianAttributeStats extends AttributeStats implements Serializable {

@@ -5,6 +5,8 @@ build/classes/**
 dist/vfdr-1.0.0/
 build_and_push.sh
 
+.idea
+
 #################
 ## Eclipse
 #################

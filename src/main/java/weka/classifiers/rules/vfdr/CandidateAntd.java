@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Class holding a antecedent that is candidate for rule expansion. Stores the
  * antecedent and the score calculated by an {@link ExpansionMetric}.
  *
- * @author Clément Fournier (clement.fournier@insa-rennes.fr)
+ * @author ClÃ©ment Fournier (clement.fournier@insa-rennes.fr)
  * @version VFDR-Base
  */
 public class CandidateAntd implements Comparable<CandidateAntd>, Serializable {

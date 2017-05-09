@@ -16,7 +16,7 @@ import weka.core.Utils;
  * determine the strategy used to classify instances (naive Bayes/ majority
  * class).
  *
- * @author Clément Fournier (clement.fournier@insa-rennes.fr)
+ * @author ClÃ©ment Fournier (clement.fournier@insa-rennes.fr)
  * @version VFDR-Base
  *
  * @see SufficientStats

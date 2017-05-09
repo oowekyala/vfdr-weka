@@ -11,7 +11,7 @@ import weka.core.Utils;
  * Metrics evaluate the merit of an expansion (given the pre and post expansion
  * class distribution) to chose the best.
  *
- * @author Clément Fournier (clement.fournier@insa-rennes.fr)
+ * @author ClÃ©ment Fournier (clement.fournier@insa-rennes.fr)
  * @version VFDR-Base
  */
 public abstract class ExpansionMetric implements Serializable {
@@ -50,7 +50,7 @@ public abstract class ExpansionMetric implements Serializable {
     /**
      * Actually this metric is information gain.
      *
-     * @author Clément Fournier (clement.fournier@insa-rennes.fr)
+     * @author Clï¿½ment Fournier (clement.fournier@insa-rennes.fr)
      * @version VFDR-Base
      */
     public static class Entropy extends ExpansionMetric {

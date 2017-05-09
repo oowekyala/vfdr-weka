@@ -14,7 +14,7 @@ import weka.core.Utils;
  * Attribute stats for nominal attributes. Uses a discrete distribution to
  * acknowledge examples.
  *
- * @author Clément Fournier (clement.fournier@insa-rennes.fr)
+ * @author ClÃ©ment Fournier (clement.fournier@insa-rennes.fr)
  * @version VFDR-Base
  */
 public class NominalAttributeStats extends AttributeStats {
@@ -109,7 +109,7 @@ public class NominalAttributeStats extends AttributeStats {
      * Inner class that implements a discrete distribution. Adapted from Mark
      * Hall's VFDT implementation to consider unweighted instances.
      *
-     * @author Clément Fournier (clement.fournier@insa-rennes.fr)
+     * @author Clï¿½ment Fournier (clement.fournier@insa-rennes.fr)
      *
      */
     protected class DiscreteDistribution implements Serializable {

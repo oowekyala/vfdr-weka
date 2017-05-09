@@ -9,7 +9,7 @@ import weka.core.Instance;
  * Antecedents (literals) make up rules. Antecedents can either be nominal or
  * numeric, depending on the nature of the attribute they're pertaining to.
  *
- * @author Clément Fournier (clement.fournier@insa-rennes.fr)
+ * @author ClÃ©ment Fournier (clement.fournier@insa-rennes.fr)
  * @version VFDR-Base
  */
 public abstract class Antd implements Serializable {

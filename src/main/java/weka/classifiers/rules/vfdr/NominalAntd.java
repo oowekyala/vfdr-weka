@@ -7,7 +7,7 @@ import weka.core.Instance;
  * Nominal antecedent, of the form {NominalAttribute = value}. The value is
  * represented by its index.
  *
- * @author Clément Fournier (clement.fournier@insa-rennes.fr)
+ * @author ClÃ©ment Fournier (clement.fournier@insa-rennes.fr)
  * @version VFDR-Base
  */
 public class NominalAntd extends Antd {

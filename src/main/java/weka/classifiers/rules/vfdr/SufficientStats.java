@@ -19,7 +19,7 @@ import weka.core.Utils;
  * used : naive bayes or majority class. These flavours are implemented here, as
  * static nested classes.
  *
- * @author Clément Fournier (clement.fournier@insa-rennes.fr)
+ * @author ClÃ©ment Fournier (clement.fournier@insa-rennes.fr)
  * @version VFDR-Base
  *
  *
@@ -167,7 +167,7 @@ public abstract class SufficientStats implements Serializable {
     /**
      * Implements the majority class strategy to classify an instance.
      *
-     * @author Clément Fournier (clement.fournier@insa-rennes.fr)
+     * @author Clï¿½ment Fournier (clement.fournier@insa-rennes.fr)
      * @version VFDR-Base
      */
     public static class MajorityClass extends SufficientStats {
@@ -207,7 +207,7 @@ public abstract class SufficientStats implements Serializable {
      * Sufficient stats for a rule that uses a naive Bayes strategy to classify
      * instances.
      *
-     * @author Clément Fournier (clement.fournier@insa-rennes.fr)
+     * @author Clï¿½ment Fournier (clement.fournier@insa-rennes.fr)
      * @version VFDR-Base
      */
     public static class NaiveBayes extends MajorityClass {

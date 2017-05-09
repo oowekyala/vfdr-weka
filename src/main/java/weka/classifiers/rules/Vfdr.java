@@ -42,7 +42,7 @@ import weka.core.Utils;
  * <!-- options-end -->
  *
  *
- * @author Clément Fournier (clement.fournier@insa-rennes.fr)
+ * @author ClÃ©ment Fournier (clement.fournier@insa-rennes.fr)
  * @version VFDR-Base
  */
 public class Vfdr extends RandomizableClassifier
@@ -133,7 +133,7 @@ public class Vfdr extends RandomizableClassifier
         TechnicalInformation result;
         
         result = new TechnicalInformation(Type.INPROCEEDINGS);
-        result.setValue(Field.AUTHOR, "Gama, João and Kosina, Petr");
+        result.setValue(Field.AUTHOR, "Gama, Joï¿½o and Kosina, Petr");
         result.setValue(Field.TITLE, "Learning Decision Rules from Data Streams");
         result.setValue(Field.BOOKTITLE, "Proceedings of the Twenty-Second International Joint Conference on"
                 + " Artificial Intelligence - Volume Two");

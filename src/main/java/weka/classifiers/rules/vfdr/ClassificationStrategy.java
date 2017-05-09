@@ -9,7 +9,7 @@ import weka.core.Instance;
 /**
  * Classification strategies applying to a ruleset.
  *
- * @author Clément Fournier (clement.fournier@insa-rennes.fr)
+ * @author ClÃ©ment Fournier (clement.fournier@insa-rennes.fr)
  * @version VFDR-Base
  *
  */
@@ -37,7 +37,7 @@ public abstract class ClassificationStrategy implements Serializable {
     /**
      * Classification strategy for ordered sets.
      *
-     * @author Clément Fournier (clement.fournier@insa-rennes.fr)
+     * @author Clï¿½ment Fournier (clement.fournier@insa-rennes.fr)
      *
      */
     public static class FirstHit extends ClassificationStrategy {
@@ -71,7 +71,7 @@ public abstract class ClassificationStrategy implements Serializable {
     /**
      * Classification strategy for unordered rule sets.
      *
-     * @author Clément Fournier (clement.fournier@insa-rennes.fr)
+     * @author Clï¿½ment Fournier (clement.fournier@insa-rennes.fr)
      * @version VFDR-Base
      *
      */
@@ -93,17 +93,17 @@ public abstract class ClassificationStrategy implements Serializable {
             List<VfdrRule> fullRuleSet = new ArrayList<>(ruleSet);
             fullRuleSet.add(defaultRule);
             
-            List<VfdrRule> trigerred = new ArrayList<>();
+            List<VfdrRule> triggered = new ArrayList<>();
             
             for (VfdrRule r : fullRuleSet) {
                 if (r.covers(inst)) {
-                    trigerred.add(r);
+                    triggered.add(r);
                 }
             }
             
             int maxWeight = Integer.MIN_VALUE;
             VfdrRule winningRule = null;
-            for (VfdrRule r : trigerred) {
+            for (VfdrRule r : triggered) {
                 if (r.getStats().totalWeight() > maxWeight) {
                     maxWeight = r.getStats().totalWeight();
                     winningRule = r;

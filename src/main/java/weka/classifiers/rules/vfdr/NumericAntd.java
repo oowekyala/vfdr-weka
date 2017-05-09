@@ -8,7 +8,7 @@ import weka.core.Instance;
  * number} or {NumericAttribute &gt; number}. The condition type (&lt;= or &gt;)
  * is stored as a boolean, and the split point as a double.
  *
- * @author Clément Fournier (clement.fournier@insa-rennes.fr)
+ * @author ClÃ©ment Fournier (clement.fournier@insa-rennes.fr)
  * @version VFDR-Base
  */
 public class NumericAntd extends Antd {

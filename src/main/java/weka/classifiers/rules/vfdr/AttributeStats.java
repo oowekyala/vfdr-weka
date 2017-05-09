@@ -12,7 +12,7 @@ import weka.classifiers.rules.Vfdr;
  * the values of its attribute for each class. In effect, it stores an
  * estimation of P(attr = value | class).
  *
- * @author Clément Fournier (clement.fournier@insa-rennes.fr)
+ * @author ClÃ©ment Fournier (clement.fournier@insa-rennes.fr)
  * @version VFDR-Base
  */
 public abstract class AttributeStats implements Serializable {

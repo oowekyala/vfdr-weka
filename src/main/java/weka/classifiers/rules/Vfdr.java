@@ -467,7 +467,7 @@ public class Vfdr extends RandomizableClassifier
             "T", 1, "-T <threshold value>"));
 
         newVector.add(new Option("The allowable error in the decision to expand a rule. Values closer to zero will take longer to decide.",
-            "C", 1, "-C <confidence value>"))
+            "C", 1, "-C <confidence value>"));
 
         newVector.addAll(Collections.list(super.listOptions()));
 

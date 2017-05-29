@@ -331,9 +331,9 @@ public class Vfdr extends RandomizableClassifier
      *
      * @param n The code of the strategy (0 = majority class, 1 = naive Bayes)
      */
-    @OptionMetadata(displayName = "predictionStrategy", commandLineParamName = "S",
+    @OptionMetadata(displayName = "predictionStrategy", commandLineParamName = "R",
         description = "The prediction strategy to use (0 = majority class, 1 = naive Bayes)",
-        commandLineParamSynopsis = "-S <strategy code>", displayOrder = 4)
+        commandLineParamSynopsis = "-R <strategy code>", displayOrder = 4)
     public void setPredictionStrategy(int n) {
         m_useNaiveBayes = n == USE_NB;
     }
@@ -451,7 +451,7 @@ public class Vfdr extends RandomizableClassifier
 
     @Override
     public Enumeration<Option> listOptions() {
-        Vector<Option> newVector = new Vector<Option>(7);
+        Vector<Option> newVector = new Vector<>(7);
         newVector.add(new Option("The minimum weight a rule requires to make predictions " +
             "using naive Bayes", "N", 1, "-N <threshold value>"));
 
@@ -459,6 +459,15 @@ public class Vfdr extends RandomizableClassifier
 
         newVector.add(new Option("Number of instances a rule should observe between expansion attempts. ",
             "G", 1, "-G <gracePeriod>"));
+
+        newVector.add(new Option("The prediction strategy to use (0 = majority class, 1 = naive Bayes)",
+            "R", 1, "-R <strategy code>"));
+
+        newVector.add(new Option("Theshold below which a rule expansion will be forced in order to break ties.",
+            "T", 1, "-T <threshold value>"));
+
+        newVector.add(new Option("The allowable error in the decision to expand a rule. Values closer to zero will take longer to decide.",
+            "C", 1, "-C <confidence value>"))
 
         newVector.addAll(Collections.list(super.listOptions()));
 
@@ -470,19 +479,25 @@ public class Vfdr extends RandomizableClassifier
     public void setOptions(String[] options) throws Exception {
         String gracePeriod = Utils.getOption('G', options);
         if (gracePeriod.length() != 0) {
-            m_gracePeriod = Integer.parseInt(gracePeriod);
-        } else {
-            m_gracePeriod = 40;
+            setGracePeriod(Integer.parseInt(gracePeriod));
         }
 
         String nbThreshold = Utils.getOption('N', options);
         if (nbThreshold.length() != 0) {
-            m_nbWeightThreshold = Double.parseDouble(nbThreshold);
-        } else {
-            m_nbWeightThreshold = 10;
+            setNBWeightThreshold(Double.parseDouble(nbThreshold));
         }
 
-        m_orderedSet = Utils.getFlag('O', options);
+        String predictionStrat = Utils.getOption('R', options);
+        if (predictionStrat.length() != 0) {
+            setPredictionStrategy(Integer.parseInt(predictionStrat));
+        }
+
+        String hoeffdingThreshold = Utils.getOption('T', options);
+        if (hoeffdingThreshold.length() != 0) {
+            setHoeffdingConfidence(Double.parseDouble(hoeffdingThreshold));
+        }
+
+        setOrderedSet(Utils.getFlag('O', options));
 
         super.setOptions(options);
 
@@ -497,12 +512,18 @@ public class Vfdr extends RandomizableClassifier
     @Override
     public String[] getOptions() {
 
-        Vector<String> options = new Vector<String>();
+        Vector<String> options = new Vector<>();
 
         options.add("-G");
         options.add("" + m_gracePeriod);
         options.add("-N");
         options.add("" + m_nbWeightThreshold);
+        options.add("-T");
+        options.add("" + m_hoeffdingTieThreshold);
+        options.add("-C");
+        options.add("" + m_hoeffdingConfidence);
+        options.add("-R");
+        options.add("" + (m_useNaiveBayes ? USE_NB : USE_MAJ_CLASS));
 
         if (m_orderedSet) {
             options.add("-O");

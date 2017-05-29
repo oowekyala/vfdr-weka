@@ -3,8 +3,11 @@ package weka.classifiers.rules;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Random;
+import java.util.Vector;
 
 import weka.classifiers.RandomizableClassifier;
 import weka.classifiers.UpdateableClassifier;
@@ -18,6 +21,7 @@ import weka.core.Capabilities;
 import weka.core.Capabilities.Capability;
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.Option;
 import weka.core.OptionHandler;
 import weka.core.OptionMetadata;
 import weka.core.RevisionHandler;
@@ -49,7 +53,7 @@ public class Vfdr extends RandomizableClassifier
 
     /* These are for option parsing */
     public static final int USE_MAJ_CLASS = 0;
-    
+
     /* PARAMETERS */
     public static final int USE_NB = 1;
     /** For serialisation */
@@ -443,5 +447,70 @@ public class Vfdr extends RandomizableClassifier
     public String getRevision() {
         return RevisionUtils.extract("$Revision: 1.0 $");
     }
+
+
+    @Override
+    public Enumeration<Option> listOptions() {
+        Vector<Option> newVector = new Vector<Option>(7);
+        newVector.add(new Option("The minimum weight a rule requires to make predictions " +
+            "using naive Bayes", "N", 1, "-N <threshold value>"));
+
+        newVector.add(new Option("Is the rule set ordered?", "O", 0, "-O"));
+
+        newVector.add(new Option("Number of instances a rule should observe between expansion attempts. ",
+            "G", 1, "-G <gracePeriod>"));
+
+        newVector.addAll(Collections.list(super.listOptions()));
+
+        return newVector.elements();
+    }
+
+
+    @Override
+    public void setOptions(String[] options) throws Exception {
+        String gracePeriod = Utils.getOption('G', options);
+        if (gracePeriod.length() != 0) {
+            m_gracePeriod = Integer.parseInt(gracePeriod);
+        } else {
+            m_gracePeriod = 40;
+        }
+
+        String nbThreshold = Utils.getOption('N', options);
+        if (nbThreshold.length() != 0) {
+            m_nbWeightThreshold = Double.parseDouble(nbThreshold);
+        } else {
+            m_nbWeightThreshold = 10;
+        }
+
+        m_orderedSet = Utils.getFlag('O', options);
+
+        super.setOptions(options);
+
+        Utils.checkForRemainingOptions(options);
+    }
+
+    /**
+     * Gets the current settings of the Classifier.
+     *
+     * @return an array of strings suitable for passing to setOptions
+     */
+    @Override
+    public String[] getOptions() {
+
+        Vector<String> options = new Vector<String>();
+
+        options.add("-G");
+        options.add("" + m_gracePeriod);
+        options.add("-N");
+        options.add("" + m_nbWeightThreshold);
+
+        if (m_orderedSet) {
+            options.add("-O");
+        }
+        Collections.addAll(options, super.getOptions());
+
+        return options.toArray(new String[0]);
+    }
+
 
 }

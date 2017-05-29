@@ -1,5 +1,5 @@
 #!/bin/bash
-ant make_package -Dpackage=vfdr-1.0.0 -buildfile build_package.xml > /dev/null
+ant make_package -Dpackage=vfdr-1.0.0 -buildfile build_package.xml # > /dev/null
 
 git commit -aqm "$0"
 

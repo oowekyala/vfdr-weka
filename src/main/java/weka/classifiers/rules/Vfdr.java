@@ -30,60 +30,56 @@ import weka.core.Utils;
 
 /**
  * <!-- globalinfo-start -->
- *
+ * <p>
  * <!-- globalinfo-end -->
- *
+ * <p>
  * <!-- technical-bibtex-start -->
- *
+ * <p>
  * <!-- technical-bibtex-end -->
- *
+ * <p>
  * <!-- options-start -->
- *
+ * <p>
  * <!-- options-end -->
- *
  *
  * @author Clément Fournier (clement.fournier@insa-rennes.fr)
  * @version VFDR-Base
  */
 public class Vfdr extends RandomizableClassifier
-        implements UpdateableClassifier, Serializable, OptionHandler, RevisionHandler, TechnicalInformationHandler {
-
-    /** For serialisation */
-    private static final long      serialVersionUID        = 845742169720545806L;
-    
-    /* PARAMETERS */
-
-    /** Whether the set of rules is ordered or not */
-    private boolean                m_orderedSet            = false;
-    /** Minimal number of covered examples needed to consider rule expansion */
-    private int                    m_gracePeriod           = 200;
-    /** Whether prediction strategy uses naive Bayes or not */
-    private boolean                m_useNaiveBayes         = true;
-    /** Allowable error in attribute selection when expanding a rule */
-    private double                 m_hoeffdingConfidence   = .0000001;
-    /** Threshold below which an expansion will be forced to to break ties */
-    private double                 m_hoeffdingTieThreshold = .05;
-    /** The minimum weight a rule requires to make predictions using NB */
-    private double                 m_nbWeightThreshold     = 10;
+    implements UpdateableClassifier, Serializable, OptionHandler, RevisionHandler, TechnicalInformationHandler {
 
     /* These are for option parsing */
-    public static final int        USE_MAJ_CLASS           = 0;
-    public static final int        USE_NB                  = 1;
+    public static final int USE_MAJ_CLASS = 0;
+    
+    /* PARAMETERS */
+    public static final int USE_NB = 1;
+    /** For serialisation */
+    private static final long serialVersionUID = 845742169720545806L;
+    /** Whether the set of rules is ordered or not */
+    private boolean m_orderedSet = false;
+    /** Minimal number of covered examples needed to consider rule expansion */
+    private int m_gracePeriod = 200;
+    /** Whether prediction strategy uses naive Bayes or not */
+    private boolean m_useNaiveBayes = true;
+    /** Allowable error in attribute selection when expanding a rule */
+    private double m_hoeffdingConfidence = .0000001;
+    /** Threshold below which an expansion will be forced to to break ties */
+    private double m_hoeffdingTieThreshold = .05;
+    /** The minimum weight a rule requires to make predictions using NB */
+    private double m_nbWeightThreshold = 10;
     
     /* FIELDS */
-
     /** Set of rules */
-    private List<VfdrRule>         m_ruleSet;
+    private List<VfdrRule> m_ruleSet;
     /** Default rule */
-    private VfdrRule               m_defaultRule;
+    private VfdrRule m_defaultRule;
     /** First hit or weighted max? Depends on set ordering */
     private ClassificationStrategy m_classificationStrategy;
     /** The metric used to evaluate expansion decisions */
-    private ExpansionMetric        m_expMetric             = new ExpansionMetric.Entropy();
+    private ExpansionMetric m_expMetric = new ExpansionMetric.Entropy();
     /** The structure of the instances this classifier can handle */
-    private Instances              m_header;
+    private Instances m_header;
     /** Has this classifier been initialised? */
-    private boolean                m_initialised           = false;
+    private boolean m_initialised = false;
 
     /** Resets this classifier to default parameters. */
     public void reset() {
@@ -106,19 +102,18 @@ public class Vfdr extends RandomizableClassifier
     /**
      * Returns a string describing classifier
      *
-     * @return a description suitable for displaying in the
-     *         explorer/experimenter gui
+     * @return a description suitable for displaying in the explorer/experimenter gui
      */
     public String globalInfo() {
         return "VFDR (Very Fast Decision Rules) is an incremental rule-learning "
-                + "classifier able to learn on very large datasets, needing only "
-                + "one pass on the input data. It does not, however, support "
-                + "distributions that change over time (concept drift). It is quite "
-                + "similar to VFDT (Hoeffding trees), in that it uses the Hoeffding "
-                + "bound to estimate the number of observations needed to "
-                + "take a near-optimal decision when expanding a rule. This allows for a"
-                + " very performant classifier, even with very large datasets. For more information, see:\n\n"
-                + getTechnicalInformation().toString();
+            + "classifier able to learn on very large datasets, needing only "
+            + "one pass on the input data. It does not, however, support "
+            + "distributions that change over time (concept drift). It is quite "
+            + "similar to VFDT (Hoeffding trees), in that it uses the Hoeffding "
+            + "bound to estimate the number of observations needed to "
+            + "take a near-optimal decision when expanding a rule. This allows for a"
+            + " very performant classifier, even with very large datasets. For more information, see:\n\n"
+            + getTechnicalInformation().toString();
     }
 
     /**
@@ -136,7 +131,7 @@ public class Vfdr extends RandomizableClassifier
         result.setValue(Field.AUTHOR, "Gama, Jo�o and Kosina, Petr");
         result.setValue(Field.TITLE, "Learning Decision Rules from Data Streams");
         result.setValue(Field.BOOKTITLE, "Proceedings of the Twenty-Second International Joint Conference on"
-                + " Artificial Intelligence - Volume Two");
+            + " Artificial Intelligence - Volume Two");
         result.setValue(Field.YEAR, "2011");
         result.setValue(Field.PAGES, "1255-1260");
         result.setValue(Field.PUBLISHER, "AAAI Press");
@@ -247,8 +242,8 @@ public class Vfdr extends RandomizableClassifier
     /**
      * Builds a new numeric antecedent from the name of its attribute
      *
-     * @param attName
-     *            The name of the attribute
+     * @param attName The name of the attribute
+     *
      * @return A new numeric antecedent
      */
     public NumericAntd buildNumericAntd(String attName) {
@@ -258,8 +253,8 @@ public class Vfdr extends RandomizableClassifier
     /**
      * Builds a new nominal antecedent from the name of its attribute
      *
-     * @param attName
-     *            The name of the attribute
+     * @param attName The name of the attribute
+     *
      * @return A new nominal antecedent
      */
     public NominalAntd buildNominalAntd(String attName) {
@@ -272,7 +267,8 @@ public class Vfdr extends RandomizableClassifier
      * @return A string describing the rule set
      */
     public String ruleSetToString() {
-        String s = "[\n";
+        String s = "G " + m_gracePeriod + " O " + m_orderedSet;
+        s += "\n[\n";
         for (VfdrRule r : m_ruleSet) {
             s += "\t" + r + "\n";
         }
@@ -291,8 +287,7 @@ public class Vfdr extends RandomizableClassifier
     /**
      * Specify the structure of the instances to classify.
      *
-     * @param m_header
-     *            The header
+     * @param m_header The header
      */
     private void setHeader(Instances m_header) {
         this.m_header = m_header;
@@ -303,12 +298,11 @@ public class Vfdr extends RandomizableClassifier
      * the desired probability of choosing the correct attribute. Used in the
      * computation of the Hoeffding bound. Default is 1E-7.
      *
-     * @param c
-     *            New confidence value
+     * @param c New confidence value
      */
     @OptionMetadata(displayName = "hoeffdingConfidence", commandLineParamName = "C",
-            description = "The allowable error in the decision to expand a rule. Values closer to zero will take longer to decide.",
-            commandLineParamSynopsis = "-C <confidence value>", displayOrder = 6)
+        description = "The allowable error in the decision to expand a rule. Values closer to zero will take longer to decide.",
+        commandLineParamSynopsis = "-C <confidence value>", displayOrder = 6)
     public void setHoeffdingConfidence(double c) {
         m_hoeffdingConfidence = c;
     }
@@ -317,12 +311,11 @@ public class Vfdr extends RandomizableClassifier
      * Sets the threshold below which an expansion will be forced in order to
      * break ties. Default is 0.05.
      *
-     * @param t
-     *            New tie threshold
+     * @param t New tie threshold
      */
     @OptionMetadata(displayName = "hoeffdingTieThreshold", commandLineParamName = "T",
-            description = "Theshold below which a rule expansion will be forced in order to break ties.",
-            commandLineParamSynopsis = "-T <threshold value>", displayOrder = 5)
+        description = "Theshold below which a rule expansion will be forced in order to break ties.",
+        commandLineParamSynopsis = "-T <threshold value>", displayOrder = 5)
     public void setHoeffdingTieThreshold(double t) {
         m_hoeffdingTieThreshold = t;
     }
@@ -332,12 +325,11 @@ public class Vfdr extends RandomizableClassifier
      * to make predictions. A parameter of 0 will set the strategy to majority
      * class.
      *
-     * @param n
-     *            The code of the strategy (0 = majority class, 1 = naive Bayes)
+     * @param n The code of the strategy (0 = majority class, 1 = naive Bayes)
      */
     @OptionMetadata(displayName = "predictionStrategy", commandLineParamName = "S",
-            description = "The prediction strategy to use (0 = majority class, 1 = naive Bayes)",
-            commandLineParamSynopsis = "-S <strategy code>", displayOrder = 4)
+        description = "The prediction strategy to use (0 = majority class, 1 = naive Bayes)",
+        commandLineParamSynopsis = "-S <strategy code>", displayOrder = 4)
     public void setPredictionStrategy(int n) {
         m_useNaiveBayes = n == USE_NB;
     }
@@ -346,13 +338,12 @@ public class Vfdr extends RandomizableClassifier
      * Sets the number of instances a rule should observe between expansion
      * attempts.
      *
-     * @param n
-     *            The new grace period
+     * @param n The new grace period
      */
     @OptionMetadata(displayName = "gracePeriod", commandLineParamName = "G",
-            description = "Number of instances a rule should observe between expansion attempts. "
-                    + "You should adapt this to the size of your training set",
-            commandLineParamSynopsis = "-G <period value>", displayOrder = 1)
+        description = "Number of instances a rule should observe between expansion attempts. "
+            + "You should adapt this to the size of your training set",
+        commandLineParamSynopsis = "-G <period value>", displayOrder = 1)
     public void setGracePeriod(int n) {
         m_gracePeriod = n;
     }
@@ -362,11 +353,10 @@ public class Vfdr extends RandomizableClassifier
      * Hit classification strategy and examples update only the first rule that
      * covers them.
      *
-     * @param b
-     *            true if the rule set is ordered
+     * @param b true if the rule set is ordered
      */
     @OptionMetadata(displayName = "orderedSet", commandLineParamName = "O", description = "Is the rule set ordered?",
-            commandLineParamSynopsis = "-O", commandLineParamIsFlag = true, displayOrder = 4)
+        commandLineParamSynopsis = "-O", commandLineParamIsFlag = true, displayOrder = 4)
     public void setOrderedSet(boolean b) {
         m_orderedSet = b;
     }
@@ -375,12 +365,11 @@ public class Vfdr extends RandomizableClassifier
      * Sets the minimal weight a rule requires to make predictions using naive
      * Bayes.
      *
-     * @param n
-     *            The minimal weight
+     * @param n The minimal weight
      */
     @OptionMetadata(displayName = "nbWeightThreshold", commandLineParamName = "N",
-            description = "The minimum weight a rule requires to make predictions using naive Bayes",
-            commandLineParamSynopsis = "-N <threshold value>", displayOrder = 4)
+        description = "The minimum weight a rule requires to make predictions using naive Bayes",
+        commandLineParamSynopsis = "-N <threshold value>", displayOrder = 4)
     public void setNBWeightThreshold(double n) {
         m_nbWeightThreshold = n;
     }

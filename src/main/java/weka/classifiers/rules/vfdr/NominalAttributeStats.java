@@ -52,17 +52,17 @@ public class NominalAttributeStats extends AttributeStats {
         List<Map<String, Integer>> postExpansionDists = postExpansionDistributions();
         double[] expMerits = expMetric.evaluateExpansions(preSplitDist, postExpansionDists);
         
-        double bestMerit = Double.NEGATIVE_INFINITY;
-        double bestValueIndex = -1;
+        double bestMerit = Double.POSITIVE_INFINITY;
+        int bestValueIndex = -1;
         for (int i = 0; i < expMerits.length; i++) {
-            if (expMerits[i] > bestMerit) {
+            if (expMerits[i] < bestMerit) {
                 bestMerit = expMerits[i];
                 bestValueIndex = i;
             }
         }
         
         NominalAntd bestAntd = m_classifierCallback.buildNominalAntd(m_attributeName);
-        bestAntd.setTargetValue((int) bestValueIndex);
+        bestAntd.setTargetValue(bestValueIndex);
         
         return new CandidateAntd(bestAntd, bestMerit);
     }

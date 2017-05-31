@@ -101,7 +101,7 @@ public class GaussianAttributeStats extends AttributeStats implements Serializab
         
         Set<Double> splitPoints = getSplitPointCandidates();
         
-        double bestScoreYet = Double.NEGATIVE_INFINITY;
+        double bestScoreYet = Double.POSITIVE_INFINITY;
         double bestSplitPoint = Double.NaN;
         boolean isConditionHigher = false;
         
@@ -111,10 +111,10 @@ public class GaussianAttributeStats extends AttributeStats implements Serializab
                 double[] expMerits = expMetric.evaluateExpansions(preSplitDist, postSplitDists);
                 
                 for (int i = 0; i < 2; i++) {
-                    if (expMerits[i] > bestScoreYet) {
+                    if (expMerits[i] < bestScoreYet) {
                         bestScoreYet = expMerits[i];
                         bestSplitPoint = s;
-                        isConditionHigher = i == 1;
+                        isConditionHigher = (i == 1);
                     }
                 }
             }

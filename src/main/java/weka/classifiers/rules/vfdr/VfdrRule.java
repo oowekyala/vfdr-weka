@@ -72,6 +72,8 @@ public class VfdrRule implements Serializable {
         if (m_lr.classDistribution().size() > 1) {
             
             List<CandidateAntd> bestCandidates = m_lr.getExpansionCandidates(expMetric);
+      //      System.err.println(bestCandidates.toString());
+
             Collections.sort(bestCandidates);
             
             boolean doExpand = false;

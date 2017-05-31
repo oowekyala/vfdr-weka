@@ -79,7 +79,7 @@ public abstract class ExpansionMetric implements Serializable {
                     post[i++] = e.getValue();
                 }
                 
-                scores[count++] = preEntropy - ContingencyTables.entropy(post);
+                scores[count++] = getEntropy(post);
             }
             
             return scores;
@@ -89,7 +89,24 @@ public abstract class ExpansionMetric implements Serializable {
         public double getMetricRange(Map<String, Integer> preDist) {
             return Utils.log2(preDist.size() < 2 ? 2 : preDist.size());
         }
-        
+
+        public static double getEntropy(double[] arr) {
+            if (Utils.sum(arr) == 0) {
+                return Double.POSITIVE_INFINITY;
+            }
+
+            Utils.normalize(arr);
+
+            double sum = 0;
+
+            for(double d : arr) {
+                sum += d * Math.log(d);
+            }
+
+            return sum == -0.0 ? Double.POSITIVE_INFINITY : -sum;
+
+        }
+
     }
     
 }

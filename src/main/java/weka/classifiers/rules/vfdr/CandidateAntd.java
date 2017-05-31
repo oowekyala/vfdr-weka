@@ -60,7 +60,11 @@ public class CandidateAntd implements Comparable<CandidateAntd>, Serializable {
      */
     @Override
     public int compareTo(CandidateAntd ca) {
-        return Double.compare(m_expMerit, ca.m_expMerit);
+        return Double.compare(ca.m_expMerit, m_expMerit);
+    }
+
+    public String toString() {
+        return '(' + m_antd.toString() + " : " + m_expMerit + ")";
     }
     
 }

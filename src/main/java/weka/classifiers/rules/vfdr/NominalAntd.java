@@ -20,8 +20,8 @@ public class NominalAntd extends Antd {
      */
     private int m_targetAttributeValue = -1;
 
-    public NominalAntd(Attribute attributeName) {
-        m_attribute = attributeName;
+    public NominalAntd(Attribute attribute) {
+        m_attribute = attribute;
         m_isNominal = true;
     }
 

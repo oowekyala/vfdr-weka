@@ -61,7 +61,7 @@ public class Vfdr extends RandomizableClassifier
     /** Whether the set of rules is ordered or not */
     private boolean m_orderedSet = false;
     /** Minimal number of covered examples needed to consider rule expansion */
-    private int m_gracePeriod = 200;
+    private int m_gracePeriod = 30;
     /** Whether prediction strategy uses naive Bayes or not */
     private boolean m_useNaiveBayes = true;
     /** Allowable error in attribute selection when expanding a rule */
@@ -88,7 +88,7 @@ public class Vfdr extends RandomizableClassifier
     /** Resets this classifier to default parameters. */
     public void reset() {
         m_orderedSet = false;
-        m_gracePeriod = 200;
+        m_gracePeriod = 30;
         m_useNaiveBayes = true;
         m_hoeffdingConfidence = .0000001;
         m_hoeffdingTieThreshold = .05;

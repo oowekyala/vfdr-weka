@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import weka.classifiers.rules.Vfdr;
 import weka.core.Utils;
@@ -70,7 +71,7 @@ public class NominalAttributeStats extends AttributeStats {
     private List<Map<String, Integer>> postExpansionDistributions() {
         
         // att value index keys to class distribution
-        Map<Integer, Map<String, Integer>> splitDists = new HashMap<>();
+        Map<Integer, Map<String, Integer>> splitDists = new TreeMap<>();
         
         for (Map.Entry<String, Object> classEntry : m_classLookup.entrySet()) {
             String classVal = classEntry.getKey();
@@ -89,18 +90,19 @@ public class NominalAttributeStats extends AttributeStats {
                 Integer clsCount = clsDist.get(classVal);
                 
                 if (clsCount == null) {
-                    clsCount = new Integer(0);
+                    clsCount = 0;
                 }
                 
-                clsDist.put(classVal, new Integer(clsCount.intValue() + attCount.intValue()));
+                clsDist.put(classVal, clsCount + attCount);
             }
-            
         }
         
         List<Map<String, Integer>> result = new LinkedList<>();
         for (Map.Entry<Integer, Map<String, Integer>> v : splitDists.entrySet()) {
             result.add(v.getValue());
         }
+
+
         
         return result;
     }
@@ -109,7 +111,7 @@ public class NominalAttributeStats extends AttributeStats {
      * Inner class that implements a discrete distribution. Adapted from Mark
      * Hall's VFDT implementation to consider unweighted instances.
      *
-     * @author Cl�ment Fournier (clement.fournier@insa-rennes.fr)
+     * @author Clément Fournier (clement.fournier@insa-rennes.fr)
      *
      */
     protected class DiscreteDistribution implements Serializable {

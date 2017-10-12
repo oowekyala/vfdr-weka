@@ -12,6 +12,7 @@ import weka.classifiers.rules.Vfdr;
 import weka.core.Instance;
 import weka.core.Utils;
 
+
 /**
  * Represents a rule for the Vfdr algorithm. Rules are made of a conjunction of
  * antecedents, and a set of sufficient statistics. Sufficient statistics
@@ -24,17 +25,26 @@ import weka.core.Utils;
  */
 public class VfdrRule implements Serializable {
 
-    /** For serialisation */
+    /**
+     * For serialisation
+     */
     private static final long serialVersionUID = -388653429728539867L;
 
-    /** The literals (antecedents) that make up this rule */
+    /**
+     * The literals (antecedents) that make up this rule
+     */
     private List<Antd> m_literals;
 
-    /** Sufficient statistics */
+    /**
+     * Sufficient statistics
+     */
     private SufficientStats m_lr;
 
-    /** Callback to the classifier */
+    /**
+     * Callback to the classifier
+     */
     private Vfdr m_classifierCallback;
+
 
     /**
      * Builds a VfdrRule
@@ -45,9 +55,10 @@ public class VfdrRule implements Serializable {
         m_classifierCallback = vfdr;
         m_literals = new ArrayList<>();
         m_lr = m_classifierCallback.getUseNaiveBayes() ? new SufficientStats.NaiveBayes(m_classifierCallback)
-            : new SufficientStats.MajorityClass(m_classifierCallback);
+                                                       : new SufficientStats.MajorityClass(m_classifierCallback);
 
     }
+
 
     /**
      * Gets the sufficient statistics of the rule
@@ -57,71 +68,70 @@ public class VfdrRule implements Serializable {
     public SufficientStats getStats() {
         return m_lr;
     }
-    
+
+
     /**
      * Expands a rule according to its sufficient statistics.
      *
-     * @param expMetric
-     *            The metric used to get the best expansion possible
+     * @param expMetric The metric used to get the best expansion possible
      * @return A new VfdrRule if the default rule was expanded, or {@code this}
-     *         otherwise
+     * otherwise
      */
     public VfdrRule expand(ExpansionMetric expMetric) {
-        
+
         // i.e. distribution is impure
         if (m_lr.classDistribution().size() > 1) {
-            
+
             List<CandidateAntd> bestCandidates = m_lr.getExpansionCandidates(expMetric);
-      //      System.err.println(bestCandidates.toString());
+            //      System.err.println(bestCandidates.toString());
 
             Collections.sort(bestCandidates);
-            
+
             boolean doExpand = false;
-            
+
             if (bestCandidates.size() > 0) {
                 double hoeffding = computeHoeffding(expMetric.getMetricRange(m_lr.m_classDistribution),
                         m_classifierCallback.getHoeffdingConfidence(), m_lr.totalWeight());
-                
+
                 CandidateAntd best = bestCandidates.get(bestCandidates.size() - 1);
                 CandidateAntd secondBest = bestCandidates.get(bestCandidates.size() - 2);
-                
+
                 double diff = best.expMerit() - secondBest.expMerit();
                 if (diff > hoeffding || m_classifierCallback.getTieThreshold() < hoeffding) {
                     doExpand = true;
                 }
             }
-            
+
             if (doExpand) {
                 CandidateAntd best = bestCandidates.get(bestCandidates.size() - 1);
-                
+
                 // It's an expansion of the default rule
                 if (m_literals.size() == 0) {
                     VfdrRule newRule = new VfdrRule(m_classifierCallback);
                     newRule.m_literals.add(best.antd());
                     newRule.m_lr.forbidAttribute(best.antd().getAttr().index());
                     m_lr = m_classifierCallback.getUseNaiveBayes()
-                            ? new SufficientStats.NaiveBayes(m_classifierCallback)
-                            : new SufficientStats.MajorityClass(m_classifierCallback);
+                           ? new SufficientStats.NaiveBayes(m_classifierCallback)
+                           : new SufficientStats.MajorityClass(m_classifierCallback);
                     return newRule;
-                    
+
                 } else {
                     m_literals.add(best.antd());
                     m_lr = m_classifierCallback.getUseNaiveBayes()
-                            ? new SufficientStats.NaiveBayes(m_classifierCallback)
-                            : new SufficientStats.MajorityClass(m_classifierCallback);
+                           ? new SufficientStats.NaiveBayes(m_classifierCallback)
+                           : new SufficientStats.MajorityClass(m_classifierCallback);
                     return this;
                 }
             }
         }
         return this;
     }
-    
+
+
     /**
      * Whether the rule covers the example or not.
      *
-     * @param datum
-     *            The instance to test
-     *
+     * @param datum The instance to test
      * @return Whether the rule covers the example or not.
      */
     public boolean covers(Instance datum) {
@@ -133,6 +143,7 @@ public class VfdrRule implements Serializable {
         return true;
     }
 
+
     /**
      * Whether this rule has antecedents, i.e. whether it is a default rule or
      * not
@@ -143,6 +154,7 @@ public class VfdrRule implements Serializable {
         return m_literals.size() > 0;
     }
 
+
     /**
      * The size of the rule, i.e. number of antecedents
      *
@@ -152,18 +164,19 @@ public class VfdrRule implements Serializable {
         return m_literals.size();
     }
 
+
     /**
      * Computes the Hoeffding bound for the given parameters
      *
      * @param range      Range of the split metric
      * @param confidence Confidence threshold
      * @param weight     Weight of the observations made so far with this rule
-     *
      * @return Hoeffding bound
      */
     public double computeHoeffding(double range, double confidence, double weight) {
         return Math.sqrt(((range * range) * Math.log(1.0 / confidence)) / (2.0 * weight * Utils.log2));
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -178,6 +191,7 @@ public class VfdrRule implements Serializable {
 
         return m_literals.equals(vfdrRule.m_literals);
     }
+
 
     @Override
     public int hashCode() {
@@ -207,11 +221,11 @@ public class VfdrRule implements Serializable {
         }
 
         Collections.sort(sortedDist, new Comparator<Entry<String, Integer>>() {
-                @Override
-                public int compare(Entry<String, Integer> o1, Entry<String, Integer> o2) {
-                    return Double.compare(o2.getValue(), o1.getValue());
+                    @Override
+                    public int compare(Entry<String, Integer> o1, Entry<String, Integer> o2) {
+                        return Double.compare(o2.getValue(), o1.getValue());
+                    }
                 }
-            }
         );
 
         for (Map.Entry<String, Integer> e : sortedDist) {

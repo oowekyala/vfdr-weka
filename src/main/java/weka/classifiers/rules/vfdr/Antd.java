@@ -5,6 +5,7 @@ import java.io.Serializable;
 import weka.core.Attribute;
 import weka.core.Instance;
 
+
 /**
  * Antecedents (literals) make up rules. Antecedents can either be nominal or
  * numeric, depending on the nature of the attribute they're pertaining to.
@@ -14,17 +15,23 @@ import weka.core.Instance;
  */
 public abstract class Antd implements Serializable {
 
-    /** For serialisation */
+    /**
+     * For serialisation
+     */
     private static final long serialVersionUID = -6617990702800935349L;
 
-    /** The attribute of the antecedent */
-    protected Attribute       m_attribute;
-    protected boolean         m_isNominal;
+    /**
+     * The attribute of the antecedent
+     */
+    protected Attribute m_attribute;
+    protected boolean m_isNominal;
+
 
     public abstract boolean covers(Instance inst);
 
     @Override
     public abstract String toString();
+
 
     /**
      * Get the attribute of this antecedent
@@ -35,6 +42,7 @@ public abstract class Antd implements Serializable {
         return m_attribute;
     }
 
+
     /**
      * Returns true if the attribute of this antecedent is nominal
      *
@@ -43,6 +51,7 @@ public abstract class Antd implements Serializable {
     public boolean isNominal() {
         return m_isNominal;
     }
+
 
     /**
      * Returns true if the attribute of this antecedent is numeric

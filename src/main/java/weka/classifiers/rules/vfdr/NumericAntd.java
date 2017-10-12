@@ -3,6 +3,7 @@ package weka.classifiers.rules.vfdr;
 import weka.core.Attribute;
 import weka.core.Instance;
 
+
 /**
  * Antecedent for numerical attributes, of the form {NumericAttribute &lt;=
  * number} or {NumericAttribute &gt; number}. The condition type (&lt;= or &gt;)
@@ -13,14 +14,21 @@ import weka.core.Instance;
  */
 public class NumericAntd extends Antd {
 
-    /** For serialisation */
+    /**
+     * For serialisation
+     */
     private static final long serialVersionUID = 8837859958896793453L;
 
-    /** The split point for this numeric antecedent */
+    /**
+     * The split point for this numeric antecedent
+     */
     private double m_splitPoint;
 
-    /** Is 0 if the condition is &lt;=, 1 otherwise */
+    /**
+     * Is 0 if the condition is &lt;=, 1 otherwise
+     */
     private boolean m_conditionHigher;
+
 
     /**
      * Builds a numeric antecedent from the attname
@@ -32,6 +40,7 @@ public class NumericAntd extends Antd {
         m_splitPoint = Double.NaN;
         m_isNominal = false;
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -50,6 +59,7 @@ public class NumericAntd extends Antd {
         return m_conditionHigher == that.m_conditionHigher;
     }
 
+
     @Override
     public int hashCode() {
         int result;
@@ -60,15 +70,18 @@ public class NumericAntd extends Antd {
         return result;
     }
 
+
     @Override
     public boolean covers(Instance inst) {
         return m_conditionHigher ? inst.value(m_attribute) > m_splitPoint : inst.value(m_attribute) <= m_splitPoint;
     }
 
+
     @Override
     public String toString() {
         return m_attribute.name() + (m_conditionHigher ? " > " : " <= ") + Math.floor(m_splitPoint * 1000) / 1000;
     }
+
 
     /**
      * Get split point of this numeric antecedent
@@ -79,13 +92,16 @@ public class NumericAntd extends Antd {
         return m_splitPoint;
     }
 
+
     public void setSplitPoint(double m_splitPoint) {
         this.m_splitPoint = m_splitPoint;
     }
 
+
     public boolean isConditionHigher() {
         return m_conditionHigher;
     }
+
 
     public void setConditionHigher(boolean m_condition) {
         m_conditionHigher = m_condition;

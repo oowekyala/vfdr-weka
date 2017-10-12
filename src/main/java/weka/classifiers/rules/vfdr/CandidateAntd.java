@@ -2,6 +2,7 @@ package weka.classifiers.rules.vfdr;
 
 import java.io.Serializable;
 
+
 /**
  * Class holding a antecedent that is candidate for rule expansion. Stores the
  * antecedent and the score calculated by an {@link ExpansionMetric}.
@@ -10,29 +11,33 @@ import java.io.Serializable;
  * @version VFDR-Base
  */
 public class CandidateAntd implements Comparable<CandidateAntd>, Serializable {
-    
-    /** For serialisation */
+
+    /**
+     * For serialisation
+     */
     private static final long serialVersionUID = -2493852936246069334L;
-    
-    private Antd              m_antd;
-    
-    /** The merit of the expansion (metric-dependent) */
-    private double            m_expMerit;
-    
+
+    private Antd m_antd;
+
+    /**
+     * The merit of the expansion (metric-dependent)
+     */
+    private double m_expMerit;
+
+
     /**
      * Builds a CandidateAntd given an antecedent and the merit of this
      * antecedent previously calculated by an expansion metric.
      *
-     * @param antd
-     *            The antecedent
-     * @param expMerit
-     *            The merit of this antecedent
+     * @param antd     The antecedent
+     * @param expMerit The merit of this antecedent
      */
     public CandidateAntd(Antd antd, double expMerit) {
         m_antd = antd;
         m_expMerit = expMerit;
     }
-    
+
+
     /**
      * Returns the split merit of this candidate
      *
@@ -41,7 +46,8 @@ public class CandidateAntd implements Comparable<CandidateAntd>, Serializable {
     public double expMerit() {
         return m_expMerit;
     }
-    
+
+
     /**
      * Gets the antecedent for this candidate
      *
@@ -50,12 +56,12 @@ public class CandidateAntd implements Comparable<CandidateAntd>, Serializable {
     public Antd antd() {
         return m_antd;
     }
-    
+
+
     /**
      * Implements comparable
      *
-     * @param ca
-     *            The candidate to compare to
+     * @param ca The candidate to compare to
      * @return comparison
      */
     @Override
@@ -63,8 +69,9 @@ public class CandidateAntd implements Comparable<CandidateAntd>, Serializable {
         return Double.compare(ca.m_expMerit, m_expMerit);
     }
 
+
     public String toString() {
         return '(' + m_antd.toString() + " : " + m_expMerit + ")";
     }
-    
+
 }

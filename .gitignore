@@ -138,3 +138,4 @@ fabric.properties
 
 # End of https://www.gitignore.io/api/intellij
 build_and_push.sh
+dist

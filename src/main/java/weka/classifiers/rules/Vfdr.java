@@ -117,12 +117,6 @@ public class Vfdr extends RandomizableClassifier
      * Resets this classifier to default parameters.
      */
     public void reset() {
-        m_orderedSet = false;
-        m_gracePeriod = 30;
-        m_useNaiveBayes = true;
-        m_hoeffdingConfidence = .0000001;
-        m_hoeffdingTieThreshold = .05;
-
         m_ruleSet = null;
         m_defaultRule = null;
         m_classificationStrategy = null;

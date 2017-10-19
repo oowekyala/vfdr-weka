@@ -50,7 +50,7 @@ import weka.core.Utils;
  * @version VFDR-Base
  */
 public class Vfdr extends RandomizableClassifier
-        implements UpdateableClassifier, Serializable, OptionHandler, RevisionHandler, TechnicalInformationHandler {
+    implements UpdateableClassifier, Serializable, OptionHandler, RevisionHandler, TechnicalInformationHandler {
 
     /* These are for option parsing */
     public static final int USE_MAJ_CLASS = 0;
@@ -278,6 +278,7 @@ public class Vfdr extends RandomizableClassifier
      * Builds a new numeric antecedent from the name of its attribute
      *
      * @param attName The name of the attribute
+     *
      * @return A new numeric antecedent
      */
     public NumericAntd buildNumericAntd(String attName) {
@@ -289,6 +290,7 @@ public class Vfdr extends RandomizableClassifier
      * Builds a new nominal antecedent from the name of its attribute
      *
      * @param attName The name of the attribute
+     *
      * @return A new nominal antecedent
      */
     public NominalAntd buildNominalAntd(String attName) {
@@ -302,8 +304,7 @@ public class Vfdr extends RandomizableClassifier
      * @return A string describing the rule set
      */
     public String ruleSetToString() {
-        String s = "G " + m_gracePeriod + " O " + m_orderedSet;
-        s += "\n[\n";
+        String s = "[\n";
         for (VfdrRule r : m_ruleSet) {
             s += "\t" + r + "\n";
         }
@@ -508,16 +509,16 @@ public class Vfdr extends RandomizableClassifier
         newVector.add(new Option("Is the rule set ordered?", "O", 0, "-O"));
 
         newVector.add(new Option("Number of instances a rule should observe between expansion attempts. ",
-                "G", 1, "-G <gracePeriod>"));
+            "G", 1, "-G <gracePeriod>"));
 
         newVector.add(new Option("The prediction strategy to use (0 = majority class, 1 = naive Bayes)",
-                "R", 1, "-R <strategy code>"));
+            "R", 1, "-R <strategy code>"));
 
         newVector.add(new Option("Theshold below which a rule expansion will be forced in order to break ties.",
-                "T", 1, "-T <threshold value>"));
+            "T", 1, "-T <threshold value>"));
 
         newVector.add(new Option("The allowable error in the decision to expand a rule. Values closer to zero will take longer to decide.",
-                "C", 1, "-C <confidence value>"));
+            "C", 1, "-C <confidence value>"));
 
         newVector.addAll(Collections.list(super.listOptions()));
 

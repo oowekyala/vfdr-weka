@@ -127,7 +127,7 @@ public class GaussianAttributeStats extends AttributeStats implements Serializab
         bestAntd.setConditionHigher(isConditionHigher);
         bestAntd.setSplitPoint(bestSplitPoint);
 
-        return new CandidateAntd(bestAntd, bestScoreYet);
+        return Double.isNaN(bestSplitPoint) ? null : new CandidateAntd(bestAntd, bestScoreYet);
     }
 
 

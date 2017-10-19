@@ -74,8 +74,9 @@ public class VfdrRule implements Serializable {
      * Expands a rule according to its sufficient statistics.
      *
      * @param expMetric The metric used to get the best expansion possible
+     *
      * @return A new VfdrRule if the default rule was expanded, or {@code this}
-     * otherwise
+     *     otherwise
      */
     public VfdrRule expand(ExpansionMetric expMetric) {
 
@@ -83,21 +84,19 @@ public class VfdrRule implements Serializable {
         if (m_lr.classDistribution().size() > 1) {
 
             List<CandidateAntd> bestCandidates = m_lr.getExpansionCandidates(expMetric);
-            //      System.err.println(bestCandidates.toString());
 
             Collections.sort(bestCandidates);
 
             boolean doExpand = false;
 
-            if (bestCandidates.size() > 0) {
+            if (bestCandidates.size() > 1) {
                 double hoeffding = computeHoeffding(expMetric.getMetricRange(m_lr.m_classDistribution),
-                        m_classifierCallback.getHoeffdingConfidence(), m_lr.totalWeight());
+                    m_classifierCallback.getHoeffdingConfidence(), m_lr.totalWeight());
 
                 CandidateAntd best = bestCandidates.get(bestCandidates.size() - 1);
                 CandidateAntd secondBest = bestCandidates.get(bestCandidates.size() - 2);
-
                 double diff = best.expMerit() - secondBest.expMerit();
-                if (diff > hoeffding || m_classifierCallback.getTieThreshold() < hoeffding) {
+                if (diff > hoeffding || hoeffding > m_classifierCallback.getTieThreshold()) {
                     doExpand = true;
                 }
             }
@@ -132,6 +131,7 @@ public class VfdrRule implements Serializable {
      * Whether the rule covers the example or not.
      *
      * @param datum The instance to test
+     *
      * @return Whether the rule covers the example or not.
      */
     public boolean covers(Instance datum) {
@@ -171,6 +171,7 @@ public class VfdrRule implements Serializable {
      * @param range      Range of the split metric
      * @param confidence Confidence threshold
      * @param weight     Weight of the observations made so far with this rule
+     *
      * @return Hoeffding bound
      */
     public double computeHoeffding(double range, double confidence, double weight) {
@@ -221,11 +222,11 @@ public class VfdrRule implements Serializable {
         }
 
         Collections.sort(sortedDist, new Comparator<Entry<String, Integer>>() {
-                    @Override
-                    public int compare(Entry<String, Integer> o1, Entry<String, Integer> o2) {
-                        return Double.compare(o2.getValue(), o1.getValue());
-                    }
+                @Override
+                public int compare(Entry<String, Integer> o1, Entry<String, Integer> o2) {
+                    return Double.compare(o2.getValue(), o1.getValue());
                 }
+            }
         );
 
         for (Map.Entry<String, Integer> e : sortedDist) {

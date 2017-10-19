@@ -3,6 +3,7 @@ package weka.classifiers.rules.vfdr;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -126,6 +127,8 @@ public abstract class SufficientStats implements Serializable {
             AttributeStats astat = en.getValue();
             candids.add(astat.bestCandidate(expMetric, m_classDistribution));
         }
+        
+        candids.removeAll(Collections.<CandidateAntd>singleton(null));
 
         return candids;
     }

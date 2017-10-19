@@ -213,3 +213,4 @@ doc
 out/*
 src/test/java/weka/classifiers/rules/LocalTests.java
 *.iml
+lib
